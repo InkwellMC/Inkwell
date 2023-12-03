@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <mia.krs3007@yandex.ru>
+Date: Sun, 3 Dec 2023 18:46:54 +0300
+Subject: [PATCH] Option for void trading
+
+
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index 4f17cc2dd5decdf4ad3e68b5d6a13dd2b6d7e4d6..358822ea00342f1303144a2b21fc36d6a3e51a9f 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -129,4 +129,9 @@ public class InkwellConfig {
+         ensureDefault(key, defaultValue, comment);
+         return config.getStringList(key);
+     }
++
++    public static boolean allowVoidTrading;
++    private static void villager() {
++        allowVoidTrading = getBoolean("entity.villager.allow-void-trading", false, "Allows you to interact with merchants in unloaded chunks");
++    }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
+index c88d5b9125f6ee43bf2be60fd1745d836f271b78..3b9450dcdeabe0f0acc2fc655552de5fe9a5e79d 100644
+--- a/src/main/java/net/minecraft/server/level/ServerLevel.java
++++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
+@@ -2794,7 +2794,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+             // Spigot Start
+             if (entity.getBukkitEntity() instanceof org.bukkit.inventory.InventoryHolder && (!(entity instanceof ServerPlayer) || entity.getRemovalReason() != Entity.RemovalReason.KILLED)) { // SPIGOT-6876: closeInventory clears death message
+                 // Paper start
+-                if (entity.getBukkitEntity() instanceof org.bukkit.inventory.Merchant merchant && merchant.getTrader() != null) {
++                if (!io.inkwellmc.inkwell.InkwellConfig.allowVoidTrading && entity.getBukkitEntity() instanceof org.bukkit.inventory.Merchant merchant && merchant.getTrader() != null) {
+                     merchant.getTrader().closeInventory(org.bukkit.event.inventory.InventoryCloseEvent.Reason.UNLOADED);
+                 }
+                 // Paper end
