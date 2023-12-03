@@ -1,0 +1,63 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <mia.krs3007@yandex.ru>
+Date: Sun, 3 Dec 2023 23:51:50 +0300
+Subject: [PATCH] Pigman spawn limit
+
+
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index 6fe731ed6dac4ed781260717b3dbf89b2979a45c..abdce8d82dbd4830e276f522019c7bd0e443acc8 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -140,6 +140,13 @@ public class InkwellConfig {
+         allowVoidTrading = getBoolean("entity.villager.allow-void-trading", false, "Allows you to interact with merchants in unloaded chunks");
+     }
+ 
++    public static boolean usePigmanSpawnLimit;
++    public static int pigmanSpawnLimit;
++    private static void pigman() {
++        usePigmanSpawnLimit = getBoolean("entity.pigman.use-pigman-spawn-limit", false);
++        pigmanSpawnLimit = getInt("entity.pigman.pigman-spawn-limit", 200, "This restriction is not global, but is only used on individual territories loaded on the server.");
++    }
++
+     public static boolean allowSignColors;
+     private static void blockEntity() {
+         allowSignColors = getBoolean("blockentity.allow-sign-colors", false, "Allows to parse colors on signs.");
+diff --git a/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java b/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
+index a6ab0d0defc05e56a91084c49897059670a1324b..f280adf40de15d9501695eae3eb7d7005ceccac2 100644
+--- a/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
+@@ -58,8 +58,32 @@ public class NetherPortalBlock extends Block {
+             }
+ 
+             if (world.getBlockState(pos).isValidSpawn(world, pos, EntityType.ZOMBIFIED_PIGLIN)) {
+-                // CraftBukkit - set spawn reason to NETHER_PORTAL
+-                Entity entity = EntityType.ZOMBIFIED_PIGLIN.spawn(world, pos.above(), MobSpawnType.STRUCTURE, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.NETHER_PORTAL);
++                // Inkwell start
++                Entity entity = null;
++                int zombifiedPigninsCount = 0;
++                if (io.inkwellmc.inkwell.InkwellConfig.usePigmanSpawnLimit) {
++                    org.bukkit.craftbukkit.entity.CraftHumanEntity player = world.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), world.getViewDistances().loadViewDistance()*16, false).getBukkitEntity();
++                    int radiusCheck = world.getViewDistances().loadViewDistance();
++                    int playerChunkX = player.getLocation().getBlockX() >> 4;
++                    int playerChunkZ = player.getLocation().getBlockZ() >> 4;
++                    java.util.List<org.bukkit.Chunk> chunks = new java.util.ArrayList<>();
++                    for (int x = playerChunkX - radiusCheck; x <= playerChunkX + radiusCheck; x++) {
++                        for (int z = playerChunkZ - radiusCheck; z <= playerChunkZ + radiusCheck; z++) {
++                            chunks.add(world.getWorld().getChunkAt(x, z));
++                        }
++                    }
++                    for (org.bukkit.Chunk chunk : chunks) {
++                        java.util.List<org.bukkit.entity.Entity> entities = java.util.List.of(chunk.getEntities());
++                        for (org.bukkit.entity.Entity entityCycle : entities) {
++                            if (entityCycle.getType().equals(org.bukkit.entity.EntityType.ZOMBIFIED_PIGLIN)) zombifiedPigninsCount++;
++                        }
++                    }
++                }
++                if (zombifiedPigninsCount < io.inkwellmc.inkwell.InkwellConfig.pigmanSpawnLimit || !io.inkwellmc.inkwell.InkwellConfig.usePigmanSpawnLimit) {
++                    // CraftBukkit - set spawn reason to NETHER_PORTAL
++                    entity = EntityType.ZOMBIFIED_PIGLIN.spawn(world, pos.above(), MobSpawnType.STRUCTURE, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.NETHER_PORTAL);
++                }
++                // Inkwell end
+ 
+                 if (entity != null) {
+                     entity.setPortalCooldown();
