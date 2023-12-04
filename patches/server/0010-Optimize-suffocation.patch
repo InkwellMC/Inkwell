@@ -1,0 +1,127 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <mia.krs3007@yandex.ru>
+Date: Mon, 4 Dec 2023 14:38:34 +0300
+Subject: [PATCH] Optimize suffocation
+
+
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index abdce8d82dbd4830e276f522019c7bd0e443acc8..69c810070e7abc10db91b7cf6de4b295d9ccae0b 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -73,7 +73,7 @@ public class InkwellConfig {
+     }
+ 
+     private static void setComment(String key, String... comment) {
+-        if (config.contains(key)) {
++        if (config.contains(key) && comment.length > 0) {
+             config.setComment(key, String.join("\n", comment), CommentType.BLOCK);
+         }
+     }
+@@ -132,23 +132,51 @@ public class InkwellConfig {
+ 
+     public static String serverModName;
+     private static void server() {
+-        serverModName = getString("server.server-mod-name", "Inkwell", "Changes the server brand in f3 and server ping");
++        serverModName = getString(
++                "server.server-mod-name",
++                "Inkwell",
++                "Changes the server brand in f3 and server ping"
++        );
+     }
+ 
+     public static boolean allowVoidTrading;
+     private static void villager() {
+-        allowVoidTrading = getBoolean("entity.villager.allow-void-trading", false, "Allows you to interact with merchants in unloaded chunks");
++        allowVoidTrading = getBoolean(
++                "entity.villager.allow-void-trading",
++                false,
++                "Allows you to interact with merchants in unloaded chunks"
++        );
+     }
+ 
+     public static boolean usePigmanSpawnLimit;
+     public static int pigmanSpawnLimit;
+     private static void pigman() {
+-        usePigmanSpawnLimit = getBoolean("entity.pigman.use-pigman-spawn-limit", false);
+-        pigmanSpawnLimit = getInt("entity.pigman.pigman-spawn-limit", 200, "This restriction is not global, but is only used on individual territories loaded on the server.");
++        usePigmanSpawnLimit = getBoolean(
++                "entity.pigman.use-pigman-spawn-limit",
++                true
++        );
++        pigmanSpawnLimit = getInt(
++                "entity.pigman.pigman-spawn-limit",
++                200,
++                "This restriction is not global, but is only used on individual territories loaded on the server."
++        );
+     }
+ 
+     public static boolean allowSignColors;
+     private static void blockEntity() {
+-        allowSignColors = getBoolean("blockentity.allow-sign-colors", false, "Allows to parse colors on signs.");
++        allowSignColors = getBoolean(
++                "blockentity.allow-sign-colors",
++                false,
++                "Allows to parse colors on signs."
++        );
++    }
++
++    public static boolean enableSuffocationOptimization;
++    private static void suffocationOptimization() {
++        enableSuffocationOptimization = getBoolean(
++                "enable-suffocation-optimization",
++                true,
++                "Optimizes the suffocation check by selectively skipping"
++        );
+     }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+index 87134e57a57df0fceda903e35d22f3f2de31adf3..51c6ff2db52e8838f2d2a1919e27e14162269665 100644
+--- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
++++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+@@ -414,7 +414,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+             boolean flag = this instanceof net.minecraft.world.entity.player.Player;
+ 
+             if (!this.level().isClientSide) {
+-                if (this.isInWall()) {
++                if (shouldCheckForSuffocation() && this.isInWall()) { // Inkwell - optimize suffocation
+                     this.hurt(this.damageSources().inWall(), 1.0F);
+                 } else if (flag && !this.level().getWorldBorder().isWithinBounds(this.getBoundingBox())) {
+                     double d0 = this.level().getWorldBorder().getDistanceToBorder(this) + this.level().getWorldBorder().getDamageSafeZone();
+@@ -1409,6 +1409,18 @@ public abstract class LivingEntity extends Entity implements Attackable {
+         return this.getHealth() <= 0.0F;
+     }
+ 
++    // Inkwell start - optimize suffocation
++    public boolean couldPossiblyBeHurt(float amount) {
++        if ((float) this.invulnerableTime > (float) this.invulnerableDuration / 2.0F && amount <= this.lastHurt) {
++            return false;
++        }
++        return true;
++    }
++    public boolean shouldCheckForSuffocation() {
++        return !io.inkwellmc.inkwell.InkwellConfig.enableSuffocationOptimization || (tickCount % 10 == 0 && couldPossiblyBeHurt(1.0F));
++    }
++    // Inkwell end
++
+     @Override
+     public boolean hurt(DamageSource source, float amount) {
+         if (this.isInvulnerableTo(source)) {
+diff --git a/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java b/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
+index 1e07febcf7a3dfb281728cc5e3e4f15dd776d7e0..1de3d43ce178312368ad9f29504e28bf5030c209 100644
+--- a/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
++++ b/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
+@@ -150,6 +150,13 @@ public class WitherBoss extends Monster implements PowerableMob, RangedAttackMob
+         this.bossEvent.setName(this.getDisplayName());
+     }
+ 
++    // Inkwell start - optimize suffocation
++    @Override
++    public boolean shouldCheckForSuffocation() {
++        return true;
++    }
++    // Inkwell end
++
+     @Override
+     protected SoundEvent getAmbientSound() {
+         return SoundEvents.WITHER_AMBIENT;
