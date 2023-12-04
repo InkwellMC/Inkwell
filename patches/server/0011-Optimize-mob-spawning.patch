@@ -5,10 +5,10 @@ Subject: [PATCH] Optimize mob spawning
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 69c810070e7abc10db91b7cf6de4b295d9ccae0b..412c920ae7d6507b3352204515632423923f5019 100644
+index c60fbbf474376a6f447eaa28209eaad2dc513c18..55aba609a6a8a327a6bd7bff0b5c77e08e8ac848 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -179,4 +179,20 @@ public class InkwellConfig {
+@@ -180,4 +180,20 @@ public class InkwellConfig {
                  "Optimizes the suffocation check by selectively skipping"
          );
      }

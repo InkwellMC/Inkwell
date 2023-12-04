@@ -105,10 +105,10 @@ index 0000000000000000000000000000000000000000..988236d1942d01a2424d5d377c1480f1
 \ No newline at end of file
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..4f17cc2dd5decdf4ad3e68b5d6a13dd2b6d7e4d6
+index 0000000000000000000000000000000000000000..1a669b25f36cf21eed71aa9e0f5e6543e8d24aff
 --- /dev/null
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -0,0 +1,132 @@
+@@ -0,0 +1,133 @@
 +package io.inkwellmc.inkwell;
 +
 +import java.io.File;
@@ -184,7 +184,7 @@ index 0000000000000000000000000000000000000000..4f17cc2dd5decdf4ad3e68b5d6a13dd2
 +    }
 +
 +    private static void setComment(String key, String... comment) {
-+        if (config.contains(key)) {
++        if (config.contains(key) && comment.length > 0) {
 +            config.setComment(key, String.join("\n", comment), CommentType.BLOCK);
 +        }
 +    }
@@ -192,7 +192,8 @@ index 0000000000000000000000000000000000000000..4f17cc2dd5decdf4ad3e68b5d6a13dd2
 +    private static void ensureDefault(String key, Object defaultValue, String... comment) {
 +        if (!config.contains(key)) {
 +            config.set(key, defaultValue);
-+            config.setComment(key, String.join("\n", comment), CommentType.BLOCK);
++            if (comment.length > 0)
++                config.setComment(key, String.join("\n", comment), CommentType.BLOCK);
 +        }
 +    }
 +

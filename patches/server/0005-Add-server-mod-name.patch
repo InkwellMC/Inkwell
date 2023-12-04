@@ -5,10 +5,10 @@ Subject: [PATCH] Add server mod name
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 358822ea00342f1303144a2b21fc36d6a3e51a9f..523f03db4cefb295ceedcef7a5c816bb3774fe53 100644
+index 35d6f0d9b24172675f191e02d98e985f0df12132..daab7b0cba9ffc96c925b60ea46c88366bd51a82 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -130,6 +130,11 @@ public class InkwellConfig {
+@@ -131,6 +131,11 @@ public class InkwellConfig {
          return config.getStringList(key);
      }
  

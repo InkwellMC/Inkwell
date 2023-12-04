@@ -5,10 +5,10 @@ Subject: [PATCH] Colored signs
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 523f03db4cefb295ceedcef7a5c816bb3774fe53..6fe731ed6dac4ed781260717b3dbf89b2979a45c 100644
+index daab7b0cba9ffc96c925b60ea46c88366bd51a82..dce8c21cb870eced48b5316242de1b64331720ef 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -139,4 +139,9 @@ public class InkwellConfig {
+@@ -140,4 +140,9 @@ public class InkwellConfig {
      private static void villager() {
          allowVoidTrading = getBoolean("entity.villager.allow-void-trading", false, "Allows you to interact with merchants in unloaded chunks");
      }

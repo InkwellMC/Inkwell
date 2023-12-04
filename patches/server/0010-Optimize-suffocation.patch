@@ -5,19 +5,10 @@ Subject: [PATCH] Optimize suffocation
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index abdce8d82dbd4830e276f522019c7bd0e443acc8..69c810070e7abc10db91b7cf6de4b295d9ccae0b 100644
+index e436de3a9dc14c32ff43265435c64d2a037aa225..c60fbbf474376a6f447eaa28209eaad2dc513c18 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -73,7 +73,7 @@ public class InkwellConfig {
-     }
- 
-     private static void setComment(String key, String... comment) {
--        if (config.contains(key)) {
-+        if (config.contains(key) && comment.length > 0) {
-             config.setComment(key, String.join("\n", comment), CommentType.BLOCK);
-         }
-     }
-@@ -132,23 +132,51 @@ public class InkwellConfig {
+@@ -133,23 +133,51 @@ public class InkwellConfig {
  
      public static String serverModName;
      private static void server() {
