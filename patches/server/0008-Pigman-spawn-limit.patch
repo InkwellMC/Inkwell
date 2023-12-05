@@ -5,10 +5,10 @@ Subject: [PATCH] Pigman spawn limit
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index dce8c21cb870eced48b5316242de1b64331720ef..e436de3a9dc14c32ff43265435c64d2a037aa225 100644
+index c73d828fcedfcfb20c4c871eb23366744845fed3..cee6431f08384dcce22ac2131f4c0494e2ae76af 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -141,6 +141,13 @@ public class InkwellConfig {
+@@ -140,6 +140,13 @@ public class InkwellConfig {
          allowVoidTrading = getBoolean("entity.villager.allow-void-trading", false, "Allows you to interact with merchants in unloaded chunks");
      }
  
