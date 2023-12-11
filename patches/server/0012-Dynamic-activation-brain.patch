@@ -1,0 +1,349 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <mia.krs3007@yandex.ru>
+Date: Mon, 11 Dec 2023 17:23:39 +0300
+Subject: [PATCH] Dynamic activation brain
+
+
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index 0961c14a874dcd6a4b08af5c77f34a01f35bd1ad..5eeb8ed0df4f3f5ab8e0f9f307b526d28e6ccd40 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -4,8 +4,12 @@ import java.io.File;
+ import java.io.IOException;
+ import java.lang.reflect.Method;
+ import java.lang.reflect.Modifier;
++import java.util.Collections;
+ import java.util.List;
++
++import net.minecraft.core.registries.BuiltInRegistries;
+ import net.minecraft.server.MinecraftServer;
++import net.minecraft.world.entity.EntityType;
+ import org.bukkit.configuration.ConfigurationSection;
+ import org.bukkit.configuration.MemoryConfiguration;
+ import org.jetbrains.annotations.Nullable;
+@@ -195,4 +199,32 @@ public class InkwellConfig {
+             enableAsyncMobSpawning = temp;
+         }
+     }
++
++    public static boolean dearEnabled;
++    public static int startDistance;
++    public static int startDistanceSquared;
++    public static int maximumActivationPriority;
++    public static int activationDistanceMod;
++    private static void dynamicActivationOfBrains() throws IOException {
++        dearEnabled = getBoolean("dab.enabled", "activation-range.enabled", true);
++        startDistance = getInt("dab.start-distance", "activation-range.start-distance", 12,
++                "This value determines how far away an entity has to be",
++                "from the player to start being effected by DEAR.");
++        startDistanceSquared = startDistance * startDistance;
++        maximumActivationPriority = getInt("dab.max-tick-freq", "activation-range.max-tick-freq", 20,
++                "This value defines how often in ticks, the furthest entity",
++                "will get their pathfinders and behaviors ticked. 20 = 1s");
++        activationDistanceMod = getInt("dab.activation-dist-mod", "activation-range.activation-dist-mod", 8,
++                "This value defines how much distance modifies an entity's",
++                "tick frequency. freq = (distanceToPlayer^2) / (2^value)");
++        for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
++            entityType.dabEnabled = true; // reset all, before setting the ones to true
++        }
++
++        getStringList("dab.blacklisted-entities", "activation-range.blacklisted-entities", Collections.emptyList(), "A list of entities to ignore for activation")
++                .forEach(name -> EntityType.byString(name).ifPresentOrElse(entityType -> {
++                    entityType.dabEnabled = false;
++                }, () -> MinecraftServer.LOGGER.warn("Unknown entity \"" + name + "\"")));
++        setComment("dab", "Optimizes entity brains when", "they're far away from the player");
++    }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
+index 3b9450dcdeabe0f0acc2fc655552de5fe9a5e79d..faef832d8ed0c5a0f9df5433b65a26640fc82ca3 100644
+--- a/src/main/java/net/minecraft/server/level/ServerLevel.java
++++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
+@@ -878,6 +878,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+             org.spigotmc.ActivationRange.activateEntities(this); // Spigot
+             this.timings.entityTick.startTiming(); // Spigot
+             this.entityTickList.forEach((entity) -> {
++                entity.activatedPriorityReset = false; // Inkwell - DAB
+                 if (!entity.isRemoved()) {
+                     if (false && this.shouldDiscardEntity(entity)) { // CraftBukkit - We prevent spawning in general, so this butchering is not needed
+                         entity.discard();
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 1ad0e44dcee6a6bb35e95d56a1fd66e49b46bd42..828ad06c849d1b9578717bbb56de45b4186e0030 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -434,6 +434,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+         return this.originWorld;
+     }
+     // Paper end
++    // Inkwell start
++    public boolean activatedPriorityReset = false; // DAB
++    public int activatedPriority = io.inkwellmc.inkwell.InkwellConfig.maximumActivationPriority; // golf score
++    // Inkwell end
++
+     public float getBukkitYaw() {
+         return this.yRot;
+     }
+diff --git a/src/main/java/net/minecraft/world/entity/EntityType.java b/src/main/java/net/minecraft/world/entity/EntityType.java
+index 73871f456a85bda1e51f54986d0e61fb629822e8..54bfefccb93683ba8d25825a206e79619198f0a0 100644
+--- a/src/main/java/net/minecraft/world/entity/EntityType.java
++++ b/src/main/java/net/minecraft/world/entity/EntityType.java
+@@ -301,6 +301,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
+     private final boolean canSpawnFarFromPlayer;
+     private final int clientTrackingRange;
+     private final int updateInterval;
++    public boolean dabEnabled = false; // Inkwell
+     @Nullable
+     private String descriptionId;
+     @Nullable
+diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
+index 956d05e2ae59978ea9623ca0e167c0afe0b87306..5f9968ec5f2346929957e0e64a01d831bbee1680 100644
+--- a/src/main/java/net/minecraft/world/entity/Mob.java
++++ b/src/main/java/net/minecraft/world/entity/Mob.java
+@@ -224,10 +224,10 @@ public abstract class Mob extends LivingEntity implements Targeting {
+     @Override
+     public void inactiveTick() {
+         super.inactiveTick();
+-        if (this.goalSelector.inactiveTick()) {
++        if (this.goalSelector.inactiveTick(this.activatedPriority, true)) { // Inkwell - pass activated priroity
+             this.goalSelector.tick();
+         }
+-        if (this.targetSelector.inactiveTick()) {
++        if (this.targetSelector.inactiveTick(this.activatedPriority, true)) { // Inkwell - pass activated priority
+             this.targetSelector.tick();
+         }
+     }
+@@ -911,16 +911,20 @@ public abstract class Mob extends LivingEntity implements Targeting {
+ 
+         if (i % 2 != 0 && this.tickCount > 1) {
+             this.level().getProfiler().push("targetSelector");
++            if (this.targetSelector.inactiveTick(this.activatedPriority, false)) // Inkwell - use this to alternate ticking
+             this.targetSelector.tickRunningGoals(false);
+             this.level().getProfiler().pop();
+             this.level().getProfiler().push("goalSelector");
++            if (this.goalSelector.inactiveTick(this.activatedPriority, false)) // Inkwell - use this to alternate ticking
+             this.goalSelector.tickRunningGoals(false);
+             this.level().getProfiler().pop();
+         } else {
+             this.level().getProfiler().push("targetSelector");
++            if (this.targetSelector.inactiveTick(this.activatedPriority, false)) // Inkwell - use this to alternate ticking
+             this.targetSelector.tick();
+             this.level().getProfiler().pop();
+             this.level().getProfiler().push("goalSelector");
++            if (this.goalSelector.inactiveTick(this.activatedPriority, false)) // Inkwell - use this to alternate ticking
+             this.goalSelector.tick();
+             this.level().getProfiler().pop();
+         }
+diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java b/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
+index b738ee2d3801fadfd09313f05ae24593e56b0ec6..413d86a8b68144ddd9779dbb1e99c4272f4d766c 100644
+--- a/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
++++ b/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
+@@ -53,9 +53,12 @@ public class GoalSelector {
+     }
+ 
+     // Paper start
+-    public boolean inactiveTick() {
++    public boolean inactiveTick(int tickRate, boolean inactive) { // Inkwell start
++        if (inactive && !io.inkwellmc.inkwell.InkwellConfig.dearEnabled) tickRate = 4; // reset to Paper's
++        tickRate = Math.min(tickRate, this.newGoalRate);
+         this.curRate++;
+-        return this.curRate % this.newGoalRate == 0;
++        return this.curRate % tickRate == 0;
++    // Inkwell end
+     }
+     public boolean hasTasks() {
+         for (WrappedGoal task : this.availableGoals) {
+diff --git a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
+index 5ad5f22e5aa26445e5eb229958e7bf356bdd460e..ee89158463da31f486f88d15125ee79f9b897208 100644
+--- a/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
++++ b/src/main/java/net/minecraft/world/entity/animal/allay/Allay.java
+@@ -221,9 +221,11 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationS
+         return 0.4F;
+     }
+ 
++    private int behaviorTick = 0; // Inkwell
+     @Override
+     protected void customServerAiStep() {
+         this.level().getProfiler().push("allayBrain");
++        if (this.behaviorTick++ % this.activatedPriority == 0) // Inkwell
+         this.getBrain().tick((ServerLevel) this.level(), this);
+         this.level().getProfiler().pop();
+         this.level().getProfiler().push("allayActivityUpdate");
+diff --git a/src/main/java/net/minecraft/world/entity/animal/axolotl/Axolotl.java b/src/main/java/net/minecraft/world/entity/animal/axolotl/Axolotl.java
+index d5b97d4316390028f54aa9bb9fa52b0b003e32a0..204261d5ce1f97127e5e7a54bea752398b9b9ac1 100644
+--- a/src/main/java/net/minecraft/world/entity/animal/axolotl/Axolotl.java
++++ b/src/main/java/net/minecraft/world/entity/animal/axolotl/Axolotl.java
+@@ -280,9 +280,11 @@ public class Axolotl extends Animal implements LerpingModel, VariantHolder<Axolo
+         return true;
+     }
+ 
++    private int behaviorTick = 0; // Inkwell
+     @Override
+     protected void customServerAiStep() {
+         this.level().getProfiler().push("axolotlBrain");
++        if (this.behaviorTick++ % this.activatedPriority == 0) // Inkwell
+         this.getBrain().tick((ServerLevel) this.level(), this);
+         this.level().getProfiler().pop();
+         this.level().getProfiler().push("axolotlActivityUpdate");
+diff --git a/src/main/java/net/minecraft/world/entity/animal/frog/Frog.java b/src/main/java/net/minecraft/world/entity/animal/frog/Frog.java
+index 5000ebc5f19dee72a86360062b822aecd60beb47..db81fbd5a533cc2aade558bfdf5f8d8376118af5 100644
+--- a/src/main/java/net/minecraft/world/entity/animal/frog/Frog.java
++++ b/src/main/java/net/minecraft/world/entity/animal/frog/Frog.java
+@@ -164,9 +164,11 @@ public class Frog extends Animal implements VariantHolder<FrogVariant> {
+         return true;
+     }
+ 
++    private int behaviorTick = 0; // Inkwell
+     @Override
+     protected void customServerAiStep() {
+         this.level().getProfiler().push("frogBrain");
++        if (this.behaviorTick++ % this.activatedPriority == 0) // Inkwell
+         this.getBrain().tick((ServerLevel)this.level(), this);
+         this.level().getProfiler().pop();
+         this.level().getProfiler().push("frogActivityUpdate");
+diff --git a/src/main/java/net/minecraft/world/entity/animal/frog/Tadpole.java b/src/main/java/net/minecraft/world/entity/animal/frog/Tadpole.java
+index 4aeab90e778629c355189dfe79c39c4b21f5f5ac..b43b687cab157f3c3686dc0f608d45d14e507898 100644
+--- a/src/main/java/net/minecraft/world/entity/animal/frog/Tadpole.java
++++ b/src/main/java/net/minecraft/world/entity/animal/frog/Tadpole.java
+@@ -77,9 +77,11 @@ public class Tadpole extends AbstractFish {
+         return SoundEvents.TADPOLE_FLOP;
+     }
+ 
++    private int behaviorTick = 0; // Inkwell
+     @Override
+     protected void customServerAiStep() {
+         this.level().getProfiler().push("tadpoleBrain");
++        if (this.behaviorTick++ % this.activatedPriority == 0) // Inkwell
+         this.getBrain().tick((ServerLevel) this.level(), this);
+         this.level().getProfiler().pop();
+         this.level().getProfiler().push("tadpoleActivityUpdate");
+diff --git a/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java b/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
+index 111a244087e24f25ba8524a46a228da10cd9498a..a84a9fd87926bf3291c9831464e38325fb297c60 100644
+--- a/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
++++ b/src/main/java/net/minecraft/world/entity/animal/goat/Goat.java
+@@ -191,9 +191,11 @@ public class Goat extends Animal {
+         return (Brain<Goat>) super.getBrain(); // CraftBukkit - decompile error
+     }
+ 
++    private int behaviorTick = 0; // Inkwell
+     @Override
+     protected void customServerAiStep() {
+         this.level().getProfiler().push("goatBrain");
++        if (this.behaviorTick++ % this.activatedPriority == 0) // Inkwell
+         this.getBrain().tick((ServerLevel) this.level(), this);
+         this.level().getProfiler().pop();
+         this.level().getProfiler().push("goatActivityUpdate");
+diff --git a/src/main/java/net/minecraft/world/entity/monster/hoglin/Hoglin.java b/src/main/java/net/minecraft/world/entity/monster/hoglin/Hoglin.java
+index 4257f2282152aee09533c9a2e53018d3e49effa4..023024bfc1f0d08e8041920004ca7cea290ebbf6 100644
+--- a/src/main/java/net/minecraft/world/entity/monster/hoglin/Hoglin.java
++++ b/src/main/java/net/minecraft/world/entity/monster/hoglin/Hoglin.java
+@@ -128,9 +128,11 @@ public class Hoglin extends Animal implements Enemy, HoglinBase {
+         return (Brain<Hoglin>) super.getBrain(); // Paper - decompile fix
+     }
+ 
++    private int behaviorTick = 0; // Inkwell
+     @Override
+     protected void customServerAiStep() {
+         this.level().getProfiler().push("hoglinBrain");
++        if (this.behaviorTick++ % this.activatedPriority == 0) // Inkwell
+         this.getBrain().tick((ServerLevel)this.level(), this);
+         this.level().getProfiler().pop();
+         HoglinAi.updateActivity(this);
+diff --git a/src/main/java/net/minecraft/world/entity/monster/piglin/Piglin.java b/src/main/java/net/minecraft/world/entity/monster/piglin/Piglin.java
+index 6407ddef8442fce4f310ac4babf3e3de0dd5fc9a..175311f945f4b9b2d8badb72ca84e5a9ef63642a 100644
+--- a/src/main/java/net/minecraft/world/entity/monster/piglin/Piglin.java
++++ b/src/main/java/net/minecraft/world/entity/monster/piglin/Piglin.java
+@@ -300,9 +300,11 @@ public class Piglin extends AbstractPiglin implements CrossbowAttackMob, Invento
+         return !this.cannotHunt;
+     }
+ 
++    private int behaviorTick = 0; // Inkwell
+     @Override
+     protected void customServerAiStep() {
+         this.level().getProfiler().push("piglinBrain");
++        if (this.behaviorTick++ % this.activatedPriority == 0) // Inkwell
+         this.getBrain().tick((ServerLevel) this.level(), this);
+         this.level().getProfiler().pop();
+         PiglinAi.updateActivity(this);
+diff --git a/src/main/java/net/minecraft/world/entity/monster/warden/Warden.java b/src/main/java/net/minecraft/world/entity/monster/warden/Warden.java
+index b2bc3a832c310448046ccde37a04918aa6d63197..72da164aa0577183af9ffa202dda1bd28e1d4940 100644
+--- a/src/main/java/net/minecraft/world/entity/monster/warden/Warden.java
++++ b/src/main/java/net/minecraft/world/entity/monster/warden/Warden.java
+@@ -272,11 +272,13 @@ public class Warden extends Monster implements VibrationSystem {
+ 
+     }
+ 
++    private int behaviorTick = 0; // Inkwell
+     @Override
+     protected void customServerAiStep() {
+         ServerLevel worldserver = (ServerLevel) this.level();
+ 
+         worldserver.getProfiler().push("wardenBrain");
++        if (this.behaviorTick++ % this.activatedPriority == 0) // Inkwell
+         this.getBrain().tick(worldserver, this);
+         this.level().getProfiler().pop();
+         super.customServerAiStep();
+diff --git a/src/main/java/net/minecraft/world/entity/npc/Villager.java b/src/main/java/net/minecraft/world/entity/npc/Villager.java
+index cbe2a37f74f4fb2abd0b3297699e54335aaed64f..00bcd5649b7d3067ea14d9978acabc932c547fdd 100644
+--- a/src/main/java/net/minecraft/world/entity/npc/Villager.java
++++ b/src/main/java/net/minecraft/world/entity/npc/Villager.java
+@@ -251,10 +251,15 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+         // Paper start
+         this.customServerAiStep(false);
+     }
++    private int behaviorTick = 0; // Inkwell
+     protected void customServerAiStep(final boolean inactive) {
+         // Paper end
+         this.level().getProfiler().push("villagerBrain");
+-        if (!inactive) this.getBrain().tick((ServerLevel) this.level(), this); // Paper
++        // Inkwell start
++        if (!inactive && this.behaviorTick++ % this.activatedPriority == 0) {
++            this.getBrain().tick((ServerLevel) this.level(), this); // Paper
++        }
++        // Inkwell end
+         this.level().getProfiler().pop();
+         if (this.assignProfessionWhenSpawned) {
+             this.assignProfessionWhenSpawned = false;
+diff --git a/src/main/java/org/spigotmc/ActivationRange.java b/src/main/java/org/spigotmc/ActivationRange.java
+index 59103744ac6beeb12719fdefcda54eeff498229e..a53027aa7f47d058fa25772298c3a2809338f041 100644
+--- a/src/main/java/org/spigotmc/ActivationRange.java
++++ b/src/main/java/org/spigotmc/ActivationRange.java
+@@ -222,6 +222,24 @@ public class ActivationRange
+                 }
+                 // Paper end - configurable marker ticking
+                 ActivationRange.activateEntity(entity);
++
++                // Inkwell start
++                if (io.inkwellmc.inkwell.InkwellConfig.dearEnabled && entity.getType().dabEnabled) {
++                    if (!entity.activatedPriorityReset) {
++                        entity.activatedPriorityReset = true;
++                        entity.activatedPriority = io.inkwellmc.inkwell.InkwellConfig.maximumActivationPriority;
++                    }
++                    net.minecraft.world.phys.Vec3 playerVec = player.position();
++                    net.minecraft.world.phys.Vec3 entityVec = entity.position();
++                    double diffX = playerVec.x - entityVec.x, diffY = playerVec.y - entityVec.y, diffZ = playerVec.z - entityVec.z;
++                    int squaredDistance = (int) (diffX * diffX + diffY * diffY + diffZ * diffZ);
++                    entity.activatedPriority = squaredDistance > io.inkwellmc.inkwell.InkwellConfig.startDistanceSquared ?
++                            Math.max(1, Math.min(squaredDistance >> io.inkwellmc.inkwell.InkwellConfig.activationDistanceMod, entity.activatedPriority)) :
++                            1;
++                } else {
++                    entity.activatedPriority = 1;
++                }
++                // Inkwell end
+             }
+             // Paper end
+         }
+@@ -238,12 +256,12 @@ public class ActivationRange
+         if ( MinecraftServer.currentTick > entity.activatedTick )
+         {
+             if ( entity.defaultActivationState )
+-            {
++            { // Inkwell - diff on change
+                 entity.activatedTick = MinecraftServer.currentTick;
+                 return;
+             }
+             if ( entity.activationType.boundingBox.intersects( entity.getBoundingBox() ) )
+-            {
++            { // Inkwell - diff on change
+                 entity.activatedTick = MinecraftServer.currentTick;
+             }
+         }
