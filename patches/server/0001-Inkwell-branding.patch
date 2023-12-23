@@ -5,13 +5,13 @@ Subject: [PATCH] Inkwell branding
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 64479f0a892d6847f987d844efe282a6080d607b..209059d347353f000c6d143387d994faad7c5fc1 100644
+index b12b5a1e82a5ebf47135a3863a390a45a9d8d8ec..9060cb2d981002ff00f8236a687507c6e1138d46 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -13,8 +13,12 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
- val alsoShade: Configuration by configurations.creating
+@@ -27,8 +27,12 @@ repositories {
  
  dependencies {
+     extraRuntime(platform("net.kyori:adventure-bom:4.15.0-SNAPSHOT"))
 -    implementation(project(":paper-api"))
 -    implementation(project(":paper-mojangapi"))
 +    implementation(project(":inkwell-api")) // Inkwell // Paper
@@ -23,7 +23,7 @@ index 64479f0a892d6847f987d844efe282a6080d607b..209059d347353f000c6d143387d994fa
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.21.0")
      implementation("net.minecrell:terminalconsoleappender:1.3.0")
-@@ -70,7 +74,7 @@ tasks.jar {
+@@ -84,7 +88,7 @@ tasks.jar {
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",
@@ -32,7 +32,7 @@ index 64479f0a892d6847f987d844efe282a6080d607b..209059d347353f000c6d143387d994fa
              "Implementation-Vendor" to date, // Paper
              "Specification-Title" to "Bukkit",
              "Specification-Version" to project.version,
-@@ -154,7 +158,7 @@ fun TaskContainer.registerRunTask(
+@@ -168,7 +172,7 @@ fun TaskContainer.registerRunTask(
      name: String,
      block: JavaExec.() -> Unit
  ): TaskProvider<JavaExec> = register<JavaExec>(name) {
@@ -41,7 +41,7 @@ index 64479f0a892d6847f987d844efe282a6080d607b..209059d347353f000c6d143387d994fa
      mainClass.set("org.bukkit.craftbukkit.Main")
      standardInput = System.`in`
      workingDir = rootProject.layout.projectDirectory
-@@ -210,7 +214,5 @@ val runtimeClasspathForRunDev = sourceSets.main.flatMap { src ->
+@@ -224,7 +228,5 @@ val runtimeClasspathForRunDev = sourceSets.main.flatMap { src ->
  }
  tasks.registerRunTask("runDev") {
      description = "Spin up a non-relocated Mojang-mapped test server"
@@ -78,10 +78,10 @@ index 4b002e8b75d117b726b0de274a76d3596fce015b..98b940f0384edf97a06898de77ea6271
                  metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
                      Map<String, Map<String, Integer>> map = new HashMap<>();
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 8f31413c939cc2b0454ad3d9a1b618dbae449d00..0ab2183377d53ffd509720da579910fd9932ccbd 100644
+index 34f19ac897a30c0c4e3ab406013fcca1c8b7db93..56fb2fef0549c099f7a8eae5ef0548e50ebb4c87 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1697,7 +1697,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1866,7 +1866,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @DontObfuscate
      public String getServerModName() {
@@ -91,10 +91,10 @@ index 8f31413c939cc2b0454ad3d9a1b618dbae449d00..0ab2183377d53ffd509720da579910fd
  
      public SystemReport fillSystemReport(SystemReport details) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 356107688a5d40d1c462b164f61af82f4dfd3926..a9babd5a895fc37effb39e4e8c69acfbd16c6f7b 100644
+index e011cfcdda2e0a609d4158b0454bdf046b04c9d9..d0d4889d205f0d0c75417287a8c00940b12cd53c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -269,7 +269,7 @@ import javax.annotation.Nullable; // Paper
+@@ -264,7 +264,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
@@ -104,7 +104,7 @@ index 356107688a5d40d1c462b164f61af82f4dfd3926..a9babd5a895fc37effb39e4e8c69acfb
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index c737c5d62407337d3db2899cfc01713a058a6467..01f48f42bc3e8be3b433b3616af1999a173a2477 100644
+index a74a8a027c99eef199c1a6a54232ac2c8ffb9d08..be9b7ff7e6599825623fd008f1d5e9f8c3b441ea 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -301,7 +301,7 @@ public class Main {

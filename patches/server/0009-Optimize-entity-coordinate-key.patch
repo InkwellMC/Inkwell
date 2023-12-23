@@ -5,10 +5,10 @@ Subject: [PATCH] Optimize entity coordinate key
 
 
 diff --git a/src/main/java/io/papermc/paper/util/MCUtil.java b/src/main/java/io/papermc/paper/util/MCUtil.java
-index 8240bb085b619f257f8c0a25775e0b15068e440f..2ddf11c6b6e2297a9f68b0a0b30f12ff0caab675 100644
+index 200ed770b57e1a9240abf0473968d4b85cbefe3c..53b2b03800369d4e4c1de9f8fe9b08c67b3eed4c 100644
 --- a/src/main/java/io/papermc/paper/util/MCUtil.java
 +++ b/src/main/java/io/papermc/paper/util/MCUtil.java
-@@ -213,7 +213,7 @@ public final class MCUtil {
+@@ -212,7 +212,7 @@ public final class MCUtil {
      }
  
      public static long getCoordinateKey(final Entity entity) {
@@ -18,10 +18,10 @@ index 8240bb085b619f257f8c0a25775e0b15068e440f..2ddf11c6b6e2297a9f68b0a0b30f12ff
  
      public static long getCoordinateKey(final ChunkPos pair) {
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index c655c6fee393c62ba79301f76baa72f9b1154a9a..051f05f7663e27d56d084d3c79fe85d197ad81af 100644
+index 0c46a4aeafd03fbbfd590b0362d41bf2b1d5ca74..1912a71f6993bc9ba612dc286449f65a15179056 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -306,7 +306,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -307,7 +307,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
      public double yo;
      public double zo;
      private Vec3 position;

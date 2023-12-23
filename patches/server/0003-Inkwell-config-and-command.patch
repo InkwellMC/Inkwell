@@ -5,12 +5,12 @@ Subject: [PATCH] Inkwell config and command
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 209059d347353f000c6d143387d994faad7c5fc1..adff3ea621c480967819b87a6312a8889d501200 100644
+index 9060cb2d981002ff00f8236a687507c6e1138d46..b3deb17dc9baf9228e4e8b412e018e55ee0e1d30 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -55,6 +55,13 @@ dependencies {
-     runtimeOnly("org.apache.maven.resolver:maven-resolver-connector-basic:1.7.3")
-     runtimeOnly("org.apache.maven.resolver:maven-resolver-transport-http:1.7.3")
+@@ -69,6 +69,13 @@ dependencies {
+     runtimeOnly("org.apache.maven.resolver:maven-resolver-connector-basic:1.9.18")
+     runtimeOnly("org.apache.maven.resolver:maven-resolver-transport-http:1.9.18")
  
 +    // Inkwell start
 +    implementation("org.yaml:snakeyaml:1.32")
@@ -243,7 +243,7 @@ index 0000000000000000000000000000000000000000..1f90b4170e039e54b4f9b1987c57e6e2
 +}
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 1c9742ad81f04052d2c3bc18c7636f45b2fc5160..3e319bd20133560d5f9da7b65d1e8a7737d23303 100644
+index 58536aabf607015939a1326f80207c0a06eed8ff..29d12afecf0cdfc5e60a11fdd799e00e9c95e0db 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -222,6 +222,9 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface

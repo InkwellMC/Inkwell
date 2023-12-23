@@ -20,10 +20,10 @@ index 1f90b4170e039e54b4f9b1987c57e6e21b1994c2..6776016211347c5f60fa8c6dc9a6b36f
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index c88d5b9125f6ee43bf2be60fd1745d836f271b78..3b9450dcdeabe0f0acc2fc655552de5fe9a5e79d 100644
+index b78a9628a88f2a495ef6de74446a02a14d41a1f6..a443a978f8dfa8142dda823db4508f87db3132c6 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -2794,7 +2794,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -2840,7 +2840,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
              // Spigot Start
              if (entity.getBukkitEntity() instanceof org.bukkit.inventory.InventoryHolder && (!(entity instanceof ServerPlayer) || entity.getRemovalReason() != Entity.RemovalReason.KILLED)) { // SPIGOT-6876: closeInventory clears death message
                  // Paper start
