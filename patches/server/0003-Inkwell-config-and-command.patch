@@ -5,10 +5,10 @@ Subject: [PATCH] Inkwell config and command
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 9060cb2d981002ff00f8236a687507c6e1138d46..b3deb17dc9baf9228e4e8b412e018e55ee0e1d30 100644
+index 283eccd7ef1fd1121f9484a0d85c0b2decfbe13a..b583bfca5b3720c7abbb242f66bc276f394c4939 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -69,6 +69,13 @@ dependencies {
+@@ -55,6 +55,13 @@ dependencies {
      runtimeOnly("org.apache.maven.resolver:maven-resolver-connector-basic:1.9.18")
      runtimeOnly("org.apache.maven.resolver:maven-resolver-transport-http:1.9.18")
  
