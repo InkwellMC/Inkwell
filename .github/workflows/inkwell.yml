@@ -15,7 +15,7 @@ jobs:
       - uses: gradle/wrapper-validation-action@v1
       - uses: actions/setup-java@v3.6.0
         with:
-          distribution: sub-kek
+          distribution: oracle
           java-version: 17
           cache: 'gradle'
       - name: Configure Git
