@@ -25,12 +25,20 @@ subprojects {
     apply(plugin = "java")
 
     java {
-        toolchain { languageVersion.set(JavaLanguageVersion.of(17)) }
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(17))
+        }
     }
 
-    tasks.withType<JavaCompile>().configureEach {
-        options.encoding = "UTF-8"
+    tasks.withType<JavaCompile> {
+        options.encoding = Charsets.UTF_8.name()
         options.release.set(17)
+    }
+    tasks.withType<Javadoc> {
+        options.encoding = Charsets.UTF_8.name()
+    }
+    tasks.withType<ProcessResources> {
+        filteringCharset = Charsets.UTF_8.name()
     }
 
     repositories {

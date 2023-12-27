@@ -1,0 +1,52 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Wed, 27 Dec 2023 21:20:17 +0300
+Subject: [PATCH] Build changes
+
+
+diff --git a/src/main/java/io/papermc/paper/registry/RegistryKey.java b/src/main/java/io/papermc/paper/registry/RegistryKey.java
+index c4b30b16ce4db754b958c493ad86d0863592c263..7d193fa3aec9d61a94250c4f1135e3f6697fc896 100644
+--- a/src/main/java/io/papermc/paper/registry/RegistryKey.java
++++ b/src/main/java/io/papermc/paper/registry/RegistryKey.java
+@@ -32,12 +32,12 @@ public sealed interface RegistryKey<T> extends Keyed permits RegistryKeyImpl {
+      * ******************* */
+     /**
+      * Built-in registry for game events
+-     * @see io.papermc.paper.registry.keys.GameEventKeys
++     * //@see io.papermc.paper.registry.keys.GameEventKeys
+      */
+     RegistryKey<GameEvent> GAME_EVENT = create("game_event");
+     /**
+      * Built-in registry for structure types.
+-     * @see io.papermc.paper.registry.keys.StructureTypeKeys
++     * //@see io.papermc.paper.registry.keys.StructureTypeKeys
+      */
+     RegistryKey<StructureType> STRUCTURE_TYPE = create("worldgen/structure_type");
+ 
+@@ -46,22 +46,22 @@ public sealed interface RegistryKey<T> extends Keyed permits RegistryKeyImpl {
+      * ********************** */
+     /**
+      * Data-driven registry for biomes.
+-     * @see io.papermc.paper.registry.keys.BiomeKeys
++     * //@see io.papermc.paper.registry.keys.BiomeKeys
+      */
+     RegistryKey<Biome> BIOME = create("worldgen/biome");
+     /**
+      * Data-driven registry for structures.
+-     * @see io.papermc.paper.registry.keys.StructureKeys
++     * //@see io.papermc.paper.registry.keys.StructureKeys
+      */
+     RegistryKey<Structure> STRUCTURE = create("worldgen/structure");
+     /**
+      * Data-driven registry for trim materials.
+-     * @see io.papermc.paper.registry.keys.TrimMaterialKeys
++     * //@see io.papermc.paper.registry.keys.TrimMaterialKeys
+      */
+     RegistryKey<TrimMaterial> TRIM_MATERIAL = create("trim_material");
+     /**
+      * Data-driven registry for trim patterns.
+-     * @see io.papermc.paper.registry.keys.TrimPatternKeys
++     * //@see io.papermc.paper.registry.keys.TrimPatternKeys
+      */
+     RegistryKey<TrimPattern> TRIM_PATTERN = create("trim_pattern");
+ }
