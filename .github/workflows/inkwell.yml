@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: archlinux
+    runs-on: p5ws5
     if: "!contains(github.event.commits[0].message, '[ci-skip]')"
     steps:
       - uses: actions/checkout@v3
