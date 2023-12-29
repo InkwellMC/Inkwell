@@ -1,32 +1,59 @@
-name: Inkwell CI
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Leaves CI
+
 on:
-  workflow_dispatch:
-  pull_request:
   push:
-    branches:
-      - "**"
+    branches: [ master ]
+  pull_request:
+    types: [ closed ]
+    branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.commits[0].message, '[ci-skip]')"
+    if: github.event.pull_request.merged || github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     steps:
-      - uses: actions/checkout@v3
-      - uses: gradle/wrapper-validation-action@v1
-      - uses: actions/setup-java@v3.6.0
+      - name: Get repository
+        uses: actions/checkout@v3
         with:
+          fetch-depth: 0
+      - name: Get JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
           distribution: 'temurin'
-          java-version: 17
-          cache: 'gradle'
-      - name: Configure Git
+      - name: Setup Git Config
         run: git config --global user.email "no-reply@github.com" && git config --global user.name "Github Actions"
       - name: Apply Patches
-        run: ./gradlew applyPatches --no-daemon --stacktrace
-      - name: Build
-        run: ./gradlew build --no-daemon --stacktrace
-      - name: Rebuild on Failure
-        if: ${{ failure() }}
-        run: |
-          ./gradlew clean cleanCache
-          ./gradlew applyPatches --no-daemon --stacktrace 
-          ./gradlew build --no-daemon --stacktrace
+        run: ./gradlew applyPatches
+      - name: Create Paperclip Jar
+        run: ./gradlew createReobfPaperclipJar
+      - name: Get Release Info
+        run: sh scripts/GetReleaseInfo.sh
+      - name: Create Release
+        if: "!contains(github.event.commits[0].message, '[release-skip]')"
+        uses: ncipollo/release-action@v1.12.0
+        with:
+          artifacts: ${{ env.jar }}
+          bodyFile: ${{ env.info }}
+          tag: ${{ env.tag }}
+          name: ${{ env.name }}
+          prerelease: ${{ env.pre }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          makeLatest: ${{ env.make_latest }}
+      - name: Delete Draft Releases
+        uses: hugo19941994/delete-draft-releases@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.jar }}
+          path: ${{ env.jar }}
