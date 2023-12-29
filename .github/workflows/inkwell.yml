@@ -5,7 +5,7 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Leaves CI
+name: Inkwell CI
 
 on:
   push:
@@ -17,7 +17,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-home
     if: github.event.pull_request.merged || github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Get repository
