@@ -55,4 +55,4 @@ echo "| SHA1 | `sha1 $jarName` |" >> $releaseinfo
 
 echo -n "{\"content\":\"Inkwell New Release\",\"embeds\":[{\"title\":\"$inkwellid,\"url\":\"https://github.com/InkwellMC/Inkwell/releases/tag/$tagid\",\"fields\":[{\"name\":\"Changelog\",\"value\":\"" >> $discordmes
 echo -n $(git log --oneline --pretty='> [%h] %s\\n' -$number) >> $discordmes
-echo "\",\"inline\":true}]\"color\":10508031}]}" >> $discordmes
+echo "\",\"inline\":true}],\"color\":10508031}]}" >> $discordmes
