@@ -5,7 +5,7 @@ Subject: [PATCH] Firework sit player
 
 
 diff --git a/src/main/java/org/bukkit/entity/Firework.java b/src/main/java/org/bukkit/entity/Firework.java
-index 217d348ad0bbef720b25d3b507a55ca8105b7731..d76fe8e6b8cf446b1a1b659db2f1431a84148452 100644
+index 217d348ad0bbef720b25d3b507a55ca8105b7731..b052f61e00a033a6c2552fc08722d2d6c751a28c 100644
 --- a/src/main/java/org/bukkit/entity/Firework.java
 +++ b/src/main/java/org/bukkit/entity/Firework.java
 @@ -185,4 +185,11 @@ public interface Firework extends Projectile {
@@ -18,5 +18,5 @@ index 217d348ad0bbef720b25d3b507a55ca8105b7731..d76fe8e6b8cf446b1a1b659db2f1431a
 +     *
 +     * @param player player sit on firework.
 +     */
-+    void sitPlayer(Player player);
++    void sitPlayer(@NotNull Player player);
  }

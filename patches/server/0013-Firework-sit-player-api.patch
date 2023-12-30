@@ -18,7 +18,7 @@ index b2f08889139dc447f7071f1c81456035bf8de31e..2f3d9d7265f22538191f2010137a9a6a
              }
              // CraftBukkit end
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftFirework.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftFirework.java
-index c13cdbaf7abdf120a3969f8e887b4c3b78989c9c..cdef9d54934dd2edf7119aa55ec861c439455d12 100644
+index c13cdbaf7abdf120a3969f8e887b4c3b78989c9c..06e6eb59b470bf8535a16b7dd369629575e730e4 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftFirework.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftFirework.java
 @@ -177,6 +177,11 @@ public class CraftFirework extends CraftProjectile implements Firework {
@@ -26,7 +26,7 @@ index c13cdbaf7abdf120a3969f8e887b4c3b78989c9c..cdef9d54934dd2edf7119aa55ec861c4
      }
  
 +    @Override
-+    public void sitPlayer(org.bukkit.entity.Player player) {
++    public void sitPlayer(@org.jetbrains.annotations.NotNull org.bukkit.entity.Player player) {
 +        this.addPassenger(player);
 +    }
 +
