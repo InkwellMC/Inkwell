@@ -16,20 +16,27 @@ You can also [build it yourself](https://github.com/InkwellMC/Inkwell#building).
 
 ## How To (Plugin developers)
 Inkwell-API:
-```kotlin
-dependencies {
-    compileOnly("io.inkwellmc.inkwell:inkwell-api:1.20.4-R0.1-SNAPSHOT")
-}
- ```
-
-In order to use Inkwell as a dependency you must [build it yourself](https://github.com/InkwellMC/Inkwell#building).
-Each time you want to update your dependency, you must re-build Inkwell.
-
-Inkwell-Server:
-```kotlin
-dependencies {
-    compileOnly("io.inkwellmc.inkwell:inkwell:1.20.4-R0.1-SNAPSHOT")
-}
+```xml
+<repositories>
+  <repository>
+    <id>sonatype-snapshots</id>
+    <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+  </repository>
+  <repository>
+    <id>papermc</id>
+    <url>https://repo.papermc.io/repository/maven-public/</url>
+  </repository>
+</repositories>
+```
+```xml
+<dependencies>
+  <dependency>
+    <groupId>io.github.inkwellmc</groupId>
+    <artifactId>inkwell-api</artifactId>
+    <version>LATEST</version>
+    <scope>provided</scope>
+  </dependency>
+</dependencies>
  ```
 
 ## Building
