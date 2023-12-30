@@ -1,7 +1,19 @@
 plugins {
     java
+    `maven-publish`
     id("com.github.johnrengelman.shadow") version "8.1.1" apply false
     id("io.papermc.paperweight.patcher") version "1.5.11"
+}
+
+allprojects {
+    apply(plugin = "java")
+    apply(plugin = "maven-publish")
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
@@ -22,14 +34,6 @@ dependencies {
 }
 
 subprojects {
-    apply(plugin = "java")
-
-    java {
-        toolchain {
-            languageVersion.set(JavaLanguageVersion.of(17))
-        }
-    }
-
     tasks.withType<JavaCompile> {
         options.encoding = Charsets.UTF_8.name()
         options.release.set(17)
@@ -67,6 +71,17 @@ paperweight {
 
             apiOutputDir.set(layout.projectDirectory.dir("inkwell-api"))
             serverOutputDir.set(layout.projectDirectory.dir("inkwell-server"))
+        }
+    }
+}
+
+allprojects {
+    publishing {
+        repositories {
+            maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+                name = "inkwellmc"
+                credentials(PasswordCredentials::class)
+            }
         }
     }
 }

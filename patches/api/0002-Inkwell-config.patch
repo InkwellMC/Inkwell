@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Sat, 30 Dec 2023 15:35:19 +0300
+Subject: [PATCH] Inkwell config
+
+
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 9af4bc16da09e59009c47911219e99450cdf2aa5..e15a1d9601fb033016133f16613ea50ae0d60f7d 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -2198,6 +2198,18 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+         }
+         // Paper end
+ 
++        // Inkwell start
++        @NotNull
++        public org.bukkit.configuration.file.YamlConfiguration getInkwellConfig() {
++            throw new UnsupportedOperationException("Not supported yet.");
++        }
++
++        @NotNull
++        public java.util.Properties getServerProperties() {
++            throw new UnsupportedOperationException("Not supported yet.");
++        }
++        // Inkwell end
++
+         /**
+          * Sends the component to the player
+          *
