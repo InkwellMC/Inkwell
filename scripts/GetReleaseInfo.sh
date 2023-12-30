@@ -14,7 +14,7 @@ commitid=$(git log --pretty='%h' -1)
 mcversion=$(prop mcVersion)
 gradleVersion=$(prop version)
 preVersion=$(prop preVersion)
-tagid="$mcversion-$commitid"
+tagid="$mcversion"
 jarName="inkwell-$mcversion.jar"
 inkwellid="Inkwell-$commitid"
 releaseinfo="releaseinfo.md"
