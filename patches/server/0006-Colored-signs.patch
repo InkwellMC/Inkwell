@@ -20,10 +20,10 @@ index f24857c05bf7c7bf007dd7c3a5774b2dc12b8d74..c73d828fcedfcfb20c4c871eb2336674
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index d1f20a8a3ccea1f074624163eb96da023142a459..59f2905721c96b669922058afb2a13c5b1c7cee2 100644
+index be05a52be037042c6158100e2ce880b8ed415d53..82b48ba317d87571c639cd69732ab473ce3ac89c 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -1548,6 +1548,7 @@ public class ServerPlayer extends Player {
+@@ -1549,6 +1549,7 @@ public class ServerPlayer extends Player {
  
      @Override
      public void openTextEdit(SignBlockEntity sign, boolean front) {
