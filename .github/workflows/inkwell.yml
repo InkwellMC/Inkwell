@@ -18,7 +18,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged || github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    if: "!contains(github.event.commits[0].message, '[ci-skip]')"
     steps:
       - name: Get repository
         uses: actions/checkout@v3
@@ -53,6 +53,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Github Releases To Discord
+        if: "!contains(github.event.commits[0].message, '[release-skip]')"
         continue-on-error: true
         uses: tsickert/discord-webhook@v5.3.0
         with:
