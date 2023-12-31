@@ -78,7 +78,7 @@ paperweight {
 allprojects {
     publishing {
         repositories {
-            maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+            maven("https://nexus.subroute.keenetic.pro/repository/maven-snapshots/") {
                 name = "inkwellmc"
                 credentials(PasswordCredentials::class)
             }

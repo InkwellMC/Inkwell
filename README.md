@@ -17,26 +17,18 @@ You can also [build it yourself](https://github.com/InkwellMC/Inkwell#building).
 ## How To (Plugin developers)
 Inkwell-API:
 ```xml
-<repositories>
-  <repository>
-    <id>sonatype-snapshots</id>
-    <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
-  </repository>
-  <repository>
-    <id>papermc</id>
-    <url>https://repo.papermc.io/repository/maven-public/</url>
-  </repository>
-</repositories>
+<repository>
+  <id>sonatype-snapshots</id>
+  <url>https://nexus.subroute.keenetic.pro/repository/maven-public/</url>
+</repository>
 ```
 ```xml
-<dependencies>
-  <dependency>
-    <groupId>io.github.inkwellmc</groupId>
-    <artifactId>inkwell-api</artifactId>
-    <version>LATEST</version>
-    <scope>provided</scope>
-  </dependency>
-</dependencies>
+<dependency>
+  <groupId>io.inkwellmc.inkwell</groupId>
+  <artifactId>inkwell-api</artifactId>
+  <version>LATEST</version>
+  <scope>provided</scope>
+</dependency>
  ```
 
 ## Building
