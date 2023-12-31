@@ -18,7 +18,7 @@ You can also [build it yourself](https://github.com/InkwellMC/Inkwell#building).
 Inkwell-API:
 ```xml
 <repository>
-  <id>sonatype-snapshots</id>
+  <id>inkwellmc</id>
   <url>https://repo.subroute.keenetic.pro/repository/maven-public/</url>
 </repository>
 ```
