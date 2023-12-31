@@ -19,7 +19,7 @@ Inkwell-API:
 ```xml
 <repository>
   <id>sonatype-snapshots</id>
-  <url>https://nexus.subroute.keenetic.pro/repository/maven-public/</url>
+  <url>https://repo.subroute.keenetic.pro/repository/maven-public/</url>
 </repository>
 ```
 ```xml
