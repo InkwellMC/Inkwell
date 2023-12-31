@@ -64,3 +64,5 @@ jobs:
         with:
           name: ${{ env.jar }}
           path: ${{ env.jar }}
+      - name: Publish Api
+        run: ./gradlew publish -PinkwellmcUsername=${{ secrets.REPO_USERNAME }} -PinkwellmcPassword=${{ secrets.REPO_PASSWORD }}
