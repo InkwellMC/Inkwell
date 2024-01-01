@@ -55,7 +55,7 @@ It's very easy to to add patches by following the steps below:
 1. Modify the code of `inkwell-api` and / or `inkwell-server`
 2. Add these changes to the local git repository (For example, `git add .`)
 3. Commit these changes using `git commit -m <Commit Message>`
-4. Run Gradle's task `rebuildPatches` to convert your commits to a new patch
+4. Run Gradle's task `./gradlew rebuildPatches` to convert your commits to a new patch
 5. Push your patches to your repository
 
 After pushing, you can open a PR to submit your patches.
@@ -67,6 +67,6 @@ You can modify a existing patch by following the steps below:
 1. Modify code at HEAD
 2. Run `git commit -a --fixup <hash>` in your terminal to make a fix-up commit
     - If you want to edit the commit message, replace `--fixup` with `--squash`.
-3. Run `git rebase -i --autosquash base` to rebase automatically, then just type `:q` to close the confirm page
-4. Run Gradle's task `rebuildPatches` to modify existing patches
+3. Run `git rebase -i base` to rebase automatically, then just type `:q` to close the confirm page
+4. Run Gradle's task `./gradlew rebuildPatches` to modify existing patches
 5. Push and PR again
