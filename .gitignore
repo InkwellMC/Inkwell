@@ -1,9 +1,10 @@
-inkwell-api
-inkwell-server
+inkwell-api/
+inkwell-server/
 
 build/
 .gradle/
 
 .idea/
 pufferpatches/
+purpurpatches/
 build-data/
