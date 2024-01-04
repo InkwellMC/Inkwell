@@ -1,9 +1,7 @@
 current_dir=$(pwd)
 end_word="Inkwell"
 
-if [ "${current_dir##*/}" = "$end_word" ]; then
-    echo "Work folder is right i continue"
-else
+if [ "${current_dir##*/}" != "$end_word" ]; then
     echo "Run it in Inkwell root dir"
     exit
 fi
