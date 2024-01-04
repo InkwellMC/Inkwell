@@ -17,10 +17,10 @@ index 8477c7b0bfa29524041c529bbe6928da83b90299..2aaf4f55ed0e81e272faf482a6ba6856
                  gameprofilerfiller.popPush("naturalSpawnCount");
                  this.level.timings.countNaturalMobs.startTiming(); // Paper - timings
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 932a0d3c018ba228d0ac2cc4d097f7c6fc00a2d1..47fd0a231ba06e8fbd20def10b22f1b2c7729590 100644
+index a0ca9bb84f1d249320989172eaa77acc7978a09a..ba07062bd3ce4f69b99f54b508481da3f3ebb49a 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -980,9 +980,10 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -985,9 +985,10 @@ public class ServerLevel extends Level implements WorldGenLevel {
      }
      // Paper start - optimise random block ticking
      private final BlockPos.MutableBlockPos chunkTickMutablePosition = new BlockPos.MutableBlockPos();
@@ -32,7 +32,7 @@ index 932a0d3c018ba228d0ac2cc4d097f7c6fc00a2d1..47fd0a231ba06e8fbd20def10b22f1b2
      public void tickChunk(LevelChunk chunk, int randomTickSpeed) {
          ChunkPos chunkcoordintpair = chunk.getPos();
          boolean flag = this.isRaining();
-@@ -993,7 +994,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -998,7 +999,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
          gameprofilerfiller.push("thunder");
          final BlockPos.MutableBlockPos blockposition = this.chunkTickMutablePosition; // Paper - use mutable to reduce allocation rate, final to force compile fail on change
  

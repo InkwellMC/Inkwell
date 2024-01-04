@@ -56,10 +56,10 @@ index 0961c14a874dcd6a4b08af5c77f34a01f35bd1ad..5eeb8ed0df4f3f5ab8e0f9f307b526d2
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index a443a978f8dfa8142dda823db4508f87db3132c6..2f8c5c9bda138f0664a95f40b103a726ca1ac074 100644
+index 8cc53b23f78e8e35db6f40a1ea2dad884f2d9ec0..a0ca9bb84f1d249320989172eaa77acc7978a09a 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -895,6 +895,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -900,6 +900,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
              org.spigotmc.ActivationRange.activateEntities(this); // Spigot
              this.timings.entityTick.startTiming(); // Spigot
              this.entityTickList.forEach((entity) -> {
@@ -68,7 +68,7 @@ index a443a978f8dfa8142dda823db4508f87db3132c6..2f8c5c9bda138f0664a95f40b103a726
                      if (false && this.shouldDiscardEntity(entity)) { // CraftBukkit - We prevent spawning in general, so this butchering is not needed
                          entity.discard();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 1912a71f6993bc9ba612dc286449f65a15179056..737e378f06f002491174e5dc81d0e9312b68e7c4 100644
+index d81f55c51491dc925dbf157a37644dcaf2e560bf..4b7ed1e49d8319975512d95f9899ffdeae3f4ead 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -438,6 +438,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
@@ -96,7 +96,7 @@ index 940b8d0b89d7e55c938aefbe80ee71b0db3dacb8..3ddf4f1ff9f2c42b84a5e0ef50a5bb18
      private String descriptionId;
      @Nullable
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 5af48151159135b869ec4753bbcf79dd257c1570..4477a7a598b19037e0c219456b913eb659b60829 100644
+index e0cf7771488ab0065708d68b4e8550b865af0ed4..bfa40dd8af11758aa6dd300e97f33f768608693e 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
 @@ -225,10 +225,10 @@ public abstract class Mob extends LivingEntity implements Targeting {
@@ -304,7 +304,7 @@ index 11935e5b16324af572b07c5b173708f5a91f8289..0eb6fd36ea53c299019ff30034e9b011
          if (this.assignProfessionWhenSpawned) {
              this.assignProfessionWhenSpawned = false;
 diff --git a/src/main/java/org/spigotmc/ActivationRange.java b/src/main/java/org/spigotmc/ActivationRange.java
-index 59103744ac6beeb12719fdefcda54eeff498229e..a53027aa7f47d058fa25772298c3a2809338f041 100644
+index 2d31752478636bd21bbff5b430e5acb76b5d91c2..9a8b5506e5f2f8b5f3da1a14b0fb221b51c6fb90 100644
 --- a/src/main/java/org/spigotmc/ActivationRange.java
 +++ b/src/main/java/org/spigotmc/ActivationRange.java
 @@ -222,6 +222,24 @@ public class ActivationRange
