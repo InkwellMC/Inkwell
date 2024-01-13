@@ -17,10 +17,10 @@ index 8477c7b0bfa29524041c529bbe6928da83b90299..2aaf4f55ed0e81e272faf482a6ba6856
                  gameprofilerfiller.popPush("naturalSpawnCount");
                  this.level.timings.countNaturalMobs.startTiming(); // Paper - timings
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index a0ca9bb84f1d249320989172eaa77acc7978a09a..ba07062bd3ce4f69b99f54b508481da3f3ebb49a 100644
+index 74aa8e49e40608e4161e7d037108ec6003e92f3a..caeb77b96d7e71576c36ab5c1a8ae6ee0a980d34 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -985,9 +985,10 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -984,9 +984,10 @@ public class ServerLevel extends Level implements WorldGenLevel {
      }
      // Paper start - optimise random block ticking
      private final BlockPos.MutableBlockPos chunkTickMutablePosition = new BlockPos.MutableBlockPos();
@@ -32,7 +32,7 @@ index a0ca9bb84f1d249320989172eaa77acc7978a09a..ba07062bd3ce4f69b99f54b508481da3
      public void tickChunk(LevelChunk chunk, int randomTickSpeed) {
          ChunkPos chunkcoordintpair = chunk.getPos();
          boolean flag = this.isRaining();
-@@ -998,7 +999,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -997,7 +998,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
          gameprofilerfiller.push("thunder");
          final BlockPos.MutableBlockPos blockposition = this.chunkTickMutablePosition; // Paper - use mutable to reduce allocation rate, final to force compile fail on change
  
@@ -42,7 +42,7 @@ index a0ca9bb84f1d249320989172eaa77acc7978a09a..ba07062bd3ce4f69b99f54b508481da3
  
              if (this.isRainingAt(blockposition)) {
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index 8848eeda7a89d445e370626182f9bb4710e5edd4..a0f51eb57268833c4f906449910178040aea9183 100644
+index 6403341f2e9d7ac4251336cb0bcc5d79dbb7bb0e..d16c744b23f460fe108ff78af8ccf09230ce1b07 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
 @@ -213,6 +213,8 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
@@ -55,7 +55,7 @@ index 8848eeda7a89d445e370626182f9bb4710e5edd4..a0f51eb57268833c4f90644991017804
          this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName()); // Spigot
          this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper
 diff --git a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-index fa170cc1ce7011d201295b89718292d696c7fc24..87c486e661dc49933eec2afc75fa70b36e1cbe83 100644
+index 27e8ee4507460b1cc72de692b41562b9f4f13929..f051960a7e5cb2c559a1adb7616028fcac83a149 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 @@ -86,6 +86,18 @@ public class LevelChunk extends ChunkAccess {

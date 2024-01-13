@@ -78,7 +78,7 @@ paperweight {
 allprojects {
     publishing {
         repositories {
-            maven("https://repo.subroute.keenetic.pro/maven-snapshots/") {
+            maven("https://repo.subroute.keenetic.pro/maven-public/") {
                 name = "inkwellmc"
                 credentials(PasswordCredentials::class)
             }
