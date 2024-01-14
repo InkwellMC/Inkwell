@@ -23,10 +23,10 @@ index c73d828fcedfcfb20c4c871eb23366744845fed3..cee6431f08384dcce22ac2131f4c0494
      private static void blockEntity() {
          allowSignColors = getBoolean("blockentity.allow-sign-colors", false, "Allows to parse colors on signs.");
 diff --git a/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java b/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
-index ee998d06804e344ea9d5b84ef0074b84aaba04c2..24bae5c92add134a4b2c038afe63a4aec5720d78 100644
+index ee998d06804e344ea9d5b84ef0074b84aaba04c2..329b725625282e65fe80c33be4c2f009d17106bf 100644
 --- a/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
-@@ -66,8 +66,32 @@ public class NetherPortalBlock extends Block {
+@@ -66,8 +66,37 @@ public class NetherPortalBlock extends Block {
              }
  
              if (world.getBlockState(pos).isValidSpawn(world, pos, EntityType.ZOMBIFIED_PIGLIN)) {
@@ -36,7 +36,12 @@ index ee998d06804e344ea9d5b84ef0074b84aaba04c2..24bae5c92add134a4b2c038afe63a4ae
 +                Entity entity = null;
 +                int zombifiedPigninsCount = 0;
 +                if (io.inkwellmc.inkwell.InkwellConfig.usePigmanSpawnLimit) {
-+                    org.bukkit.craftbukkit.entity.CraftHumanEntity player = world.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), world.getViewDistances().loadViewDistance()*16, false).getBukkitEntity();
++                    org.bukkit.craftbukkit.entity.CraftHumanEntity player;
++                    try {
++                        player = world.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), world.getViewDistances().loadViewDistance()*16, false).getBukkitEntity();
++                    } catch (Exception e) {
++                        return;
++                    }
 +                    int radiusCheck = world.getViewDistances().loadViewDistance();
 +                    int playerChunkX = player.getLocation().getBlockX() >> 4;
 +                    int playerChunkZ = player.getLocation().getBlockZ() >> 4;
