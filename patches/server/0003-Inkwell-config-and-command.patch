@@ -5,10 +5,10 @@ Subject: [PATCH] Inkwell config and command
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 283eccd7ef1fd1121f9484a0d85c0b2decfbe13a..b583bfca5b3720c7abbb242f66bc276f394c4939 100644
+index cc844f70284e23debed93a3d1b6508843232e163..d95f720470e93a71bf054c1ef27807ccb959de59 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -55,6 +55,13 @@ dependencies {
+@@ -54,6 +54,13 @@ dependencies {
      runtimeOnly("org.apache.maven.resolver:maven-resolver-connector-basic:1.9.18")
      runtimeOnly("org.apache.maven.resolver:maven-resolver-transport-http:1.9.18")
  
@@ -243,12 +243,12 @@ index 0000000000000000000000000000000000000000..1f90b4170e039e54b4f9b1987c57e6e2
 +}
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 58536aabf607015939a1326f80207c0a06eed8ff..29d12afecf0cdfc5e60a11fdd799e00e9c95e0db 100644
+index c1402d4dfbddc14ca748efa24e7d62d81abf4e58..3d3a8e475e2db2fc4d93f8870af624312d0eae1d 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -222,6 +222,9 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
-         io.papermc.paper.brigadier.PaperBrigadierProviderImpl.INSTANCE.getClass(); // init PaperBrigadierProvider
-         // Paper end
+         com.destroystokyo.paper.VersionHistoryManager.INSTANCE.getClass(); // Paper - load version history now
+         io.papermc.paper.brigadier.PaperBrigadierProviderImpl.INSTANCE.getClass(); // Paper - init PaperBrigadierProvider
  
 +        io.inkwellmc.inkwell.InkwellConfig.load(); // Inkwell
 +        io.inkwellmc.inkwell.InkwellCommand.init(); // Inkwell

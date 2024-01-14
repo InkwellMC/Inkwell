@@ -56,7 +56,7 @@ index 0961c14a874dcd6a4b08af5c77f34a01f35bd1ad..5eeb8ed0df4f3f5ab8e0f9f307b526d2
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index fb401e6b04aefb97d5ef9fc48f6b298d31752c08..74aa8e49e40608e4161e7d037108ec6003e92f3a 100644
+index 797f0315f1d7721cb151a48c9816b2aab19f7ff8..5b6ec9709d3a709a4bcaa35b50e9da9b99b92a0c 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -899,6 +899,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
@@ -68,10 +68,10 @@ index fb401e6b04aefb97d5ef9fc48f6b298d31752c08..74aa8e49e40608e4161e7d037108ec60
                      if (false && this.shouldDiscardEntity(entity)) { // CraftBukkit - We prevent spawning in general, so this butchering is not needed
                          entity.discard();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 7ca4ac3c3ad2dac5c9a7c029587122b0883e16be..f9ae7ba70dfc1709acc2d04858e4c83d18ed11dd 100644
+index b1b48ea83da67e4741de447d72b60998471d4acb..09f581736b245e4ad803d30e2a74fa3b1ad28997 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -438,6 +438,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -440,6 +440,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
          return this.originWorld;
      }
      // Paper end
@@ -84,7 +84,7 @@ index 7ca4ac3c3ad2dac5c9a7c029587122b0883e16be..f9ae7ba70dfc1709acc2d04858e4c83d
          return this.yRot;
      }
 diff --git a/src/main/java/net/minecraft/world/entity/EntityType.java b/src/main/java/net/minecraft/world/entity/EntityType.java
-index 6cfce9755dd464a7afb01f9032e567ce3bcd5bc5..abd2f1947e0d2f88883381b028803e0dca981241 100644
+index 4bede2ca556a3bbcfbde9709c8415c9ea94383de..74da61498342f24564570e62a94bc2a19ba39449 100644
 --- a/src/main/java/net/minecraft/world/entity/EntityType.java
 +++ b/src/main/java/net/minecraft/world/entity/EntityType.java
 @@ -305,6 +305,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
@@ -96,7 +96,7 @@ index 6cfce9755dd464a7afb01f9032e567ce3bcd5bc5..abd2f1947e0d2f88883381b028803e0d
      private String descriptionId;
      @Nullable
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index a7fbd329ea6d36a46c00b4476c74e426dbbfe238..e741f8b193d6fd7015600340f2a12eb1777ca742 100644
+index 0b5334004b9d0489e8465824870662b467ce321b..324864f54a08630dd7ce313f7a3138247a5a2ca9 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
 @@ -225,10 +225,10 @@ public abstract class Mob extends LivingEntity implements Targeting {
