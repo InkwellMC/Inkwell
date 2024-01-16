@@ -23,10 +23,10 @@ index c73d828fcedfcfb20c4c871eb23366744845fed3..cee6431f08384dcce22ac2131f4c0494
      private static void blockEntity() {
          allowSignColors = getBoolean("blockentity.allow-sign-colors", false, "Allows to parse colors on signs.");
 diff --git a/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java b/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
-index ee998d06804e344ea9d5b84ef0074b84aaba04c2..329b725625282e65fe80c33be4c2f009d17106bf 100644
+index ee998d06804e344ea9d5b84ef0074b84aaba04c2..4877f6962e05b9c328a4ba63507336823428ff3e 100644
 --- a/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
-@@ -66,8 +66,37 @@ public class NetherPortalBlock extends Block {
+@@ -66,8 +66,31 @@ public class NetherPortalBlock extends Block {
              }
  
              if (world.getBlockState(pos).isValidSpawn(world, pos, EntityType.ZOMBIFIED_PIGLIN)) {
@@ -36,23 +36,17 @@ index ee998d06804e344ea9d5b84ef0074b84aaba04c2..329b725625282e65fe80c33be4c2f009
 +                Entity entity = null;
 +                int zombifiedPigninsCount = 0;
 +                if (io.inkwellmc.inkwell.InkwellConfig.usePigmanSpawnLimit) {
-+                    org.bukkit.craftbukkit.entity.CraftHumanEntity player;
-+                    try {
-+                        player = world.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), world.getViewDistances().loadViewDistance()*16, false).getBukkitEntity();
-+                    } catch (Exception e) {
-+                        return;
-+                    }
 +                    int radiusCheck = world.getViewDistances().loadViewDistance();
-+                    int playerChunkX = player.getLocation().getBlockX() >> 4;
-+                    int playerChunkZ = player.getLocation().getBlockZ() >> 4;
-+                    java.util.List<org.bukkit.Chunk> chunks = new java.util.ArrayList<>();
-+                    for (int x = playerChunkX - radiusCheck; x <= playerChunkX + radiusCheck; x++) {
-+                        for (int z = playerChunkZ - radiusCheck; z <= playerChunkZ + radiusCheck; z++) {
-+                            chunks.add(world.getWorld().getChunkAt(x, z));
++                    int chunkX = pos.getX() >> 4;
++                    int chunkZ = pos.getZ() >> 4;
++                    java.util.List<net.minecraft.world.level.chunk.LevelChunk> chunks = new java.util.ArrayList<>();
++                    for (int x = chunkX - radiusCheck; x <= chunkX + radiusCheck; x++) {
++                        for (int z = chunkZ - radiusCheck; z <= chunkZ + radiusCheck; z++) {
++                            chunks.add(world.getChunk(x, z));
 +                        }
 +                    }
-+                    for (org.bukkit.Chunk chunk : chunks) {
-+                        java.util.List<org.bukkit.entity.Entity> entities = java.util.List.of(chunk.getEntities());
++                    for (net.minecraft.world.level.chunk.LevelChunk chunk : chunks) {
++                        java.util.List<org.bukkit.entity.Entity> entities = java.util.List.of(world.getChunkEntities(chunk.locX, chunk.locZ));
 +                        for (org.bukkit.entity.Entity entityCycle : entities) {
 +                            if (entityCycle.getType().equals(org.bukkit.entity.EntityType.ZOMBIFIED_PIGLIN)) zombifiedPigninsCount++;
 +                        }
