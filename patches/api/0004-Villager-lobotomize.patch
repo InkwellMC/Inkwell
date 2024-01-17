@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Wed, 17 Jan 2024 14:58:20 +0300
+Subject: [PATCH] Villager lobotomize
+
+
+diff --git a/src/main/java/org/bukkit/entity/Villager.java b/src/main/java/org/bukkit/entity/Villager.java
+index 3bc24457d143449e6a338d79becf7c39b9f81054..65e9dc37f926f7030bd821a416ced45eb1c9c1c4 100644
+--- a/src/main/java/org/bukkit/entity/Villager.java
++++ b/src/main/java/org/bukkit/entity/Villager.java
+@@ -328,4 +328,13 @@ public interface Villager extends AbstractVillager {
+      */
+     public void clearReputations();
+     // Paper end
++
++    // Inkwell start
++    /**
++      * Check if villager is currently lobotomized
++      *
++      * @return True if lobotomized
++      */
++    boolean isLobotomized();
++    // Inkwell end
+ }
