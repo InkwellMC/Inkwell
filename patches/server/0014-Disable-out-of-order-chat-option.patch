@@ -20,15 +20,15 @@ index 5eeb8ed0df4f3f5ab8e0f9f307b526d28e6ccd40..99f5e8a56d5d9eadfe82a4a4a393b862
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/network/chat/SignedMessageChain.java b/src/main/java/net/minecraft/network/chat/SignedMessageChain.java
-index 85a8a687b1568a56e3e646b37ef78b562c1b8a82..26f696783d9649dd7154c3a3fcaca939b4632742 100644
+index ba12919c3f9aec34a9e64993b143ae92be5eb172..b5cdf463353f2afac87ba5b203558facf6faf9ae 100644
 --- a/src/main/java/net/minecraft/network/chat/SignedMessageChain.java
 +++ b/src/main/java/net/minecraft/network/chat/SignedMessageChain.java
 @@ -38,7 +38,7 @@ public class SignedMessageChain {
                  throw new SignedMessageChain.DecodeException(Component.translatable("chat.disabled.chain_broken"), false); // Paper - diff on change (if disconnects, need a new kick event cause)
              } else if (playerPublicKey.data().hasExpired()) {
-                 throw new SignedMessageChain.DecodeException(Component.translatable("chat.disabled.expiredProfileKey", org.bukkit.event.player.PlayerKickEvent.Cause.EXPIRED_PROFILE_PUBLIC_KEY), false); // Paper - kick event causes
+                 throw new SignedMessageChain.DecodeException(Component.translatable("chat.disabled.expiredProfileKey"), false, org.bukkit.event.player.PlayerKickEvent.Cause.EXPIRED_PROFILE_PUBLIC_KEY); // Paper - kick event causes
 -            } else if (body.timeStamp().isBefore(this.lastTimeStamp)) {
 +            } else if (!io.inkwellmc.inkwell.InkwellConfig.disableOutOfOrderChat && body.timeStamp().isBefore(this.lastTimeStamp)) { // Inkwell
-                 throw new SignedMessageChain.DecodeException(Component.translatable("multiplayer.disconnect.out_of_order_chat", org.bukkit.event.player.PlayerKickEvent.Cause.OUT_OF_ORDER_CHAT), true); // Paper - kick event causes
+                 throw new SignedMessageChain.DecodeException(Component.translatable("multiplayer.disconnect.out_of_order_chat"), true, org.bukkit.event.player.PlayerKickEvent.Cause.OUT_OF_ORDER_CHAT); // Paper - kick event causes
              } else {
                  this.lastTimeStamp = body.timeStamp();

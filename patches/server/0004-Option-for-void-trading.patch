@@ -20,15 +20,15 @@ index 1f90b4170e039e54b4f9b1987c57e6e21b1994c2..6776016211347c5f60fa8c6dc9a6b36f
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 891ebb5a03adaa5d184b7363bbfa94e8a17c2773..fb401e6b04aefb97d5ef9fc48f6b298d31752c08 100644
+index 9b0b2510edb4984b0714244bbe513e077af7b455..41ad0706e3a27163dd42050cf152c2914c8a08d5 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -2845,7 +2845,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
              // Spigot Start
              if (entity.getBukkitEntity() instanceof org.bukkit.inventory.InventoryHolder && (!(entity instanceof ServerPlayer) || entity.getRemovalReason() != Entity.RemovalReason.KILLED)) { // SPIGOT-6876: closeInventory clears death message
-                 // Paper start
+                 // Paper start - Fix merchant inventory not closing on entity removal
 -                if (entity.getBukkitEntity() instanceof org.bukkit.inventory.Merchant merchant && merchant.getTrader() != null) {
 +                if (!io.inkwellmc.inkwell.InkwellConfig.allowVoidTrading && entity.getBukkitEntity() instanceof org.bukkit.inventory.Merchant merchant && merchant.getTrader() != null) {
                      merchant.getTrader().closeInventory(org.bukkit.event.inventory.InventoryCloseEvent.Reason.UNLOADED);
                  }
-                 // Paper end
+                 // Paper end - Fix merchant inventory not closing on entity removal

@@ -67,7 +67,7 @@ index cee6431f08384dcce22ac2131f4c0494e2ae76af..e092f1288e8810493c39fca59b24e255
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 45b1a182acf6b2aef40b714d31ca125d8f74619a..65523d289080be632235acbe9367ccecd8f2ee10 100644
+index 353f8598ae940b15a71e71d7c6b80f9d063decb6..e8cd94d2cd84a5b1a3c3f3574d68bc18cad5d0c0 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -413,7 +413,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
@@ -79,7 +79,7 @@ index 45b1a182acf6b2aef40b714d31ca125d8f74619a..65523d289080be632235acbe9367ccec
                      this.hurt(this.damageSources().inWall(), 1.0F);
                  } else if (flag && !this.level().getWorldBorder().isWithinBounds(this.getBoundingBox())) {
                      double d0 = this.level().getWorldBorder().getDistanceToBorder(this) + this.level().getWorldBorder().getDamageSafeZone();
-@@ -1408,6 +1408,18 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -1409,6 +1409,18 @@ public abstract class LivingEntity extends Entity implements Attackable {
          return this.getHealth() <= 0.0F;
      }
  
@@ -99,7 +99,7 @@ index 45b1a182acf6b2aef40b714d31ca125d8f74619a..65523d289080be632235acbe9367ccec
      public boolean hurt(DamageSource source, float amount) {
          if (this.isInvulnerableTo(source)) {
 diff --git a/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java b/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
-index c9a4feb4a52c0eb621b120e5b8c18d0a74dae0cd..26a462f60b65188d44e28ca3f461fb61ff1f8b7c 100644
+index ac9eaeaf7df1e84ee588f371628c0a10784d50bc..b82e893014e3327ddf0ccb070de676bfdc93fe39 100644
 --- a/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
 +++ b/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
 @@ -150,6 +150,13 @@ public class WitherBoss extends Monster implements PowerableMob, RangedAttackMob
