@@ -5,7 +5,7 @@ Subject: [PATCH] Inkwell branding
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 444ff797c70b0e285d4272ea2ce3d72453c9bda5..cc844f70284e23debed93a3d1b6508843232e163 100644
+index 376e8983fdfdbb6c3e5fd8ad0f6a05e655b622bf..d0cd481ea32cc1891d5b6996a125f9bd9498bcb3 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,8 +13,12 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -78,7 +78,7 @@ index 4b002e8b75d117b726b0de274a76d3596fce015b..98b940f0384edf97a06898de77ea6271
                  metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
                      Map<String, Map<String, Integer>> map = new HashMap<>();
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 2ea52c9aad51967bfefc3fe08073a004f65a9451..265100aba947ec029e89dcb768b3cced9f5e0f36 100644
+index 947190e48a05f1212c85a507e52a7f56618efaf6..15c2d8ac8e5acd5eb699bfe87b1349bd65074197 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1852,7 +1852,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -91,7 +91,7 @@ index 2ea52c9aad51967bfefc3fe08073a004f65a9451..265100aba947ec029e89dcb768b3cced
  
      public SystemReport fillSystemReport(SystemReport details) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 0b68bd21b0e45d556ec9ae0a51507987dfed559c..10dcf5f325a0f053489fc1e3d4fdaa317a346403 100644
+index eb617d659c701e512aac8a1ff822c147b69d3a3b..cbaac980ff3b27c20ce791e06d5093a1c38041b2 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -264,7 +264,7 @@ import javax.annotation.Nullable; // Paper
@@ -104,7 +104,7 @@ index 0b68bd21b0e45d556ec9ae0a51507987dfed559c..10dcf5f325a0f053489fc1e3d4fdaa31
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index a74a8a027c99eef199c1a6a54232ac2c8ffb9d08..be9b7ff7e6599825623fd008f1d5e9f8c3b441ea 100644
+index 9faa47caa5712477a9311c1bbeac893a81d25d20..b1af541bfeed70b49762d9c2d3e01392e4f75570 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -301,7 +301,7 @@ public class Main {
@@ -115,7 +115,7 @@ index a74a8a027c99eef199c1a6a54232ac2c8ffb9d08..be9b7ff7e6599825623fd008f1d5e9f8
 +                        System.err.println("*** Please download a new build as per instructions from https://github.com/InkwellMC/Inkwell/releases ***"); // Paper
                          //System.err.println("*** Server will start in 20 seconds ***");
                          //Thread.sleep(TimeUnit.SECONDS.toMillis(20));
-                         // Paper End
+                         // Paper end
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 index 774556a62eb240da42e84db4502e2ed43495be17..c27f2ff1ddd087488bf84790b30d6062f3022405 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
