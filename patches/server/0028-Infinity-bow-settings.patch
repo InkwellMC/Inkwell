@@ -5,19 +5,19 @@ Subject: [PATCH] Infinity bow settings
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 9f8ba6fdd5eff4852c8bd7e91ac97f95a96ebd6f..d894a866301a2dc596a2f2b8d4f1fe56f91a504b 100644
+index e145e7764e03d81f160e2eff73a8b4f0cbe0a669..04c5c42104045dc84b940e053e42fcd6df442347 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -286,4 +286,15 @@ public class InkwellConfig {
          playerCreativeFlyNoclip = getBoolean("player.creative-fly-noclip", false, "Allows noclip in creative fly");
-         spectatorDontGetAdvancement = getBoolean("player.spectator-advancements", false, "Value defines can't spectator get advancements");
+         spectatorCanGetAdvancement = getBoolean("player.spectator-advancements", true, "Value defines spectator can get advancements");
      }
 +
-+    public static boolean infinityWorksWithoutArrows = false;
-+    public static boolean infinityWorksWithNormalArrows = true;
-+    public static boolean infinityWorksWithSpectralArrows = false;
-+    public static boolean infinityWorksWithTippedArrows = false;
-+    private void infinityArrowsSettings() {
++    public static boolean infinityWorksWithoutArrows;
++    public static boolean infinityWorksWithNormalArrows;
++    public static boolean infinityWorksWithSpectralArrows;
++    public static boolean infinityWorksWithTippedArrows;
++    private static void infinityArrowsSettings() {
 +        infinityWorksWithoutArrows = getBoolean("gameplay-mechanics.infinity-bow.works-without-arrows", false);
 +        infinityWorksWithNormalArrows = getBoolean("gameplay-mechanics.infinity-bow.normal-arrows", true);
 +        infinityWorksWithSpectralArrows = getBoolean("gameplay-mechanics.infinity-bow.spectral-arrows", false);

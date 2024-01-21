@@ -5,7 +5,7 @@ Subject: [PATCH] Stonecutter damage
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index d894a866301a2dc596a2f2b8d4f1fe56f91a504b..6a220a9c19f40eee5b358c8e37187d8d35d336e2 100644
+index 04c5c42104045dc84b940e053e42fcd6df442347..8e4512d33b7226f3f387a4273e5033ec9aafbea4 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -297,4 +297,14 @@ public class InkwellConfig {
@@ -14,7 +14,7 @@ index d894a866301a2dc596a2f2b8d4f1fe56f91a504b..6a220a9c19f40eee5b358c8e37187d8d
      }
 +
 +    public static String deathMsgStonecutter;
-+    private void deathMessages() {
++    private static void deathMessages() {
 +        deathMsgStonecutter = getString("settings.messages.death-message.stonecutter", "<player> has sawed themself in half");
 +    }
 +
@@ -24,6 +24,59 @@ index d894a866301a2dc596a2f2b8d4f1fe56f91a504b..6a220a9c19f40eee5b358c8e37187d8d
 +    }
  }
 \ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+index 0814e3cf9bd20d4647d66d2b9c55a3ad8b120716..bb8430cc44b4df5a22f6be303bad566bf64c317f 100644
+--- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
++++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+@@ -1884,6 +1884,24 @@ public class ServerPlayer extends Player {
+         this.lastSentExp = -1; // CraftBukkit - Added to reset
+     }
+ 
++    // Inkwell start
++    public void sendActionBarMessage(@Nullable String message) {
++        if (message != null && !message.isEmpty()) {
++            sendActionBarMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message));
++        }
++    }
++    public void sendActionBarMessage(@Nullable net.kyori.adventure.text.Component message) {
++        if (message != null) {
++            sendActionBarMessage(io.papermc.paper.adventure.PaperAdventure.asVanilla(message));
++        }
++    }
++    public void sendActionBarMessage(@Nullable Component message) {
++        if (message != null) {
++            displayClientMessage(message, true);
++        }
++    }
++    // Inkwell end
++
+     @Override
+     public void displayClientMessage(Component message, boolean overlay) {
+         this.sendSystemMessage(message, overlay);
+diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
+index 31245c4cbdb36f22bc0cee2fd71c0c65d1a08b82..e22e675cb6210fa58fcec1588246de11eb06c472 100644
+--- a/src/main/java/net/minecraft/server/players/PlayerList.java
++++ b/src/main/java/net/minecraft/server/players/PlayerList.java
+@@ -1064,6 +1064,19 @@ public abstract class PlayerList {
+     }
+     // CraftBukkit end
+ 
++    // Inkwell start
++    public void broadcastMiniMessage(@Nullable String message, boolean overlay) {
++        if (message != null && !message.isEmpty()) {
++            this.broadcastMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message), overlay);
++        }
++    }
++    public void broadcastMessage(@Nullable net.kyori.adventure.text.Component message, boolean overlay) {
++        if (message != null) {
++            this.broadcastSystemMessage(io.papermc.paper.adventure.PaperAdventure.asVanilla(message), overlay);
++        }
++    }
++    // Inkwell end
++
+     public void broadcastAll(Packet<?> packet, ResourceKey<Level> dimension) {
+         Iterator iterator = this.players.iterator();
+ 
 diff --git a/src/main/java/net/minecraft/world/damagesource/CombatTracker.java b/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
 index 9c99b2e365aacb8309f29acb9025faccd2c676b3..a1709913a55ac131536f0fb5b30852b603b27899 100644
 --- a/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
@@ -84,6 +137,30 @@ index f339475185645f7be30963e4f980ce81a6f7e536..a19403edacb7d9bb38fbe4b7d93c3e80
 +    }
 +    // Inkwell end
  }
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 49004f362ce9381884665d68179b7e294d234ecb..d647029ebf2fe5afe0063a57e5c30c330e0577db 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -4140,6 +4140,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+         return SlotAccess.NULL;
+     }
+ 
++    // Inkwell Start
++    public void sendMiniMessage(@Nullable String message) {
++        if (message != null && !message.isEmpty()) {
++            this.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message));
++        }
++    }
++    public void sendMessage(@Nullable net.kyori.adventure.text.Component message) {
++        if (message != null) {
++            this.sendSystemMessage(io.papermc.paper.adventure.PaperAdventure.asVanilla(message));
++        }
++    }
++    // Inkwell end
++
+     @Override
+     public void sendSystemMessage(Component message) {}
+ 
 diff --git a/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java b/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
 index 77ae7b8ab24935d046cce1f8f7f476310876f9df..65e0382bc97b494812aba8c453ce12a646cae5a4 100644
 --- a/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
