@@ -1,0 +1,60 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Sun, 21 Jan 2024 23:05:12 +0300
+Subject: [PATCH] Griefing control
+
+
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index 8e4512d33b7226f3f387a4273e5033ec9aafbea4..208d03b5dc3976fac361cd2a19a439eac949a748 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -174,6 +174,16 @@ public class InkwellConfig {
+         enderdragonCanBreakBlocks = getBoolean("entity.enderdragon.can-grief", true);
+     }
+ 
++    public static boolean creeperAllowGriefing;
++    private static void creeperSettings() {
++        creeperAllowGriefing = getBoolean("entity.creeper.allow-griefing", true);
++    }
++
++    public static boolean endermanAllowGriefing;
++    private static void endermanSettings() {
++        endermanAllowGriefing = getBoolean("entity.enderman.allow-griefing", true);
++    }
++
+     public static boolean allowSignColors;
+     private static void blockEntity() {
+         allowSignColors = getBoolean(
+diff --git a/src/main/java/net/minecraft/world/entity/monster/Creeper.java b/src/main/java/net/minecraft/world/entity/monster/Creeper.java
+index 52eb3f6a73fa99d12d5fc75bab03e47a605c653a..ba654bdcdf0859ba05fed2a8b79c860a63b92ecd 100644
+--- a/src/main/java/net/minecraft/world/entity/monster/Creeper.java
++++ b/src/main/java/net/minecraft/world/entity/monster/Creeper.java
+@@ -272,7 +272,7 @@ public class Creeper extends Monster implements PowerableMob {
+             if (!event.isCancelled()) {
+             // CraftBukkit end
+             this.dead = true;
+-            this.level().explode(this, this.getX(), this.getY(), this.getZ(), event.getRadius(), event.getFire(), Level.ExplosionInteraction.MOB); // CraftBukkit
++                this.level().explode(this, this.getX(), this.getY(), this.getZ(), event.getRadius(), event.getFire(), this.level().getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_MOBGRIEFING) && io.inkwellmc.inkwell.InkwellConfig.creeperAllowGriefing ? Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE); // CraftBukkit // Inkwell
+             this.discard();
+             this.spawnLingeringCloud();
+             // CraftBukkit start
+diff --git a/src/main/java/net/minecraft/world/entity/monster/EnderMan.java b/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
+index 66da608477afe967f6c768c465bb1867b76e5df8..b28b8a271526aa8444ffcaac60338b78214ea74f 100644
+--- a/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
++++ b/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
+@@ -522,6 +522,7 @@ public class EnderMan extends Monster implements NeutralMob {
+ 
+         @Override
+         public boolean canUse() {
++            if (!io.inkwellmc.inkwell.InkwellConfig.endermanAllowGriefing) return false; // Inkwell
+             return this.enderman.getCarriedBlock() == null ? false : (!this.enderman.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? false : this.enderman.getRandom().nextInt(reducedTickDelay(2000)) == 0);
+         }
+ 
+@@ -567,6 +568,7 @@ public class EnderMan extends Monster implements NeutralMob {
+ 
+         @Override
+         public boolean canUse() {
++            if (!io.inkwellmc.inkwell.InkwellConfig.endermanAllowGriefing) return false; // Inkwell
+             return this.enderman.getCarriedBlock() != null ? false : (!this.enderman.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? false : this.enderman.getRandom().nextInt(reducedTickDelay(20)) == 0);
+         }
+ 
