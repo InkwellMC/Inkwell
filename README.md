@@ -5,7 +5,7 @@ Inkwell
 [![Inkwell Download](https://img.shields.io/github/downloads/InkwellMC/Inkwell/total?color=0&logo=github)](https://github.com/InkwellMC/Inkwell/releases/latest)
 [![Discord](https://badgen.net/discord/online-members/VH8fJgWEBc?icon=discord&label=Discord&list=what)](https://discord.gg/VH8fJgWEBc)
 
-> Fork of [Paper](https://github.com/PaperMC/Paper) aims at optimization.
+> Fork of [Paper](https://github.com/PaperMC/Paper) aims at optimization and game customization.
 
 ## How To (Server Admins)
 Inkwell use the same paperclip jar system that Paper uses.
