@@ -5,16 +5,16 @@ Subject: [PATCH] Spectator advancements
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 433165e49c376cc3b7af06d5b4d44085cbb0665c..d332e20228f216a07420922a174df2f804255898 100644
+index 7b61b89e40a90e43b82f61ef60cfdd72d308d70a..74493fba75cd1d426fa678b3bff51802b7ec5812 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -276,7 +276,9 @@ public class InkwellConfig {
      }
  
-     public static boolean playerCreativeFlyNoclip;
+     public static boolean playerCreativeBlockNoclip;
 +    public static boolean spectatorCanGetAdvancement;
      private static void playerSettings() {
-         playerCreativeFlyNoclip = getBoolean("player.creative-fly-noclip", false, "Allows noclip in creative fly");
+         playerCreativeBlockNoclip = getBoolean("player.creative-block-noclip", false, "Allows noclip blocks in creative");
 +        spectatorCanGetAdvancement = getBoolean("player.spectator-advancements", true, "Value defines spectator can get advancements");
      }
  }

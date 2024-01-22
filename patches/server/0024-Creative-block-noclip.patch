@@ -1,11 +1,11 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: sub-kek <subbkek@gmail.com>
 Date: Sat, 20 Jan 2024 18:57:27 +0300
-Subject: [PATCH] Creative fly noclip
+Subject: [PATCH] Creative block noclip
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index faa8201f1ac5bde4efc944ad309ac88f38689650..547b2dd2736fc57dd5db407421a5ee3a7f98438c 100644
+index faa8201f1ac5bde4efc944ad309ac88f38689650..5363dd7957f7a539c5de2bf66e9794186bad71d8 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -272,4 +272,9 @@ public class InkwellConfig {
@@ -13,14 +13,14 @@ index faa8201f1ac5bde4efc944ad309ac88f38689650..547b2dd2736fc57dd5db407421a5ee3a
          mobFlameAllowGriefing = getBoolean("mobs.flames.allow-griefing", true);
      }
 +
-+    public static boolean playerCreativeFlyNoclip;
++    public static boolean playerCreativeBlockNoclip;
 +    private static void playerSettings() {
-+        playerCreativeFlyNoclip = getBoolean("player.creative-fly-noclip", false, "Allows noclip in creative fly");
++        playerCreativeBlockNoclip = getBoolean("player.creative-block-noclip", false, "Allows noclip blocks in creative");
 +    }
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 9044458491fc9a33923852e324a15ac59d6660b2..af2805c3e9fbdd4a4b424a87b7acb1ef88029c73 100644
+index 9044458491fc9a33923852e324a15ac59d6660b2..69b95801bc5cb304f6a58b27f6e5e9ade99d8689 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
 @@ -238,8 +238,8 @@ public abstract class Player extends LivingEntity {
@@ -29,8 +29,8 @@ index 9044458491fc9a33923852e324a15ac59d6660b2..af2805c3e9fbdd4a4b424a87b7acb1ef
      public void tick() {
 -        this.noPhysics = this.isSpectator();
 -        if (this.isSpectator()) {
-+        this.noPhysics = this.isCreativeFlyOrSpectator(); // Inkwell - creative no clip
-+        if (this.isCreativeFlyOrSpectator()) { // Inkwell - creative no clip
++        this.noPhysics = this.isCreativeOrSpectator(); // Inkwell - creative no clip
++        if (this.isCreativeOrSpectator()) { // Inkwell - creative no clip
              this.setOnGround(false);
          }
  
@@ -39,7 +39,7 @@ index 9044458491fc9a33923852e324a15ac59d6660b2..af2805c3e9fbdd4a4b424a87b7acb1ef
              Pose entitypose1;
  
 -            if (!this.isSpectator() && !this.isPassenger() && !this.canPlayerFitWithinBlocksAndEntitiesWhen(entitypose)) {
-+            if (!this.isCreativeFlyOrSpectator() && !this.isPassenger() && !this.canPlayerFitWithinBlocksAndEntitiesWhen(entitypose)) { // Inkwell - creative no clip
++            if (!this.isCreativeOrSpectator() && !this.isPassenger() && !this.canPlayerFitWithinBlocksAndEntitiesWhen(entitypose)) { // Inkwell - creative no clip
                  if (this.canPlayerFitWithinBlocksAndEntitiesWhen(Pose.CROUCHING)) {
                      entitypose1 = Pose.CROUCHING;
                  } else {
@@ -48,7 +48,7 @@ index 9044458491fc9a33923852e324a15ac59d6660b2..af2805c3e9fbdd4a4b424a87b7acb1ef
  
          this.bob += (f - this.bob) * 0.4F;
 -        if (this.getHealth() > 0.0F && !this.isSpectator()) {
-+        if (this.getHealth() > 0.0F && !this.isCreativeFlyOrSpectator()) { // Inkwell - creative no clip
++        if (this.getHealth() > 0.0F && !this.isCreativeOrSpectator()) { // Inkwell - creative no clip
              AABB axisalignedbb;
  
              if (this.isPassenger() && !this.getVehicle().isRemoved()) {
@@ -57,11 +57,11 @@ index 9044458491fc9a33923852e324a15ac59d6660b2..af2805c3e9fbdd4a4b424a87b7acb1ef
      public abstract boolean isSpectator();
  
 +    // Inkwell start - creative no clip
-+    public boolean isCreativeFlyOrSpectator() {
-+        return isSpectator() || (io.inkwellmc.inkwell.InkwellConfig.playerCreativeFlyNoclip && isCreative() && getAbilities().flying);
++    public boolean isCreativeOrSpectator() {
++        return isSpectator() || (io.inkwellmc.inkwell.InkwellConfig.playerCreativeBlockNoclip && isCreative());
 +    }
 +    public boolean canSpectatingPlace(Level world, BlockState state, BlockPos pos, net.minecraft.world.phys.shapes.CollisionContext context) {
-+        if (this.isCreativeFlyOrSpectator()) {
++        if (this.isCreativeOrSpectator()) {
 +            net.minecraft.world.phys.shapes.VoxelShape voxelShape = state.getCollisionShape(world, pos, context);
 +            return voxelShape.isEmpty() || world.isUnobstructed(this, voxelShape.move(pos.getX(), pos.getY(), pos.getZ()));
 +        } else {
@@ -74,7 +74,7 @@ index 9044458491fc9a33923852e324a15ac59d6660b2..af2805c3e9fbdd4a4b424a87b7acb1ef
      public boolean canBeHitByProjectile() {
          return !this.isSpectator() && super.canBeHitByProjectile();
 diff --git a/src/main/java/net/minecraft/world/item/BlockItem.java b/src/main/java/net/minecraft/world/item/BlockItem.java
-index 8ab80717f7f694ed262fb84f9145bc189e3c087c..203e77a2ccc1b4a7c8c3ed068c0d67bcdc63e4f4 100644
+index 8ab80717f7f694ed262fb84f9145bc189e3c087c..6a49389c16478f106e4dee1fb325c3b4e04f7039 100644
 --- a/src/main/java/net/minecraft/world/item/BlockItem.java
 +++ b/src/main/java/net/minecraft/world/item/BlockItem.java
 @@ -211,7 +211,7 @@ public class BlockItem extends Item {
@@ -82,7 +82,7 @@ index 8ab80717f7f694ed262fb84f9145bc189e3c087c..203e77a2ccc1b4a7c8c3ed068c0d67bc
          // CraftBukkit start - store default return
          Level world = context.getLevel(); // Paper
 -        boolean defaultReturn = (!this.mustSurvive() || state.canSurvive(context.getLevel(), context.getClickedPos())) && world.checkEntityCollision(state, entityhuman, voxelshapecollision, context.getClickedPos(), true); // Paper
-+        boolean defaultReturn = (!this.mustSurvive() || state.canSurvive(context.getLevel(), context.getClickedPos())) && (io.inkwellmc.inkwell.InkwellConfig.playerCreativeFlyNoclip && context.getPlayer() != null ? context.getPlayer().canSpectatingPlace(world, state, context.getClickedPos(), voxelshapecollision) : world.checkEntityCollision(state, entityhuman, voxelshapecollision, context.getClickedPos(), true)); // Paper // Inkwell - creative no clip
++        boolean defaultReturn = (!this.mustSurvive() || state.canSurvive(context.getLevel(), context.getClickedPos())) && (io.inkwellmc.inkwell.InkwellConfig.playerCreativeBlockNoclip && context.getPlayer() != null ? context.getPlayer().canSpectatingPlace(world, state, context.getClickedPos(), voxelshapecollision) : world.checkEntityCollision(state, entityhuman, voxelshapecollision, context.getClickedPos(), true)); // Paper // Inkwell - creative no clip
          org.bukkit.entity.Player player = (context.getPlayer() instanceof ServerPlayer) ? (org.bukkit.entity.Player) context.getPlayer().getBukkitEntity() : null;
  
          BlockCanBuildEvent event = new BlockCanBuildEvent(CraftBlock.at(context.getLevel(), context.getClickedPos()), player, CraftBlockData.fromData(state), defaultReturn, org.bukkit.craftbukkit.CraftEquipmentSlot.getHand(context.getHand())); // Paper - Expose hand in BlockCanBuildEvent
@@ -100,7 +100,7 @@ index f8f909ebdad5e96379e8bd8c610164ef0697368e..7b2ec2fde9002ff75ac6cace75fb3beb
  
              BlockCanBuildEvent event = new BlockCanBuildEvent(CraftBlock.at(world, blockposition), player, CraftBlockData.fromData(iblockdata1), defaultReturn, org.bukkit.craftbukkit.CraftEquipmentSlot.getHand(context.getHand())); // Paper - Expose hand in BlockCanBuildEvent
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
-index 1fa22445a4ecc8c08dbcf0cc6bd39dc5003604c4..4ea44e1b6c517ff4a8eae182ca13af6c67a7e77e 100644
+index 1fa22445a4ecc8c08dbcf0cc6bd39dc5003604c4..4bf5d15fd4d3c2b52430b6e75a388e95431d9399 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
 @@ -162,7 +162,7 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl
@@ -108,12 +108,12 @@ index 1fa22445a4ecc8c08dbcf0cc6bd39dc5003604c4..4ea44e1b6c517ff4a8eae182ca13af6c
                      Entity entity = (Entity) iterator.next();
  
 -                    if (entity.getPistonPushReaction() != PushReaction.IGNORE) {
-+                    if (entity.getPistonPushReaction() != PushReaction.IGNORE  && !(entity instanceof Player player && player.isCreativeFlyOrSpectator())) { // Inkwell - creative no clip
++                    if (entity.getPistonPushReaction() != PushReaction.IGNORE  && !(entity instanceof Player player && player.isCreativeOrSpectator())) { // Inkwell - creative no clip
                          entity.move(MoverType.SHULKER_BOX, new Vec3((axisalignedbb.getXsize() + 0.01D) * (double) enumdirection.getStepX(), (axisalignedbb.getYsize() + 0.01D) * (double) enumdirection.getStepY(), (axisalignedbb.getZsize() + 0.01D) * (double) enumdirection.getStepZ()));
                      }
                  }
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
-index b7a0d8ffd1823a1d1edee6baaa62c15f69e6af3d..ff2f87f3a15bbad4591b7595c16df3f92781eada 100644
+index b7a0d8ffd1823a1d1edee6baaa62c15f69e6af3d..2fc187a6fb26ad6f47747ceb6d1754af79e965e3 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
 @@ -127,7 +127,7 @@ public class TheEndGatewayBlockEntity extends TheEndPortalBlockEntity {
@@ -121,12 +121,12 @@ index b7a0d8ffd1823a1d1edee6baaa62c15f69e6af3d..ff2f87f3a15bbad4591b7595c16df3f9
  
      public static boolean canEntityTeleport(Entity entity) {
 -        return EntitySelector.NO_SPECTATORS.test(entity) && !entity.getRootVehicle().isOnPortalCooldown();
-+        return EntitySelector.NO_SPECTATORS.test(entity) && !entity.getRootVehicle().isOnPortalCooldown() && !(entity instanceof net.minecraft.world.entity.player.Player player && player.isCreativeFlyOrSpectator()); // Inkwell - creative no clip
++        return EntitySelector.NO_SPECTATORS.test(entity) && !entity.getRootVehicle().isOnPortalCooldown() && !(entity instanceof net.minecraft.world.entity.player.Player player && player.isCreativeOrSpectator()); // Inkwell - creative no clip
      }
  
      public boolean isSpawning() {
 diff --git a/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java b/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
-index 1ef87580574919796dbba707f44a413ee5c5781b..8f3da42b6ab92e2a9430d6e4710796780f2dd745 100644
+index 1ef87580574919796dbba707f44a413ee5c5781b..9a50c0582a2fc8dd03a43971d576fe9386f7c24c 100644
 --- a/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
 @@ -142,7 +142,7 @@ public class PistonMovingBlockEntity extends BlockEntity {
@@ -134,7 +134,7 @@ index 1ef87580574919796dbba707f44a413ee5c5781b..8f3da42b6ab92e2a9430d6e471079678
                                  }
  
 -                                entity.setDeltaMovement(e, g, h);
-+                                if (!(entity instanceof net.minecraft.world.entity.player.Player player) || !player.isCreativeFlyOrSpectator()) entity.setDeltaMovement(e, g, h); // Inkwell - creative no clip
++                                if (!(entity instanceof net.minecraft.world.entity.player.Player player) || !player.isCreativeOrSpectator()) entity.setDeltaMovement(e, g, h); // Inkwell - creative no clip
                                  // Paper - EAR items stuck in in slime pushed by a piston
                                  entity.activatedTick = Math.max(entity.activatedTick, net.minecraft.server.MinecraftServer.currentTick + 10);
                                  entity.activatedImmunityTick = Math.max(entity.activatedImmunityTick, net.minecraft.server.MinecraftServer.currentTick + 10);
@@ -142,23 +142,47 @@ index 1ef87580574919796dbba707f44a413ee5c5781b..8f3da42b6ab92e2a9430d6e471079678
      }
  
      private static void moveEntityByPiston(Direction direction, Entity entity, double distance, Direction movementDirection) {
-+        if (entity instanceof net.minecraft.world.entity.player.Player player && player.isCreativeFlyOrSpectator()) return; // Inkwell - creative no clip
++        if (entity instanceof net.minecraft.world.entity.player.Player player && player.isCreativeOrSpectator()) return; // Inkwell - creative no clip
          NOCLIP.set(direction);
          entity.move(MoverType.PISTON, new Vec3(distance * (double)movementDirection.getStepX(), distance * (double)movementDirection.getStepY(), distance * (double)movementDirection.getStepZ()));
          NOCLIP.set((Direction)null);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index b364a042a9b5d1b3c604f6bf6d03b6aeff03ec82..95db4f8060be42fc6b982d455ce25d069546dcab 100644
+index b364a042a9b5d1b3c604f6bf6d03b6aeff03ec82..571b815b6b7696552db266cd939e8467b1046b7c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3373,4 +3373,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -144,7 +144,6 @@ import org.bukkit.craftbukkit.event.CraftEventFactory;
+ import org.bukkit.craftbukkit.inventory.CraftItemStack;
+ import org.bukkit.craftbukkit.map.CraftMapView;
+ import org.bukkit.craftbukkit.map.RenderData;
+-import org.bukkit.craftbukkit.profile.CraftPlayerProfile;
+ import org.bukkit.craftbukkit.scoreboard.CraftScoreboard;
+ import org.bukkit.craftbukkit.util.CraftChatMessage;
+ import org.bukkit.craftbukkit.util.CraftLocation;
+@@ -157,7 +156,6 @@ import org.bukkit.event.player.PlayerExpCooldownChangeEvent;
+ import org.bukkit.event.player.PlayerHideEntityEvent;
+ import org.bukkit.event.player.PlayerRegisterChannelEvent;
+ import org.bukkit.event.player.PlayerShowEntityEvent;
+-import org.bukkit.event.player.PlayerSpawnChangeEvent;
+ import org.bukkit.event.player.PlayerTeleportEvent;
+ import org.bukkit.event.player.PlayerUnregisterChannelEvent;
+ import org.bukkit.inventory.EquipmentSlot;
+@@ -168,7 +166,6 @@ import org.bukkit.map.MapView;
+ import org.bukkit.metadata.MetadataValue;
+ import org.bukkit.plugin.Plugin;
+ import org.bukkit.plugin.messaging.StandardMessenger;
+-import org.bukkit.profile.PlayerProfile;
+ import org.bukkit.scoreboard.Scoreboard;
+ import org.jetbrains.annotations.NotNull;
+ 
+@@ -3373,4 +3370,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return this.spigot;
      }
      // Spigot end
 +
 +    //Inkwell start
 +    @Override
-+    public boolean isCreativeFlyOrSpectator() {
-+        return this.getHandle().isCreativeFlyOrSpectator();
++    public boolean isCreativeOrSpectator() {
++        return this.getHandle().isCreativeOrSpectator();
 +    }
 +    // Inkwell end
  }

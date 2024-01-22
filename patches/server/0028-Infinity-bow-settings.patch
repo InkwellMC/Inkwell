@@ -5,11 +5,11 @@ Subject: [PATCH] Infinity bow settings
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index e145e7764e03d81f160e2eff73a8b4f0cbe0a669..04c5c42104045dc84b940e053e42fcd6df442347 100644
+index bbb406fc17e8bad8ea4e2d50d50c25dfc3a80e17..9c3365d536a0b460d4e4f6d29b62a48782996e7b 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -286,4 +286,15 @@ public class InkwellConfig {
-         playerCreativeFlyNoclip = getBoolean("player.creative-fly-noclip", false, "Allows noclip in creative fly");
+         playerCreativeBlockNoclip = getBoolean("player.creative-block-noclip", false, "Allows noclip blocks in creative");
          spectatorCanGetAdvancement = getBoolean("player.spectator-advancements", true, "Value defines spectator can get advancements");
      }
 +
