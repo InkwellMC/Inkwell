@@ -5,7 +5,7 @@ Subject: [PATCH] Inkwell config and command
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index cc844f70284e23debed93a3d1b6508843232e163..d95f720470e93a71bf054c1ef27807ccb959de59 100644
+index d0cd481ea32cc1891d5b6996a125f9bd9498bcb3..7dad6ea853396400870543b6783e29a5c7d6b151 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -54,6 +54,13 @@ dependencies {
@@ -105,7 +105,7 @@ index 0000000000000000000000000000000000000000..988236d1942d01a2424d5d377c1480f1
 \ No newline at end of file
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..1f90b4170e039e54b4f9b1987c57e6e21b1994c2
+index 0000000000000000000000000000000000000000..3b8ded27552248210716db2617a28792775a89d8
 --- /dev/null
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -0,0 +1,132 @@
@@ -163,7 +163,7 @@ index 0000000000000000000000000000000000000000..1f90b4170e039e54b4f9b1987c57e6e2
 +        getString("info.version", "1.0");
 +        setComment("info",
 +                "Inkwell Configuration",
-+                "Join our Discord for support: https://discord.gg/VH8fJgWEBc",
++                "Join our Discord for support: https://discord.gg/RTaXtqKZNc",
 +                "Download new builds at https://github.com/InkwellMC/Inkwell/releases");
 +
 +        for (Method method : InkwellConfig.class.getDeclaredMethods()) {
@@ -243,7 +243,7 @@ index 0000000000000000000000000000000000000000..1f90b4170e039e54b4f9b1987c57e6e2
 +}
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index c1402d4dfbddc14ca748efa24e7d62d81abf4e58..3d3a8e475e2db2fc4d93f8870af624312d0eae1d 100644
+index 2b5f4ff619af8e23d759992f73551c054e2e5562..c09254452f9ba4b725092e13cbc6fe7fbaded0c3 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -222,6 +222,9 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
