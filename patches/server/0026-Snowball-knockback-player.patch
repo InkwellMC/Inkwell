@@ -5,10 +5,10 @@ Subject: [PATCH] Snowball knockback player
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 547b2dd2736fc57dd5db407421a5ee3a7f98438c..433165e49c376cc3b7af06d5b4d44085cbb0665c 100644
+index d1be68a7735854a5e50b29689e1b3db7d618cf95..02b9fcff7f3cdcca809082dff879a8d87c4e664c 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -233,9 +233,11 @@ public class InkwellConfig {
+@@ -244,9 +244,11 @@ public class InkwellConfig {
  
      public static boolean disableOutOfOrderChat;
      public static int pistonPushLimit;

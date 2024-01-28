@@ -5,10 +5,10 @@ Subject: [PATCH] Stonecutter damage
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 04c5c42104045dc84b940e053e42fcd6df442347..8e4512d33b7226f3f387a4273e5033ec9aafbea4 100644
+index c263ad4796c92ac371e8144a9ab83bf2b8e6c1a3..9d9679a42c63d4229bb495d639e644c7566a2fb2 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -297,4 +297,14 @@ public class InkwellConfig {
+@@ -308,4 +308,14 @@ public class InkwellConfig {
          infinityWorksWithSpectralArrows = getBoolean("gameplay-mechanics.infinity-bow.spectral-arrows", false);
          infinityWorksWithTippedArrows = getBoolean("gameplay-mechanics.infinity-bow.tipped-arrows", false);
      }

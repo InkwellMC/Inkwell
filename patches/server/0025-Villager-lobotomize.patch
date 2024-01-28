@@ -5,7 +5,7 @@ Subject: [PATCH] Villager lobotomize
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index faa8201f1ac5bde4efc944ad309ac88f38689650..7a3f86e24eb3f08c8ccae8f2aa51b40d40c97fdd 100644
+index 17c38dda77342d8313493521289b579a184900c1..d1be68a7735854a5e50b29689e1b3db7d618cf95 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -147,12 +147,23 @@ public class InkwellConfig {
@@ -33,7 +33,7 @@ index faa8201f1ac5bde4efc944ad309ac88f38689650..7a3f86e24eb3f08c8ccae8f2aa51b40d
  
      public static boolean usePigmanSpawnLimit;
 diff --git a/src/main/java/net/minecraft/world/entity/npc/Villager.java b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-index 0eb6fd36ea53c299019ff30034e9b01185831ffc..7d88727e585f64dc3f91f37a842e4d4e2a531fc2 100644
+index 2e169caf9af98dacc00ef56c4e699322e42fb8ba..01a6ca4f4a66c5ce465502121be13eb5d17c9c09 100644
 --- a/src/main/java/net/minecraft/world/entity/npc/Villager.java
 +++ b/src/main/java/net/minecraft/world/entity/npc/Villager.java
 @@ -142,6 +142,9 @@ public class Villager extends AbstractVillager implements ReputationEventHandler

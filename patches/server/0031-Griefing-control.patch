@@ -5,10 +5,10 @@ Subject: [PATCH] Griefing control
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 111f2b7643f0c4a96585e1219b07f57f73cd7200..612d85f0feba0911b4039100006016ffea1dfb8c 100644
+index 9d9679a42c63d4229bb495d639e644c7566a2fb2..9df72c4ccc33a13717dac2e1d05405b063d9c343 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -174,6 +174,16 @@ public class InkwellConfig {
+@@ -185,6 +185,16 @@ public class InkwellConfig {
          enderdragonAllowGriefing = getBoolean("entity.enderdragon.allow-griefing", true);
      }
  

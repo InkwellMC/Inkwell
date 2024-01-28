@@ -5,10 +5,10 @@ Subject: [PATCH] EnderDragon griefing control
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 74493fba75cd1d426fa678b3bff51802b7ec5812..bbb406fc17e8bad8ea4e2d50d50c25dfc3a80e17 100644
+index 492d4cc62f3a51b736e7c3a59c90956513c2caca..ac4c45c4546644cbd12022b408374732d1e1ddd8 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -169,6 +169,11 @@ public class InkwellConfig {
+@@ -180,6 +180,11 @@ public class InkwellConfig {
          );
      }
  
