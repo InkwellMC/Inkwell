@@ -4,24 +4,35 @@ Date: Sun, 3 Dec 2023 18:17:48 +0300
 Subject: [PATCH] Inkwell config and command
 
 
-diff --git a/build.gradle.kts b/build.gradle.kts
-index d0cd481ea32cc1891d5b6996a125f9bd9498bcb3..7dad6ea853396400870543b6783e29a5c7d6b151 100644
---- a/build.gradle.kts
-+++ b/build.gradle.kts
-@@ -54,6 +54,13 @@ dependencies {
-     runtimeOnly("org.apache.maven.resolver:maven-resolver-connector-basic:1.9.18")
-     runtimeOnly("org.apache.maven.resolver:maven-resolver-transport-http:1.9.18")
- 
-+    // Inkwell start
-+    implementation("org.yaml:snakeyaml:1.32")
-+    implementation ("me.carleslc.Simple-YAML:Simple-Yaml:1.8.4") {
-+        exclude(group="org.yaml", module="snakeyaml")
-+    }
-+    // Inkwell end
-+
-     testImplementation("io.github.classgraph:classgraph:4.8.47") // Paper - mob goal test
-     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
-     testImplementation("org.hamcrest:hamcrest:2.2")
+diff --git a/build.gradle.kts.rej b/build.gradle.kts.rej
+index f74f00bae5b34a12f463a24587db8ee20159b38d..b2d139a1a335dcc3c5aec9d94184f2b09f298660 100644
+--- a/build.gradle.kts.rej
++++ b/build.gradle.kts.rej
+@@ -1,10 +1,15 @@
+ diff a/build.gradle.kts b/build.gradle.kts	(rejected hunks)
+-@@ -209,7 +213,5 @@ val runtimeClasspathForRunDev = sourceSets.main.flatMap { src ->
+- }
+- tasks.registerRunTask("runDev") {
+-     description = "Spin up a non-relocated Mojang-mapped test server"
+--    classpath(tasks.filterProjectDir.flatMap { it.outputJar })
+--    classpath(runtimeClasspathForRunDev)
+--    jvmArgs("-DPaper.isRunDev=true")
+-+    classpath(sourceSets.main.map { it.runtimeClasspath })
+- }
++@@ -54,6 +54,13 @@ dependencies {
++     runtimeOnly("org.apache.maven.resolver:maven-resolver-connector-basic:1.9.18")
++     runtimeOnly("org.apache.maven.resolver:maven-resolver-transport-http:1.9.18")
++ 
+++    // Inkwell start
+++    implementation("org.yaml:snakeyaml:1.32")
+++    implementation ("me.carleslc.Simple-YAML:Simple-Yaml:1.8.4") {
+++        exclude(group="org.yaml", module="snakeyaml")
+++    }
+++    // Inkwell end
+++
++     testImplementation("io.github.classgraph:classgraph:4.8.47") // Paper - mob goal test
++     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
++     testImplementation("org.hamcrest:hamcrest:2.2")
 diff --git a/src/main/java/co/aikar/timings/TimingsExport.java b/src/main/java/co/aikar/timings/TimingsExport.java
 index a2f71a6d1a9e98133dff6cd0f625da9435a8af14..04c825b361fc0c12e2a542a2321910ff911d7277 100644
 --- a/src/main/java/co/aikar/timings/TimingsExport.java
@@ -243,12 +254,12 @@ index 0000000000000000000000000000000000000000..3b8ded27552248210716db2617a28792
 +}
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 2b5f4ff619af8e23d759992f73551c054e2e5562..c09254452f9ba4b725092e13cbc6fe7fbaded0c3 100644
+index c49802c936ae8e3f4dc1badd98414d96714ecd60..0d2d46f924c948d8651335522204f25bc58d5d13 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -222,6 +222,9 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
-         com.destroystokyo.paper.VersionHistoryManager.INSTANCE.getClass(); // Paper - load version history now
-         io.papermc.paper.brigadier.PaperBrigadierProviderImpl.INSTANCE.getClass(); // Paper - init PaperBrigadierProvider
+         io.papermc.paper.brigadier.PaperBrigadierProviderImpl.INSTANCE.getClass(); // init PaperBrigadierProvider
+         // Paper end
  
 +        io.inkwellmc.inkwell.InkwellConfig.load(); // Inkwell
 +        io.inkwellmc.inkwell.InkwellCommand.init(); // Inkwell
@@ -256,3 +267,20 @@ index 2b5f4ff619af8e23d759992f73551c054e2e5562..c09254452f9ba4b725092e13cbc6fe7f
          this.setPvpAllowed(dedicatedserverproperties.pvp);
          this.setFlightAllowed(dedicatedserverproperties.allowFlight);
          this.setMotd(dedicatedserverproperties.motd);
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java.rej b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java.rej
+new file mode 100644
+index 0000000000000000000000000000000000000000..46f92df8af4b19292674a95593d7ae8ce7c96245
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java.rej
+@@ -0,0 +1,11 @@
++diff a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java	(rejected hunks)
++@@ -222,6 +222,9 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
++         com.destroystokyo.paper.VersionHistoryManager.INSTANCE.getClass(); // Paper - load version history now
++         io.papermc.paper.brigadier.PaperBrigadierProviderImpl.INSTANCE.getClass(); // Paper - init PaperBrigadierProvider
++ 
+++        io.inkwellmc.inkwell.InkwellConfig.load(); // Inkwell
+++        io.inkwellmc.inkwell.InkwellCommand.init(); // Inkwell
+++
++         this.setPvpAllowed(dedicatedserverproperties.pvp);
++         this.setFlightAllowed(dedicatedserverproperties.allowFlight);
++         this.setMotd(dedicatedserverproperties.motd);

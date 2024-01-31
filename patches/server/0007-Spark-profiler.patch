@@ -99,21 +99,21 @@ index 0000000000000000000000000000000000000000..757aaa3180fcbc6003dc1aab7b4d2466
 +}
 \ No newline at end of file
 diff --git a/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java b/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
-index a6f58b3457b7477015c5c6d969e7d83017dd3fa1..ed3d7f631adfce3395c6e7e59dc085d4d84319e4 100644
+index 019d3bbd78fb0b06861979d223915fedb6c99442..d458b95008385f9c2faa8bb32a2356aec8cd3baf 100644
 --- a/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
 +++ b/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
-@@ -96,6 +96,7 @@ public class GlobalConfiguration extends ConfigurationPart {
-     @Deprecated(forRemoval = true)
-     public class Timings extends ConfigurationPart {
+@@ -90,6 +90,7 @@ public class GlobalConfiguration extends ConfigurationPart {
+ 
+     public class Timings extends ConfigurationPart.Post {
          public boolean enabled = true;
 +        public boolean reallyEnabled = false;
          public boolean verbose = true;
          public String url = "https://timings.aikar.co/";
          public boolean serverNamePrivacy = false;
-@@ -109,6 +110,14 @@ public class GlobalConfiguration extends ConfigurationPart {
+@@ -103,6 +104,14 @@ public class GlobalConfiguration extends ConfigurationPart {
  
-         @PostProcess
-         private void postProcess() {
+         @Override
+         public void postProcess() {
 +            // Inkwell start
 +            if (enabled && !reallyEnabled) {
 +                org.bukkit.Bukkit.getLogger().log(java.util.logging.Level.WARNING, "[Inkwell] To improve performance, timings have been disabled by default");
@@ -125,6 +125,36 @@ index a6f58b3457b7477015c5c6d969e7d83017dd3fa1..ed3d7f631adfce3395c6e7e59dc085d4
              MinecraftTimings.processConfig(this);
          }
      }
+diff --git a/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java.rej b/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java.rej
+new file mode 100644
+index 0000000000000000000000000000000000000000..894f3cb5f6fc1b8a81fbc9bce15eb13864b76b7a
+--- /dev/null
++++ b/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java.rej
+@@ -0,0 +1,24 @@
++diff a/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java b/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java	(rejected hunks)
++@@ -96,6 +96,7 @@ public class GlobalConfiguration extends ConfigurationPart {
++     @Deprecated(forRemoval = true)
++     public class Timings extends ConfigurationPart {
++         public boolean enabled = true;
+++        public boolean reallyEnabled = false;
++         public boolean verbose = true;
++         public String url = "https://timings.aikar.co/";
++         public boolean serverNamePrivacy = false;
++@@ -109,6 +110,14 @@ public class GlobalConfiguration extends ConfigurationPart {
++ 
++         @PostProcess
++         private void postProcess() {
+++            // Inkwell start
+++            if (enabled && !reallyEnabled) {
+++                org.bukkit.Bukkit.getLogger().log(java.util.logging.Level.WARNING, "[Inkwell] To improve performance, timings have been disabled by default");
+++                org.bukkit.Bukkit.getLogger().log(java.util.logging.Level.WARNING, "[Inkwell] You can still use timings by using /timings on, but they will not start on server startup unless you set timings.really-enabled to true in paper.yml");
+++                org.bukkit.Bukkit.getLogger().log(java.util.logging.Level.WARNING, "[Inkwell] If you would like to disable this message, either set timings.really-enabled to true or timings.enabled to false.");
+++            }
+++            enabled = reallyEnabled;
+++            // Inkwell end
++             MinecraftTimings.processConfig(this);
++         }
++     }
 diff --git a/src/main/java/io/papermc/paper/plugin/PluginInitializerManager.java b/src/main/java/io/papermc/paper/plugin/PluginInitializerManager.java
 index 89bf48fd581ee6580b91e2eb31dd532cb622df5e..fc5e0eab448b9b914a8afaa738fe41d97dbc9ddb 100644
 --- a/src/main/java/io/papermc/paper/plugin/PluginInitializerManager.java

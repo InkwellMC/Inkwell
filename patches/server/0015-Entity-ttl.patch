@@ -5,7 +5,7 @@ Subject: [PATCH] Entity ttl
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 99f5e8a56d5d9eadfe82a4a4a393b862e5d6c4a8..39d0b92a14da76bbe549663b4d42b0fc59c8e789 100644
+index 6c83e8f5cef07b6daf8ef10bffaff9ad64290e7c..65dc89933efba6e831052cf2f03481e6ad5a76fa 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -6,6 +6,8 @@ import java.lang.reflect.Method;
@@ -40,10 +40,10 @@ index 99f5e8a56d5d9eadfe82a4a4a393b862e5d6c4a8..39d0b92a14da76bbe549663b4d42b0fc
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 09f581736b245e4ad803d30e2a74fa3b1ad28997..6702690c905cf48cd64f620f2ff7b0aa72c5de4b 100644
+index 802aeb42eb9fb40f76925983ed85ba2dacc14d89..dc9fff08139b7006d825ba34e43e3b0ce5fb16e2 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -813,6 +813,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -803,6 +803,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      }
  
      public void tick() {
@@ -57,10 +57,10 @@ index 09f581736b245e4ad803d30e2a74fa3b1ad28997..6702690c905cf48cd64f620f2ff7b0aa
      }
  
 diff --git a/src/main/java/net/minecraft/world/entity/EntityType.java b/src/main/java/net/minecraft/world/entity/EntityType.java
-index 74da61498342f24564570e62a94bc2a19ba39449..baaa083c80b0d84b4dadfb446464d332ead0a01a 100644
+index 00869478ee20a7802ea35299ffd57225c4bb9ca4..76c137db1d1cdc780edc029072ea6d28cfb1e7d0 100644
 --- a/src/main/java/net/minecraft/world/entity/EntityType.java
 +++ b/src/main/java/net/minecraft/world/entity/EntityType.java
-@@ -306,6 +306,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
+@@ -301,6 +301,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
      private final int clientTrackingRange;
      private final int updateInterval;
      public boolean dabEnabled = false; // Inkwell

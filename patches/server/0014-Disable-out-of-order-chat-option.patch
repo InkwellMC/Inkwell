@@ -5,7 +5,7 @@ Subject: [PATCH] Disable out of order chat option
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 5eeb8ed0df4f3f5ab8e0f9f307b526d28e6ccd40..99f5e8a56d5d9eadfe82a4a4a393b862e5d6c4a8 100644
+index ae201beb80e3fb74243970f7d42d0939a812147c..6c83e8f5cef07b6daf8ef10bffaff9ad64290e7c 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -227,4 +227,9 @@ public class InkwellConfig {
@@ -19,16 +19,31 @@ index 5eeb8ed0df4f3f5ab8e0f9f307b526d28e6ccd40..99f5e8a56d5d9eadfe82a4a4a393b862
 +    }
  }
 \ No newline at end of file
-diff --git a/src/main/java/net/minecraft/network/chat/SignedMessageChain.java b/src/main/java/net/minecraft/network/chat/SignedMessageChain.java
-index ba12919c3f9aec34a9e64993b143ae92be5eb172..b5cdf463353f2afac87ba5b203558facf6faf9ae 100644
---- a/src/main/java/net/minecraft/network/chat/SignedMessageChain.java
-+++ b/src/main/java/net/minecraft/network/chat/SignedMessageChain.java
-@@ -38,7 +38,7 @@ public class SignedMessageChain {
-                 throw new SignedMessageChain.DecodeException(Component.translatable("chat.disabled.chain_broken"), false); // Paper - diff on change (if disconnects, need a new kick event cause)
-             } else if (playerPublicKey.data().hasExpired()) {
-                 throw new SignedMessageChain.DecodeException(Component.translatable("chat.disabled.expiredProfileKey"), false, org.bukkit.event.player.PlayerKickEvent.Cause.EXPIRED_PROFILE_PUBLIC_KEY); // Paper - kick event causes
--            } else if (body.timeStamp().isBefore(this.lastTimeStamp)) {
-+            } else if (!io.inkwellmc.inkwell.InkwellConfig.disableOutOfOrderChat && body.timeStamp().isBefore(this.lastTimeStamp)) { // Inkwell
-                 throw new SignedMessageChain.DecodeException(Component.translatable("multiplayer.disconnect.out_of_order_chat"), true, org.bukkit.event.player.PlayerKickEvent.Cause.OUT_OF_ORDER_CHAT); // Paper - kick event causes
-             } else {
-                 this.lastTimeStamp = body.timeStamp();
+diff --git a/src/main/java/net/minecraft/network/chat/SignedMessageChain.java.rej b/src/main/java/net/minecraft/network/chat/SignedMessageChain.java.rej
+new file mode 100644
+index 0000000000000000000000000000000000000000..6bae4ba6d9bd843ac3db8142df61696e221a3bd8
+--- /dev/null
++++ b/src/main/java/net/minecraft/network/chat/SignedMessageChain.java.rej
+@@ -0,0 +1,10 @@
++diff a/src/main/java/net/minecraft/network/chat/SignedMessageChain.java b/src/main/java/net/minecraft/network/chat/SignedMessageChain.java	(rejected hunks)
++@@ -38,7 +38,7 @@ public class SignedMessageChain {
++                 throw new SignedMessageChain.DecodeException(Component.translatable("chat.disabled.chain_broken"), false); // Paper - diff on change (if disconnects, need a new kick event cause)
++             } else if (playerPublicKey.data().hasExpired()) {
++                 throw new SignedMessageChain.DecodeException(Component.translatable("chat.disabled.expiredProfileKey"), false, org.bukkit.event.player.PlayerKickEvent.Cause.EXPIRED_PROFILE_PUBLIC_KEY); // Paper - kick event causes
++-            } else if (body.timeStamp().isBefore(this.lastTimeStamp)) {
+++            } else if (!io.inkwellmc.inkwell.InkwellConfig.disableOutOfOrderChat && body.timeStamp().isBefore(this.lastTimeStamp)) { // Inkwell
++                 throw new SignedMessageChain.DecodeException(Component.translatable("multiplayer.disconnect.out_of_order_chat"), true, org.bukkit.event.player.PlayerKickEvent.Cause.OUT_OF_ORDER_CHAT); // Paper - kick event causes
++             } else {
++                 this.lastTimeStamp = body.timeStamp();
+diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+index 3c0651fa5a5db880202c9a3805a6455269c5f16d..8e50a23f9064b3616d9a147d753fccd0e63af98a 100644
+--- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
++++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+@@ -2420,6 +2420,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+     }
+ 
+     private boolean updateChatOrder(Instant timestamp) {
++        if (io.inkwellmc.inkwell.InkwellConfig.disableOutOfOrderChat) return true;
+         Instant instant1;
+ 
+         do {

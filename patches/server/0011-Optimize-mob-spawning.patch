@@ -5,7 +5,7 @@ Subject: [PATCH] Optimize mob spawning
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index e092f1288e8810493c39fca59b24e255e526b4c2..0961c14a874dcd6a4b08af5c77f34a01f35bd1ad 100644
+index 558e89d32f41ac53fce17d77750c860e8587fd39..a505391726ddabb1ee2b0283dbd6c8bd16d565a9 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -179,4 +179,20 @@ public class InkwellConfig {
@@ -31,20 +31,35 @@ index e092f1288e8810493c39fca59b24e255e526b4c2..0961c14a874dcd6a4b08af5c77f34a01
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 256fd6d665108be4f66c08beca3b7acf6e92aaf0..4d5f37620994f5c76696c95717ed2a454bdc5a2d 100644
+index 8f359e7c8b2227a1337f3f2636453f2f2d48fbb3..fdb064470dd9f60e42151799856e02f65f34c8fe 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -315,6 +315,8 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
-     public static final long SERVER_INIT = System.nanoTime();
-     // Paper end - lag compensation
- 
+@@ -310,6 +310,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+     public volatile Thread shutdownThread; // Paper
+     public volatile boolean abnormalExit = false; // Paper
+     public boolean isIteratingOverLevels = false; // Paper
 +    public io.inkwellmc.inkwell.util.AsyncExecutor mobSpawnExecutor = new io.inkwellmc.inkwell.util.AsyncExecutor("MobSpawning"); // Inkwell - optimize mob spawning
-+
+ 
      public static <S extends MinecraftServer> S spin(Function<Thread, S> serverFactory) {
          AtomicReference<S> atomicreference = new AtomicReference();
-         Thread thread = new io.papermc.paper.util.TickThread(() -> { // Paper - rewrite chunk system
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java.rej b/src/main/java/net/minecraft/server/MinecraftServer.java.rej
+new file mode 100644
+index 0000000000000000000000000000000000000000..9495779760d5471ffd4c7c411d461ae7b97bf540
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java.rej
+@@ -0,0 +1,10 @@
++diff a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java	(rejected hunks)
++@@ -315,6 +315,8 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
++     public static final long SERVER_INIT = System.nanoTime();
++     // Paper end - lag compensation
++ 
+++    public io.inkwellmc.inkwell.util.AsyncExecutor mobSpawnExecutor = new io.inkwellmc.inkwell.util.AsyncExecutor("MobSpawning"); // Inkwell - optimize mob spawning
+++
++     public static <S extends MinecraftServer> S spin(Function<Thread, S> serverFactory) {
++         AtomicReference<S> atomicreference = new AtomicReference();
++         Thread thread = new io.papermc.paper.util.TickThread(() -> { // Paper - rewrite chunk system
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 29d12afecf0cdfc5e60a11fdd799e00e9c95e0db..18f34be0d962c1ff30d554cfddc051fe1bc8ea96 100644
+index 0d2d46f924c948d8651335522204f25bc58d5d13..0df3e3e7944fcade082eb522f09dfab1b0d1c117 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -341,6 +341,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
@@ -56,84 +71,91 @@ index 29d12afecf0cdfc5e60a11fdd799e00e9c95e0db..18f34be0d962c1ff30d554cfddc051fe
          }
      }
 diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
-index d9cd497bc1b654030ff1a597f038b6a881df9f6b..d222f4ba03290463877c121ed286a6edb17ecc7b 100644
+index 65d947df910d60f478e7a449eb161e5105e2c0c9..0a761b76ac407447a9da2c2cd520710b7b017f5c 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkMap.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
-@@ -243,7 +243,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
-     // Paper end
-     // Paper start - optimise chunk tick iteration
-     public final it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet<ChunkHolder> needsChangeBroadcasting = new it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet<>();
--    public final com.destroystokyo.paper.util.misc.PlayerAreaMap playerMobSpawnMap = new com.destroystokyo.paper.util.misc.PlayerAreaMap(this.pooledLinkedPlayerHashSets);
-+    public final com.destroystokyo.paper.util.misc.PlayerAreaMap playerMobSpawnMap = new io.inkwellmc.inkwell.util.AsyncPlayerAreaMap(this.pooledLinkedPlayerHashSets); // Inkwell
-     // Paper end - optimise chunk tick iteration
- 
-     public ChunkMap(ServerLevel world, LevelStorageSource.LevelStorageAccess session, DataFixer dataFixer, StructureTemplateManager structureTemplateManager, Executor executor, BlockableEventLoop<Runnable> mainThreadExecutor, LightChunkGetter chunkProvider, ChunkGenerator chunkGenerator, ChunkProgressListener worldGenerationProgressListener, ChunkStatusUpdateListener chunkStatusChangeListener, Supplier<DimensionDataStorage> persistentStateManagerFactory, int viewDistance, boolean dsync) {
+@@ -342,7 +342,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+         this.dataRegionManager = new io.papermc.paper.chunk.SingleThreadChunkRegionManager(this.level, 2, (1.0 / 3.0), 1, 6, "Data", DataRegionData::new, DataRegionSectionData::new);
+         this.regionManagers.add(this.dataRegionManager);
+         // Paper end
+-        this.playerMobDistanceMap = this.level.paperConfig().entities.spawning.perPlayerMobSpawns ? new com.destroystokyo.paper.util.misc.PlayerAreaMap(this.pooledLinkedPlayerHashSets) : null; // Paper
++        this.playerMobDistanceMap = this.level.paperConfig().entities.spawning.perPlayerMobSpawns ? new io.inkwellmc.inkwell.util.AsyncPlayerAreaMap(this.pooledLinkedPlayerHashSets) : null; // Paper // Inkwell
+         // Paper start - use distance map to optimise entity tracker
+         this.playerEntityTrackerTrackMaps = new com.destroystokyo.paper.util.misc.PlayerAreaMap[TRACKING_RANGE_TYPES.length];
+         this.entityTrackerTrackRanges = new int[TRACKING_RANGE_TYPES.length];
+diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java.rej b/src/main/java/net/minecraft/server/level/ChunkMap.java.rej
+new file mode 100644
+index 0000000000000000000000000000000000000000..3f9e64f4c02b82368aa226c834658f6d76095d41
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/level/ChunkMap.java.rej
+@@ -0,0 +1,10 @@
++diff a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java	(rejected hunks)
++@@ -243,7 +243,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
++     // Paper end
++     // Paper start - optimise chunk tick iteration
++     public final it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet<ChunkHolder> needsChangeBroadcasting = new it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet<>();
++-    public final com.destroystokyo.paper.util.misc.PlayerAreaMap playerMobSpawnMap = new com.destroystokyo.paper.util.misc.PlayerAreaMap(this.pooledLinkedPlayerHashSets);
+++    public final com.destroystokyo.paper.util.misc.PlayerAreaMap playerMobSpawnMap = new io.inkwellmc.inkwell.util.AsyncPlayerAreaMap(this.pooledLinkedPlayerHashSets); // Inkwell
++     // Paper end - optimise chunk tick iteration
++ 
++     public ChunkMap(ServerLevel world, LevelStorageSource.LevelStorageAccess session, DataFixer dataFixer, StructureTemplateManager structureTemplateManager, Executor executor, BlockableEventLoop<Runnable> mainThreadExecutor, LightChunkGetter chunkProvider, ChunkGenerator chunkGenerator, ChunkProgressListener worldGenerationProgressListener, ChunkStatusUpdateListener chunkStatusChangeListener, Supplier<DimensionDataStorage> persistentStateManagerFactory, int viewDistance, boolean dsync) {
 diff --git a/src/main/java/net/minecraft/server/level/ServerChunkCache.java b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-index 44ada45d9bf2d9b48e5de1c3cb1a855902f3884b..8477c7b0bfa29524041c529bbe6928da83b90299 100644
+index acbcdc8cb1523044b1657e03a141fae6389a3686..11919df65d78f9ea27f2b83c59b268ad9fbe68e1 100644
 --- a/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 +++ b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-@@ -74,6 +74,9 @@ public class ServerChunkCache extends ChunkSource {
+@@ -76,6 +76,8 @@ public class ServerChunkCache extends ChunkSource {
+     final it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap<LevelChunk> loadedChunkMap = new it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap<>(8192, 0.5f);
  
      private final LevelChunk[] lastLoadedChunks = new LevelChunk[4 * 4];
- 
 +    public boolean firstRunSpawnCounts = true; // Inkwell
 +    public final java.util.concurrent.atomic.AtomicBoolean _inkwell_spawnCountsReady = new java.util.concurrent.atomic.AtomicBoolean(false); // Inkwell - optimize countmobs
-+
+ 
      private static int getChunkCacheKey(int x, int z) {
          return x & 3 | ((z & 3) << 2);
-     }
-@@ -529,12 +532,13 @@ public class ServerChunkCache extends ChunkSource {
-                 int naturalSpawnChunkCount = k;
-                 NaturalSpawner.SpawnState spawnercreature_d; // moved down
-                 if ((this.spawnFriendlies || this.spawnEnemies) && this.level.paperConfig().entities.spawning.perPlayerMobSpawns) { // don't count mobs when animals and monsters are disabled
-+                    // Inkwell start - moved down when async processing
-+                if (!io.inkwellmc.inkwell.InkwellConfig.enableAsyncMobSpawning) {
-                     // re-set mob counts
-                     for (ServerPlayer player : this.level.players) {
-                         // Paper start - per player mob spawning backoff
-                         for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
-                             player.mobCounts[ii] = 0;
--
-                             int newBackoff = player.mobBackoffCounts[ii] - 1; // TODO make configurable bleed // TODO use nonlinear algorithm?
-                             if (newBackoff < 0) {
-                                 newBackoff = 0;
-@@ -543,14 +547,19 @@ public class ServerChunkCache extends ChunkSource {
-                         }
-                         // Paper end - per player mob spawning backoff
-                     }
--                    spawnercreature_d = NaturalSpawner.createState(naturalSpawnChunkCount, this.level.getAllEntities(), this::getFullChunk, null, true);
-+                    lastSpawnState = NaturalSpawner.createState(naturalSpawnChunkCount, this.level.getAllEntities(), this::getFullChunk, null, true);
-+                }
-+                // Inkwell end
-                 } else {
--                    spawnercreature_d = NaturalSpawner.createState(naturalSpawnChunkCount, this.level.getAllEntities(), this::getFullChunk, !this.level.paperConfig().entities.spawning.perPlayerMobSpawns ? new LocalMobCapCalculator(this.chunkMap) : null, false);
-+                    // Inkwell start
-+                    lastSpawnState = NaturalSpawner.createState(naturalSpawnChunkCount, this.level.getAllEntities(), this::getFullChunk, !this.level.paperConfig().entities.spawning.perPlayerMobSpawns ? new LocalMobCapCalculator(this.chunkMap) : null, false);
-+                    _inkwell_spawnCountsReady.set(true);
-+                    // Inkwell end
+@@ -561,6 +563,8 @@ public class ServerChunkCache extends ChunkSource {
+             int l = this.distanceManager.getNaturalSpawnChunkCount();
+             // Paper start - per player mob spawning
+             NaturalSpawner.SpawnState spawnercreature_d; // moved down
++            // Inkwell start - moved down when async processing
++            if (!io.inkwellmc.inkwell.InkwellConfig.enableAsyncMobSpawning) {
+             if ((this.spawnFriendlies || this.spawnEnemies) && this.chunkMap.playerMobDistanceMap != null) { // don't count mobs when animals and monsters are disabled
+                 // re-set mob counts
+                 for (ServerPlayer player : this.level.players) {
+@@ -577,13 +581,18 @@ public class ServerChunkCache extends ChunkSource {
+                     // Paper end - per player mob spawning backoff
                  }
-                 // Paper end
-                 this.level.timings.countNaturalMobs.stopTiming(); // Paper - timings
+                 spawnercreature_d = NaturalSpawner.createState(l, this.level.getAllEntities(), this::getFullChunk, null, true);
++            }
++            // Inkwell end
+             } else {
+-                spawnercreature_d = NaturalSpawner.createState(l, this.level.getAllEntities(), this::getFullChunk, this.chunkMap.playerMobDistanceMap == null ? new LocalMobCapCalculator(this.chunkMap) : null, false);
++                // Inkwell start
++                lastSpawnState = NaturalSpawner.createState(l, this.level.getAllEntities(), this::getFullChunk, !this.level.paperConfig().entities.spawning.perPlayerMobSpawns ? new LocalMobCapCalculator(this.chunkMap) : null, false);
++                _inkwell_spawnCountsReady.set(true);
++                // Inkwell end
+             }
+             // Paper end
+             this.level.timings.countNaturalMobs.stopTiming(); // Paper - timings
  
--                this.lastSpawnState = spawnercreature_d;
-+                //this.lastSpawnState = spawnercreature_d; // Inkwell - this is managed asynchronously
-                 gameprofilerfiller.popPush("spawnAndTick");
-                 boolean flag = this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING) && !this.level.players().isEmpty(); // CraftBukkit
+-            this.lastSpawnState = spawnercreature_d;
++            // this.lastSpawnState = spawnercreature_d; // Inkwell - this is managed asynchronously
+             gameprofilerfiller.popPush("filteringLoadedChunks");
+             // Paper - moved down
+             this.level.timings.chunkTicks.startTiming(); // Paper
+@@ -622,8 +631,8 @@ public class ServerChunkCache extends ChunkSource {
  
-@@ -640,8 +649,8 @@ public class ServerChunkCache extends ChunkSource {
-                     if (tick && chunk1.chunkStatus.isOrAfter(net.minecraft.server.level.FullChunkStatus.ENTITY_TICKING)) {
-                         // Paper end - optimise chunk tick iteration
-                         chunk1.incrementInhabitedTime(j);
--                        if (spawn && flag && (this.spawnEnemies || this.spawnFriendlies) && this.level.getWorldBorder().isWithinBounds(chunkcoordintpair)) { // Spigot // Paper - optimise chunk tick iteration
--                            NaturalSpawner.spawnForChunk(this.level, chunk1, spawnercreature_d, this.spawnFriendlies, this.spawnEnemies, flag1);
-+                        if (spawn && flag && (!io.inkwellmc.inkwell.InkwellConfig.enableAsyncMobSpawning || _inkwell_spawnCountsReady.get()) && (this.spawnEnemies || this.spawnFriendlies) && this.level.getWorldBorder().isWithinBounds(chunkcoordintpair)) { // Spigot // Paper - optimise chunk tick iteration // Inkwell
-+                            NaturalSpawner.spawnForChunk(this.level, chunk1, lastSpawnState, this.spawnFriendlies, this.spawnEnemies, flag1); // Inkwell
-                         }
+                 if ((true || this.level.isNaturalSpawningAllowed(chunkcoordintpair)) && this.chunkMap.anyPlayerCloseEnoughForSpawning(holder, chunkcoordintpair, false)) { // Paper - optimise anyPlayerCloseEnoughForSpawning // Paper - the chunk is known ticking
+                     chunk1.incrementInhabitedTime(j);
+-                    if (flag2 && (this.spawnEnemies || this.spawnFriendlies) && this.level.getWorldBorder().isWithinBounds(chunkcoordintpair) && this.chunkMap.anyPlayerCloseEnoughForSpawning(holder, chunkcoordintpair, true)) { // Spigot // Paper - optimise anyPlayerCloseEnoughForSpawning & optimise chunk tick iteration
+-                        NaturalSpawner.spawnForChunk(this.level, chunk1, spawnercreature_d, this.spawnFriendlies, this.spawnEnemies, flag1);
++                    if (flag2 && (!io.inkwellmc.inkwell.InkwellConfig.enableAsyncMobSpawning || _inkwell_spawnCountsReady.get()) && (this.spawnEnemies || this.spawnFriendlies) && this.level.getWorldBorder().isWithinBounds(chunkcoordintpair)) { // Spigot // Paper - optimise chunk tick iteration // Inkwell
++                        NaturalSpawner.spawnForChunk(this.level, chunk1, lastSpawnState, this.spawnFriendlies, this.spawnEnemies, flag1); // Inkwell
+                     }
  
-                         if (true || this.level.shouldTickBlocksAt(chunkcoordintpair.toLong())) { // Paper - optimise chunk tick iteration
-@@ -688,6 +697,39 @@ public class ServerChunkCache extends ChunkSource {
-             gameprofilerfiller.pop();
-             gameprofilerfiller.pop();
+                     if (true || this.level.shouldTickBlocksAt(chunkcoordintpair.toLong())) { // Paper - the chunk is known ticking
+@@ -685,6 +694,39 @@ public class ServerChunkCache extends ChunkSource {
+             }
+             // Paper end - controlled flush for entity tracker packets
          }
 +
 +        // Inkwell start - optimize mob spawning
@@ -167,10 +189,106 @@ index 44ada45d9bf2d9b48e5de1c3cb1a855902f3884b..8477c7b0bfa29524041c529bbe6928da
 +                });
 +            }
 +        }
-+    // Inkwell end
++        // Inkwell end
      }
  
      private void getFullChunk(long pos, Consumer<LevelChunk> chunkConsumer) {
+diff --git a/src/main/java/net/minecraft/server/level/ServerChunkCache.java.rej b/src/main/java/net/minecraft/server/level/ServerChunkCache.java.rej
+new file mode 100644
+index 0000000000000000000000000000000000000000..97211a47f7028d81a23d347750c7d6dc15d8bd7d
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/level/ServerChunkCache.java.rej
+@@ -0,0 +1,90 @@
++diff a/src/main/java/net/minecraft/server/level/ServerChunkCache.java b/src/main/java/net/minecraft/server/level/ServerChunkCache.java	(rejected hunks)
++@@ -529,12 +532,13 @@ public class ServerChunkCache extends ChunkSource {
++                 int naturalSpawnChunkCount = k;
++                 NaturalSpawner.SpawnState spawnercreature_d; // moved down
++                 if ((this.spawnFriendlies || this.spawnEnemies) && this.level.paperConfig().entities.spawning.perPlayerMobSpawns) { // don't count mobs when animals and monsters are disabled
+++                    // Inkwell start - moved down when async processing
+++                if (!io.inkwellmc.inkwell.InkwellConfig.enableAsyncMobSpawning) {
++                     // re-set mob counts
++                     for (ServerPlayer player : this.level.players) {
++                         // Paper start - per player mob spawning backoff
++                         for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
++                             player.mobCounts[ii] = 0;
++-
++                             int newBackoff = player.mobBackoffCounts[ii] - 1; // TODO make configurable bleed // TODO use nonlinear algorithm?
++                             if (newBackoff < 0) {
++                                 newBackoff = 0;
++@@ -543,14 +547,19 @@ public class ServerChunkCache extends ChunkSource {
++                         }
++                         // Paper end - per player mob spawning backoff
++                     }
++-                    spawnercreature_d = NaturalSpawner.createState(naturalSpawnChunkCount, this.level.getAllEntities(), this::getFullChunk, null, true);
+++                    lastSpawnState = NaturalSpawner.createState(naturalSpawnChunkCount, this.level.getAllEntities(), this::getFullChunk, null, true);
+++                }
+++                // Inkwell end
++                 } else {
++-                    spawnercreature_d = NaturalSpawner.createState(naturalSpawnChunkCount, this.level.getAllEntities(), this::getFullChunk, !this.level.paperConfig().entities.spawning.perPlayerMobSpawns ? new LocalMobCapCalculator(this.chunkMap) : null, false);
+++                    // Inkwell start
+++                    lastSpawnState = NaturalSpawner.createState(naturalSpawnChunkCount, this.level.getAllEntities(), this::getFullChunk, !this.level.paperConfig().entities.spawning.perPlayerMobSpawns ? new LocalMobCapCalculator(this.chunkMap) : null, false);
+++                    _inkwell_spawnCountsReady.set(true);
+++                    // Inkwell end
++                 }
++                 // Paper end
++                 this.level.timings.countNaturalMobs.stopTiming(); // Paper - timings
++ 
++-                this.lastSpawnState = spawnercreature_d;
+++                //this.lastSpawnState = spawnercreature_d; // Inkwell - this is managed asynchronously
++                 gameprofilerfiller.popPush("spawnAndTick");
++                 boolean flag = this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING) && !this.level.players().isEmpty(); // CraftBukkit
++ 
++@@ -640,8 +649,8 @@ public class ServerChunkCache extends ChunkSource {
++                     if (tick && chunk1.chunkStatus.isOrAfter(net.minecraft.server.level.FullChunkStatus.ENTITY_TICKING)) {
++                         // Paper end - optimise chunk tick iteration
++                         chunk1.incrementInhabitedTime(j);
++-                        if (spawn && flag && (this.spawnEnemies || this.spawnFriendlies) && this.level.getWorldBorder().isWithinBounds(chunkcoordintpair)) { // Spigot // Paper - optimise chunk tick iteration
++-                            NaturalSpawner.spawnForChunk(this.level, chunk1, spawnercreature_d, this.spawnFriendlies, this.spawnEnemies, flag1);
+++                        if (spawn && flag && (!io.inkwellmc.inkwell.InkwellConfig.enableAsyncMobSpawning || _inkwell_spawnCountsReady.get()) && (this.spawnEnemies || this.spawnFriendlies) && this.level.getWorldBorder().isWithinBounds(chunkcoordintpair)) { // Spigot // Paper - optimise chunk tick iteration // Inkwell
+++                            NaturalSpawner.spawnForChunk(this.level, chunk1, lastSpawnState, this.spawnFriendlies, this.spawnEnemies, flag1); // Inkwell
++                         }
++ 
++                         if (true || this.level.shouldTickBlocksAt(chunkcoordintpair.toLong())) { // Paper - optimise chunk tick iteration
++@@ -688,6 +697,39 @@ public class ServerChunkCache extends ChunkSource {
++             gameprofilerfiller.pop();
++             gameprofilerfiller.pop();
++         }
+++
+++        // Inkwell start - optimize mob spawning
+++        if (io.inkwellmc.inkwell.InkwellConfig.enableAsyncMobSpawning) {
+++            for (ServerPlayer player : this.level.players) {
+++                // Paper start - per player mob spawning backoff
+++                for (int ii = 0; ii < ServerPlayer.MOBCATEGORY_TOTAL_ENUMS; ii++) {
+++                    player.mobCounts[ii] = 0;
+++                    int newBackoff = player.mobBackoffCounts[ii] - 1; // TODO make configurable bleed // TODO use nonlinear algorithm?
+++                    if (newBackoff < 0) {
+++                        newBackoff = 0;
+++                    }
+++                    player.mobBackoffCounts[ii] = newBackoff;
+++                }
+++                // Paper end - per player mob spawning backoff
+++            }
+++            if (firstRunSpawnCounts) {
+++                firstRunSpawnCounts = false;
+++                _inkwell_spawnCountsReady.set(true);
+++            }
+++            if (_inkwell_spawnCountsReady.getAndSet(false)) {
+++                net.minecraft.server.MinecraftServer.getServer().mobSpawnExecutor.submit(() -> {
+++                    int mapped = distanceManager.getNaturalSpawnChunkCount();
+++                    io.papermc.paper.util.maplist.IteratorSafeOrderedReferenceSet.Iterator<Entity> objectiterator =
+++                            level.entityTickList.entities.iterator(io.papermc.paper.util.maplist.IteratorSafeOrderedReferenceSet.ITERATOR_FLAG_SEE_ADDITIONS);
+++                    io.inkwellmc.inkwell.util.IterableWrapper<net.minecraft.world.entity.Entity> wrappedIterator =
+++                            new io.inkwellmc.inkwell.util.IterableWrapper<>(objectiterator);
+++                    lastSpawnState = NaturalSpawner.createState(mapped, wrappedIterator, this::getFullChunk, null, true);
+++                    objectiterator.finishedIterating();
+++                    _inkwell_spawnCountsReady.set(true);
+++                });
+++            }
+++        }
+++    // Inkwell end
++     }
++ 
++     private void getFullChunk(long pos, Consumer<LevelChunk> chunkConsumer) {
 diff --git a/src/main/java/net/minecraft/world/level/entity/EntityTickList.java b/src/main/java/net/minecraft/world/level/entity/EntityTickList.java
 index 4cdfc433df67afcd455422e9baf56f167dd712ae..8c7115b06b7e379f6a75a3951db73558e4c5beca 100644
 --- a/src/main/java/net/minecraft/world/level/entity/EntityTickList.java
