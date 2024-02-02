@@ -72,13 +72,14 @@ paperweight {
             apiOutputDir.set(layout.projectDirectory.dir("inkwell-api"))
             serverOutputDir.set(layout.projectDirectory.dir("inkwell-server"))
         }
-
+        /* 1.20.1 api generator not supported
         patchTasks.register("generatedApi") {
             isBareDirectory = true
             upstreamDirPath = "paper-api-generator/generated"
             patchDir = layout.projectDirectory.dir("patches/generated-api")
             outputDir = layout.projectDirectory.dir("paper-api-generator/generated")
         }
+        */
     }
 }
 

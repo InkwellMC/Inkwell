@@ -9,12 +9,7 @@ name: Inkwell CI
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    types: [ closed ]
-    branches: [ master ]
-  workflow_dispatch:
-
+    branches: ['**']
 jobs:
   build:
     runs-on: ubuntu-latest
