@@ -20,13 +20,13 @@ index 02b9fcff7f3cdcca809082dff879a8d87c4e664c..492d4cc62f3a51b736e7c3a59c909565
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/PlayerAdvancements.java b/src/main/java/net/minecraft/server/PlayerAdvancements.java
-index f655e0ae4a287886d0291cd0089bad2000249d0f..db401a418ed36afbaebc6b964dd98f24cede7b2c 100644
+index acc49f66bf34e2507d0ee6fec0a56b11bfc68f46..e8cd53fac8c70227b1528b6ac8c856447e6668bb 100644
 --- a/src/main/java/net/minecraft/server/PlayerAdvancements.java
 +++ b/src/main/java/net/minecraft/server/PlayerAdvancements.java
-@@ -221,6 +221,12 @@ public class PlayerAdvancements {
+@@ -224,6 +224,12 @@ public class PlayerAdvancements {
      }
  
-     public boolean award(AdvancementHolder advancement, String criterionName) {
+     public boolean award(Advancement advancement, String criterionName) {
 +        // Inkwell start - spectator don't get advancement
 +        if (!io.inkwellmc.inkwell.InkwellConfig.spectatorCanGetAdvancement && player.gameMode.getGameModeForPlayer() == net.minecraft.world.level.GameType.SPECTATOR) {
 +            return false;

@@ -5,7 +5,7 @@ Subject: [PATCH] Creative block noclip
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index faa8201f1ac5bde4efc944ad309ac88f38689650..5363dd7957f7a539c5de2bf66e9794186bad71d8 100644
+index 4264a4054d7c48d9938d7c415be7fc2442747d9e..17c38dda77342d8313493521289b579a184900c1 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -272,4 +272,9 @@ public class InkwellConfig {
@@ -20,10 +20,10 @@ index faa8201f1ac5bde4efc944ad309ac88f38689650..5363dd7957f7a539c5de2bf66e979418
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 9044458491fc9a33923852e324a15ac59d6660b2..69b95801bc5cb304f6a58b27f6e5e9ade99d8689 100644
+index 58152160d609d0e9d105153aeb166a56a7955603..9061975250f19c3ac5af9a645ef18b51f036952c 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
-@@ -238,8 +238,8 @@ public abstract class Player extends LivingEntity {
+@@ -242,8 +242,8 @@ public abstract class Player extends LivingEntity {
  
      @Override
      public void tick() {
@@ -34,13 +34,13 @@ index 9044458491fc9a33923852e324a15ac59d6660b2..69b95801bc5cb304f6a58b27f6e5e9ad
              this.setOnGround(false);
          }
  
-@@ -416,7 +416,7 @@ public abstract class Player extends LivingEntity {
+@@ -415,7 +415,7 @@ public abstract class Player extends LivingEntity {
  
              Pose entitypose1;
  
--            if (!this.isSpectator() && !this.isPassenger() && !this.canPlayerFitWithinBlocksAndEntitiesWhen(entitypose)) {
-+            if (!this.isCreativeOrSpectator() && !this.isPassenger() && !this.canPlayerFitWithinBlocksAndEntitiesWhen(entitypose)) { // Inkwell - creative no clip
-                 if (this.canPlayerFitWithinBlocksAndEntitiesWhen(Pose.CROUCHING)) {
+-            if (!this.isSpectator() && !this.isPassenger() && !this.canEnterPose(entitypose)) {
++            if (!this.isCreativeOrSpectator() && !this.isPassenger() && !this.canEnterPose(entitypose)) { // Inkwell - creative no clip
+                 if (this.canEnterPose(Pose.CROUCHING)) {
                      entitypose1 = Pose.CROUCHING;
                  } else {
 @@ -576,7 +576,7 @@ public abstract class Player extends LivingEntity {
@@ -52,7 +52,7 @@ index 9044458491fc9a33923852e324a15ac59d6660b2..69b95801bc5cb304f6a58b27f6e5e9ad
              AABB axisalignedbb;
  
              if (this.isPassenger() && !this.getVehicle().isRemoved()) {
-@@ -2067,6 +2067,20 @@ public abstract class Player extends LivingEntity {
+@@ -2130,6 +2130,20 @@ public abstract class Player extends LivingEntity {
      @Override
      public abstract boolean isSpectator();
  
@@ -74,10 +74,10 @@ index 9044458491fc9a33923852e324a15ac59d6660b2..69b95801bc5cb304f6a58b27f6e5e9ad
      public boolean canBeHitByProjectile() {
          return !this.isSpectator() && super.canBeHitByProjectile();
 diff --git a/src/main/java/net/minecraft/world/item/BlockItem.java b/src/main/java/net/minecraft/world/item/BlockItem.java
-index 8ab80717f7f694ed262fb84f9145bc189e3c087c..6a49389c16478f106e4dee1fb325c3b4e04f7039 100644
+index e483186a5292b3b53bfb1af4d56f55fcc1a6106c..8a63a89f9193c60ae6c8899e57194e3bce538460 100644
 --- a/src/main/java/net/minecraft/world/item/BlockItem.java
 +++ b/src/main/java/net/minecraft/world/item/BlockItem.java
-@@ -211,7 +211,7 @@ public class BlockItem extends Item {
+@@ -212,7 +212,7 @@ public class BlockItem extends Item {
          CollisionContext voxelshapecollision = entityhuman == null ? CollisionContext.empty() : CollisionContext.of(entityhuman);
          // CraftBukkit start - store default return
          Level world = context.getLevel(); // Paper
@@ -85,9 +85,9 @@ index 8ab80717f7f694ed262fb84f9145bc189e3c087c..6a49389c16478f106e4dee1fb325c3b4
 +        boolean defaultReturn = (!this.mustSurvive() || state.canSurvive(context.getLevel(), context.getClickedPos())) && (io.inkwellmc.inkwell.InkwellConfig.playerCreativeBlockNoclip && context.getPlayer() != null ? context.getPlayer().canSpectatingPlace(world, state, context.getClickedPos(), voxelshapecollision) : world.checkEntityCollision(state, entityhuman, voxelshapecollision, context.getClickedPos(), true)); // Paper // Inkwell - creative no clip
          org.bukkit.entity.Player player = (context.getPlayer() instanceof ServerPlayer) ? (org.bukkit.entity.Player) context.getPlayer().getBukkitEntity() : null;
  
-         BlockCanBuildEvent event = new BlockCanBuildEvent(CraftBlock.at(context.getLevel(), context.getClickedPos()), player, CraftBlockData.fromData(state), defaultReturn, org.bukkit.craftbukkit.CraftEquipmentSlot.getHand(context.getHand())); // Paper - Expose hand in BlockCanBuildEvent
+         BlockCanBuildEvent event = new BlockCanBuildEvent(CraftBlock.at(context.getLevel(), context.getClickedPos()), player, CraftBlockData.fromData(state), defaultReturn, org.bukkit.craftbukkit.CraftEquipmentSlot.getHand(context.getHand())); // Paper - expose hand
 diff --git a/src/main/java/net/minecraft/world/item/StandingAndWallBlockItem.java b/src/main/java/net/minecraft/world/item/StandingAndWallBlockItem.java
-index f8f909ebdad5e96379e8bd8c610164ef0697368e..7b2ec2fde9002ff75ac6cace75fb3beb0680ee40 100644
+index 88072259a9de205db428351c5c9f6114e199e402..c5d63b6f9c58c0c4b42356373366886630e476a4 100644
 --- a/src/main/java/net/minecraft/world/item/StandingAndWallBlockItem.java
 +++ b/src/main/java/net/minecraft/world/item/StandingAndWallBlockItem.java
 @@ -56,7 +56,7 @@ public class StandingAndWallBlockItem extends BlockItem {
@@ -98,14 +98,14 @@ index f8f909ebdad5e96379e8bd8c610164ef0697368e..7b2ec2fde9002ff75ac6cace75fb3beb
 +            boolean defaultReturn = context.getPlayer() != null ? context.getPlayer().canSpectatingPlace(world, iblockdata1, blockposition, CollisionContext.empty()) : world.isUnobstructed(iblockdata1, blockposition, CollisionContext.empty()); // Inkwell - creative no clip
              org.bukkit.entity.Player player = (context.getPlayer() instanceof ServerPlayer) ? (org.bukkit.entity.Player) context.getPlayer().getBukkitEntity() : null;
  
-             BlockCanBuildEvent event = new BlockCanBuildEvent(CraftBlock.at(world, blockposition), player, CraftBlockData.fromData(iblockdata1), defaultReturn, org.bukkit.craftbukkit.CraftEquipmentSlot.getHand(context.getHand())); // Paper - Expose hand in BlockCanBuildEvent
+             BlockCanBuildEvent event = new BlockCanBuildEvent(CraftBlock.at(world, blockposition), player, CraftBlockData.fromData(iblockdata1), defaultReturn, org.bukkit.craftbukkit.CraftEquipmentSlot.getHand(context.getHand())); // Paper - expose hand
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
-index 1fa22445a4ecc8c08dbcf0cc6bd39dc5003604c4..4bf5d15fd4d3c2b52430b6e75a388e95431d9399 100644
+index b7686fd63b7c5d88c3a12ec4ee9bc01a17f997e0..5418cab2e8d9161d8103239ebbf10b935fb041c8 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
-@@ -162,7 +162,7 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl
-                 while (iterator.hasNext()) {
-                     Entity entity = (Entity) iterator.next();
+@@ -151,7 +151,7 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl
+                 for (int i = 0; i < list.size(); ++i) {
+                     Entity entity = (Entity) list.get(i);
  
 -                    if (entity.getPistonPushReaction() != PushReaction.IGNORE) {
 +                    if (entity.getPistonPushReaction() != PushReaction.IGNORE  && !(entity instanceof Player player && player.isCreativeOrSpectator())) { // Inkwell - creative no clip
@@ -113,7 +113,7 @@ index 1fa22445a4ecc8c08dbcf0cc6bd39dc5003604c4..4bf5d15fd4d3c2b52430b6e75a388e95
                      }
                  }
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
-index b7a0d8ffd1823a1d1edee6baaa62c15f69e6af3d..2fc187a6fb26ad6f47747ceb6d1754af79e965e3 100644
+index 1ec80f9c901dff1c9f29befa5a8e3c3f6f37aaf7..ee058fbe82eba8f9819790beda9f70871aabaa2c 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
 @@ -127,7 +127,7 @@ public class TheEndGatewayBlockEntity extends TheEndPortalBlockEntity {
@@ -147,7 +147,7 @@ index 1ef87580574919796dbba707f44a413ee5c5781b..9a50c0582a2fc8dd03a43971d576fe93
          entity.move(MoverType.PISTON, new Vec3(distance * (double)movementDirection.getStepX(), distance * (double)movementDirection.getStepY(), distance * (double)movementDirection.getStepZ()));
          NOCLIP.set((Direction)null);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index b364a042a9b5d1b3c604f6bf6d03b6aeff03ec82..571b815b6b7696552db266cd939e8467b1046b7c 100644
+index 4e6fea7cf11b1e29ae7c7098a6f5d06bb5f93cc2..adaf5d17dc93dae8cd91e02941517478f9b80a61 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -144,7 +144,6 @@ import org.bukkit.craftbukkit.event.CraftEventFactory;
@@ -174,7 +174,7 @@ index b364a042a9b5d1b3c604f6bf6d03b6aeff03ec82..571b815b6b7696552db266cd939e8467
  import org.bukkit.scoreboard.Scoreboard;
  import org.jetbrains.annotations.NotNull;
  
-@@ -3373,4 +3370,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -3267,4 +3264,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return this.spigot;
      }
      // Spigot end

@@ -5,10 +5,10 @@ Subject: [PATCH] Reduce chunk loading lookups
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/monster/EnderMan.java b/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
-index bd5996eef2d946e9d7765b6b315bc5951158810e..8d037784cc2683ea9c4c41cb50596b94586124f9 100644
+index b62457313a1e30aad0c5313d608667b5d3811455..6b9677eed89bf97929f9f10d4b40b375aa042447 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
-@@ -333,11 +333,17 @@ public class EnderMan extends Monster implements NeutralMob {
+@@ -326,11 +326,17 @@ public class EnderMan extends Monster implements NeutralMob {
      private boolean teleport(double x, double y, double z) {
          BlockPos.MutableBlockPos blockposition_mutableblockposition = new BlockPos.MutableBlockPos(x, y, z);
  

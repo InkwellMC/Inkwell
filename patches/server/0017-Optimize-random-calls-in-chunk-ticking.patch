@@ -5,22 +5,22 @@ Subject: [PATCH] Optimize random calls in chunk ticking
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerChunkCache.java b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-index 8477c7b0bfa29524041c529bbe6928da83b90299..2aaf4f55ed0e81e272faf482a6ba68563dac50f5 100644
+index 1dc37386932280f7b474781832cdcc861bc89496..bd19836a7b7ae04a4576f039d428ed0879df39c4 100644
 --- a/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 +++ b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-@@ -524,6 +524,7 @@ public class ServerChunkCache extends ChunkSource {
+@@ -556,6 +556,7 @@ public class ServerChunkCache extends ChunkSource {
+             ProfilerFiller gameprofilerfiller = this.level.getProfiler();
  
-             // Paper - optimise chunk tick iteration
- 
+             gameprofilerfiller.push("pollingChunks");
 +            this.level.resetIceAndSnowTick(); // Inkwell - reset ice & snow tick random
-             if (this.level.getServer().tickRateManager().runsNormally()) {
-                 gameprofilerfiller.popPush("naturalSpawnCount");
-                 this.level.timings.countNaturalMobs.startTiming(); // Paper - timings
+             int k = this.level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
+             boolean flag1 = level.ticksPerSpawnCategory.getLong(org.bukkit.entity.SpawnCategory.ANIMAL) != 0L && worlddata.getGameTime() % level.ticksPerSpawnCategory.getLong(org.bukkit.entity.SpawnCategory.ANIMAL) == 0L; // CraftBukkit
+ 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 5b6ec9709d3a709a4bcaa35b50e9da9b99b92a0c..83275126450e5ce6f7dac2f3a11ff72f69f31d4e 100644
+index 255ddfea0f6cc9e9e2e2fd9c6edc06cdc78b3a76..13af3142dc5a9b6b64e518c66279bda69ae58936 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -984,9 +984,10 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -935,9 +935,10 @@ public class ServerLevel extends Level implements WorldGenLevel {
      }
      // Paper start - optimise random block ticking
      private final BlockPos.MutableBlockPos chunkTickMutablePosition = new BlockPos.MutableBlockPos();
@@ -32,34 +32,34 @@ index 5b6ec9709d3a709a4bcaa35b50e9da9b99b92a0c..83275126450e5ce6f7dac2f3a11ff72f
      public void tickChunk(LevelChunk chunk, int randomTickSpeed) {
          ChunkPos chunkcoordintpair = chunk.getPos();
          boolean flag = this.isRaining();
-@@ -997,7 +998,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -948,7 +949,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
          gameprofilerfiller.push("thunder");
          final BlockPos.MutableBlockPos blockposition = this.chunkTickMutablePosition; // Paper - use mutable to reduce allocation rate, final to force compile fail on change
  
 -        if (!this.paperConfig().environment.disableThunder && flag && this.isThundering() && this.spigotConfig.thunderChance > 0 && this.random.nextInt(this.spigotConfig.thunderChance) == 0) { // Spigot // Paper - disable thunder
 +        if (!this.paperConfig().environment.disableThunder && flag && this.isThundering() && this.spigotConfig.thunderChance > 0 && /*this.random.nextInt(this.spigotConfig.thunderChance) == 0 &&*/ chunk.shouldDoLightning(this.random)) { // Spigot // Paper - disable thunder // Inkwell - replace random with shouldDoLightning
              blockposition.set(this.findLightningTargetAround(this.getBlockRandomPos(j, 0, k, 15))); // Paper
- 
              if (this.isRainingAt(blockposition)) {
+                 DifficultyInstance difficultydamagescaler = this.getCurrentDifficultyAt(blockposition);
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index afd2e9bcdf94f3511bcd68cab5e72284f07fd016..47dc9708c08f154ce7afb673f6fc265f5622a711 100644
+index 773bfdd3ed457a352b5329f280c0d10297d579ba..d6987bcee33212675c386e760ddc42d6b8ce4eb8 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
-@@ -213,6 +213,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
+@@ -272,6 +272,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
+     // Paper end - optimise checkDespawn
  
      public abstract ResourceKey<LevelStem> getTypeKey();
- 
 +    protected final io.papermc.paper.util.math.ThreadUnsafeRandom randomTickRandom = new io.papermc.paper.util.math.ThreadUnsafeRandom(java.util.concurrent.ThreadLocalRandom.current().nextLong()); public net.minecraft.util.RandomSource getThreadUnsafeRandom() { return this.randomTickRandom; } // Inkwell - move thread unsafe random initialization // Inkwell - getter
-     protected Level(WritableLevelData worlddatamutable, ResourceKey<Level> resourcekey, RegistryAccess iregistrycustom, Holder<DimensionType> holder, Supplier<ProfilerFiller> supplier, boolean flag, boolean flag1, long i, int j, org.bukkit.generator.ChunkGenerator gen, org.bukkit.generator.BiomeProvider biomeProvider, org.bukkit.World.Environment env, java.util.function.Function<org.spigotmc.SpigotWorldConfig, io.papermc.paper.configuration.WorldConfiguration> paperWorldConfigCreator, java.util.concurrent.Executor executor) { // Paper - create paper world config; Async-Anti-Xray: Pass executor
+ 
+     protected Level(WritableLevelData worlddatamutable, ResourceKey<Level> resourcekey, RegistryAccess iregistrycustom, Holder<DimensionType> holder, Supplier<ProfilerFiller> supplier, boolean flag, boolean flag1, long i, int j, org.bukkit.generator.ChunkGenerator gen, org.bukkit.generator.BiomeProvider biomeProvider, org.bukkit.World.Environment env, java.util.function.Function<org.spigotmc.SpigotWorldConfig, io.papermc.paper.configuration.WorldConfiguration> paperWorldConfigCreator, java.util.concurrent.Executor executor) { // Paper - Async-Anti-Xray - Pass executor
          this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName()); // Spigot
-         this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper - create paper world config
 diff --git a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-index 27e8ee4507460b1cc72de692b41562b9f4f13929..f051960a7e5cb2c559a1adb7616028fcac83a149 100644
+index 4ff0d2fc9fd76e92e64abd69f2c9e299aa08ac32..87ed38450aa9634254a14b6a8a435c51964313cc 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-@@ -86,6 +86,18 @@ public class LevelChunk extends ChunkAccess {
+@@ -85,6 +85,18 @@ public class LevelChunk extends ChunkAccess {
+     private final LevelChunkTicks<Block> blockTicks;
      private final LevelChunkTicks<Fluid> fluidTicks;
-     public volatile FullChunkStatus chunkStatus = FullChunkStatus.INACCESSIBLE; // Paper - rewrite chunk system
  
 +    // Inkwell start - instead of using a random every time the chunk is ticked, define when lightning strikes preemptively
 +    private int lightningTick;
@@ -76,7 +76,7 @@ index 27e8ee4507460b1cc72de692b41562b9f4f13929..f051960a7e5cb2c559a1adb7616028fc
      public LevelChunk(Level world, ChunkPos pos) {
          this(world, pos, UpgradeData.EMPTY, new LevelChunkTicks<>(), new LevelChunkTicks<>(), 0L, (LevelChunkSection[]) null, (LevelChunk.PostLoadProcessor) null, (BlendingData) null);
      }
-@@ -109,6 +121,7 @@ public class LevelChunk extends ChunkAccess {
+@@ -112,6 +124,7 @@ public class LevelChunk extends ChunkAccess {
          this.postLoad = entityLoader;
          this.blockTicks = blockTickScheduler;
          this.fluidTicks = fluidTickScheduler;
