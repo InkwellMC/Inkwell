@@ -21,10 +21,10 @@ index 492d4cc62f3a51b736e7c3a59c90956513c2caca..ac4c45c4546644cbd12022b408374732
      private static void blockEntity() {
          allowSignColors = getBoolean(
 diff --git a/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java b/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
-index a24ae93efcdb2da5782d342c7697a1bb253400c7..e3ae2b64726a6c584906141f61c2e102a9ecc358 100644
+index ce2d3387f5a812f6e074e0f46e2fd61e474f4734..56ecd665c05618d97dca8fd00f45bdc386f9fdef 100644
 --- a/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
 +++ b/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
-@@ -532,7 +532,7 @@ public class EnderDragon extends Mob implements Enemy {
+@@ -523,7 +523,7 @@ public class EnderDragon extends Mob implements Enemy {
                      BlockState iblockdata = this.level().getBlockState(blockposition);
  
                      if (!iblockdata.isAir() && !iblockdata.is(BlockTags.DRAGON_TRANSPARENT)) {

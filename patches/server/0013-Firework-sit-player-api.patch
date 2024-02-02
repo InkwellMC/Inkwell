@@ -5,7 +5,7 @@ Subject: [PATCH] Firework sit player api
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/FireworkRocketEntity.java b/src/main/java/net/minecraft/world/entity/projectile/FireworkRocketEntity.java
-index 288910fb168ddc5d3a61971778b8038a56772fa8..d2180f301dae45a3194dfd42ec9f99a0b0b42a3a 100644
+index b2f08889139dc447f7071f1c81456035bf8de31e..2f3d9d7265f22538191f2010137a9a6accb06748 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/FireworkRocketEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/FireworkRocketEntity.java
 @@ -197,7 +197,7 @@ public class FireworkRocketEntity extends Projectile implements ItemSupplier {
@@ -18,10 +18,10 @@ index 288910fb168ddc5d3a61971778b8038a56772fa8..d2180f301dae45a3194dfd42ec9f99a0
              }
              // CraftBukkit end
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftFirework.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftFirework.java
-index 68c5af9b67a2834ee6e2f80ceefa19c3a982b8ed..6e3ec95d5dab54d773024daba8c855c50ee5d4de 100644
+index c13cdbaf7abdf120a3969f8e887b4c3b78989c9c..06e6eb59b470bf8535a16b7dd369629575e730e4 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftFirework.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftFirework.java
-@@ -173,6 +173,11 @@ public class CraftFirework extends CraftProjectile implements Firework {
+@@ -177,6 +177,11 @@ public class CraftFirework extends CraftProjectile implements Firework {
          this.getHandle().lifetime = ticks;
      }
  

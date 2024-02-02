@@ -5,10 +5,10 @@ Subject: [PATCH] Use thread unsafe random for mob spawning
 
 
 diff --git a/src/main/java/net/minecraft/world/level/NaturalSpawner.java b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-index e85ddf92b4f6f044e2b5834a172f37d78e702ef3..52507dcd494bf4f4abddfc944e8d7b632f365c21 100644
+index 3cdddda9c0618e95288b81b975d499c8dd30c05f..4eef3ee29c74d9c77bc3a48e8b45938dfbf6a09c 100644
 --- a/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-@@ -431,12 +431,12 @@ public final class NaturalSpawner {
+@@ -429,12 +429,12 @@ public final class NaturalSpawner {
          }
      }
  

@@ -5,7 +5,7 @@ Subject: [PATCH] Colored signs
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 1a4add0bcf81e6adf70e0357c47cf7508fbd6332..1b793a765ec7b9ceb260b028f638351c992b132b 100644
+index f24857c05bf7c7bf007dd7c3a5774b2dc12b8d74..c73d828fcedfcfb20c4c871eb23366744845fed3 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -139,4 +139,9 @@ public class InkwellConfig {
@@ -20,10 +20,10 @@ index 1a4add0bcf81e6adf70e0357c47cf7508fbd6332..1b793a765ec7b9ceb260b028f638351c
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index b382da838acc04a1c5d89064b4fa43bcdd38ae71..7c210da4f192b0c052039312f4f21f5fe6c9bea1 100644
+index be05a52be037042c6158100e2ce880b8ed415d53..82b48ba317d87571c639cd69732ab473ce3ac89c 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -1534,6 +1534,7 @@ public class ServerPlayer extends Player {
+@@ -1549,6 +1549,7 @@ public class ServerPlayer extends Player {
  
      @Override
      public void openTextEdit(SignBlockEntity sign, boolean front) {
@@ -32,10 +32,10 @@ index b382da838acc04a1c5d89064b4fa43bcdd38ae71..7c210da4f192b0c052039312f4f21f5f
          this.connection.send(new ClientboundOpenSignEditorPacket(sign.getBlockPos(), front));
      }
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/SignBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/SignBlockEntity.java
-index 38cde466714e5663cd416b6afd5d2558e139ec09..f5632eb37e86a64320850630ef51f25e76a2e130 100644
+index a3ec2f522be2d02b9e37810799cecc2ba14f58f3..e4e41a270cbd09dac9f2e05ac4fe0e6b4cf51d54 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/SignBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/SignBlockEntity.java
-@@ -202,16 +202,30 @@ public class SignBlockEntity extends BlockEntity implements CommandSource { // C
+@@ -200,16 +200,30 @@ public class SignBlockEntity extends BlockEntity implements CommandSource { // C
          return this.setText((SignText) textChanger.apply(signtext), front);
      }
  
@@ -68,7 +68,7 @@ index 38cde466714e5663cd416b6afd5d2558e139ec09..f5632eb37e86a64320850630ef51f25e
              }
          }
  
-@@ -351,6 +365,28 @@ public class SignBlockEntity extends BlockEntity implements CommandSource { // C
+@@ -349,6 +363,28 @@ public class SignBlockEntity extends BlockEntity implements CommandSource { // C
          return ClientboundBlockEntityDataPacket.create(this);
      }
  

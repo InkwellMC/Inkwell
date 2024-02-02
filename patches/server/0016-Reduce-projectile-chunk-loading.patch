@@ -5,7 +5,7 @@ Subject: [PATCH] Reduce projectile chunk loading
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 65dc89933efba6e831052cf2f03481e6ad5a76fa..b05df68b54a24a413a162d3ea3dfc743bd8eea0d 100644
+index 39d0b92a14da76bbe549663b4d42b0fc59c8e789..5eaad20db43919a6b4d2b6ef38a6388cf65191c7 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -250,4 +250,12 @@ public class InkwellConfig {
@@ -23,10 +23,10 @@ index 65dc89933efba6e831052cf2f03481e6ad5a76fa..b05df68b54a24a413a162d3ea3dfc743
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/Projectile.java b/src/main/java/net/minecraft/world/entity/projectile/Projectile.java
-index 1b7cf6d06bdf36f146656727511a461f2520762e..5c3616642bee386aca3993f52b40b392bfb00872 100644
+index 2f058cec80c6ef7a5a5ca065dc6c9fe353c521de..5ed2962b3d1a1eaa0124008b0071a26c65074f68 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/Projectile.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/Projectile.java
-@@ -44,6 +44,35 @@ public abstract class Projectile extends Entity implements TraceableEntity {
+@@ -45,6 +45,35 @@ public abstract class Projectile extends Entity implements TraceableEntity {
          super(type, world);
      }
  

@@ -33,10 +33,10 @@ index 17c38dda77342d8313493521289b579a184900c1..d1be68a7735854a5e50b29689e1b3db7
  
      public static boolean usePigmanSpawnLimit;
 diff --git a/src/main/java/net/minecraft/world/entity/npc/Villager.java b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-index c8ef4914eb1f7ddef920a20990c4f13aea522d45..ff161f39df297abd384074993219642c5927d7b9 100644
+index 2e169caf9af98dacc00ef56c4e699322e42fb8ba..01a6ca4f4a66c5ce465502121be13eb5d17c9c09 100644
 --- a/src/main/java/net/minecraft/world/entity/npc/Villager.java
 +++ b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-@@ -141,6 +141,9 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+@@ -142,6 +142,9 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
          return holder.is(PoiTypes.MEETING);
      });
  
@@ -46,7 +46,7 @@ index c8ef4914eb1f7ddef920a20990c4f13aea522d45..ff161f39df297abd384074993219642c
      public Villager(EntityType<? extends Villager> entityType, Level world) {
          this(entityType, world, VillagerType.PLAINS);
      }
-@@ -205,6 +208,44 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+@@ -206,6 +209,44 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
          brain.updateActivityFromSchedule(this.level().getDayTime(), this.level().getGameTime());
      }
  
@@ -91,7 +91,7 @@ index c8ef4914eb1f7ddef920a20990c4f13aea522d45..ff161f39df297abd384074993219642c
      @Override
      protected void ageBoundaryReached() {
          super.ageBoundaryReached();
-@@ -251,13 +292,20 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+@@ -252,13 +293,20 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
          this.customServerAiStep(false);
      }
      private int behaviorTick = 0; // Inkwell
@@ -115,10 +115,10 @@ index c8ef4914eb1f7ddef920a20990c4f13aea522d45..ff161f39df297abd384074993219642c
          this.level().getProfiler().pop();
          if (this.assignProfessionWhenSpawned) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftVillager.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftVillager.java
-index f29e221e5b850516c169c03bfbd2b0885d1a841b..6bd4933c39beead821daca3f394f0171d4d6e40d 100644
+index 6c15d40979fd3e3d246a447c432b321fbf29ada3..b6f7f4af28c677c5be8bb271a4ca8d6240ea6839 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftVillager.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftVillager.java
-@@ -216,4 +216,11 @@ public class CraftVillager extends CraftAbstractVillager implements Villager {
+@@ -252,4 +252,11 @@ public class CraftVillager extends CraftAbstractVillager implements Villager {
          getHandle().getGossips().gossips.clear();
      }
      // Paper end

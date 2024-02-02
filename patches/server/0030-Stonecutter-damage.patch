@@ -25,10 +25,10 @@ index c263ad4796c92ac371e8144a9ab83bf2b8e6c1a3..9d9679a42c63d4229bb495d639e644c7
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 7c210da4f192b0c052039312f4f21f5fe6c9bea1..3c9b8af16e288d8e94bd6dcdeb5400cabc064bca 100644
+index 0814e3cf9bd20d4647d66d2b9c55a3ad8b120716..bb8430cc44b4df5a22f6be303bad566bf64c317f 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -1780,6 +1780,24 @@ public class ServerPlayer extends Player {
+@@ -1884,6 +1884,24 @@ public class ServerPlayer extends Player {
          this.lastSentExp = -1; // CraftBukkit - Added to reset
      }
  
@@ -54,10 +54,10 @@ index 7c210da4f192b0c052039312f4f21f5fe6c9bea1..3c9b8af16e288d8e94bd6dcdeb5400ca
      public void displayClientMessage(Component message, boolean overlay) {
          this.sendSystemMessage(message, overlay);
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index f097ec5b4e3ad6b1a7c464a8cff4f8b2568fcf4f..be9d48d7328548ca4c2e00485109153e9152bbc0 100644
+index 31245c4cbdb36f22bc0cee2fd71c0c65d1a08b82..e22e675cb6210fa58fcec1588246de11eb06c472 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
-@@ -1045,6 +1045,19 @@ public abstract class PlayerList {
+@@ -1064,6 +1064,19 @@ public abstract class PlayerList {
      }
      // CraftBukkit end
  
@@ -78,7 +78,7 @@ index f097ec5b4e3ad6b1a7c464a8cff4f8b2568fcf4f..be9d48d7328548ca4c2e00485109153e
          Iterator iterator = this.players.iterator();
  
 diff --git a/src/main/java/net/minecraft/world/damagesource/CombatTracker.java b/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
-index c12d7bacf2c54f268b1bc5e46250a083ca041415..2ff936ec867e6654fa372e933a084222bd9968b3 100644
+index 9c99b2e365aacb8309f29acb9025faccd2c676b3..a1709913a55ac131536f0fb5b30852b603b27899 100644
 --- a/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
 +++ b/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
 @@ -99,6 +99,9 @@ public class CombatTracker {
@@ -92,7 +92,7 @@ index c12d7bacf2c54f268b1bc5e46250a083ca041415..2ff936ec867e6654fa372e933a084222
              }
          }
 diff --git a/src/main/java/net/minecraft/world/damagesource/DamageSource.java b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
-index 25a5a3b949a0eb632611355e74ccd4865be108ca..28d2503714ee93f3e686bf8f1a60b520169d2b86 100644
+index fc6903b20a6e084729306fc960a6fc80e094f76c..6d0ea93fe760e1dae42418da0422d8fc3494fbb1 100644
 --- a/src/main/java/net/minecraft/world/damagesource/DamageSource.java
 +++ b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
 @@ -54,6 +54,8 @@ public class DamageSource {
@@ -121,7 +121,7 @@ index 25a5a3b949a0eb632611355e74ccd4865be108ca..28d2503714ee93f3e686bf8f1a60b520
          return this.type().msgId();
      }
 diff --git a/src/main/java/net/minecraft/world/damagesource/DamageSources.java b/src/main/java/net/minecraft/world/damagesource/DamageSources.java
-index 4604f8b38460e9113e966889a679d4547f24aff6..751bedfd52501a589198d845c6f5411c27784da6 100644
+index f339475185645f7be30963e4f980ce81a6f7e536..a19403edacb7d9bb38fbe4b7d93c3e80c48924ce 100644
 --- a/src/main/java/net/minecraft/world/damagesource/DamageSources.java
 +++ b/src/main/java/net/minecraft/world/damagesource/DamageSources.java
 @@ -267,4 +267,12 @@ public class DamageSources {
@@ -138,10 +138,10 @@ index 4604f8b38460e9113e966889a679d4547f24aff6..751bedfd52501a589198d845c6f5411c
 +    // Inkwell end
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index dc9fff08139b7006d825ba34e43e3b0ce5fb16e2..f2bc29078fe3635e6283a2fd01ffc1efed361985 100644
+index 49004f362ce9381884665d68179b7e294d234ecb..d647029ebf2fe5afe0063a57e5c30c330e0577db 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -4024,6 +4024,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -4140,6 +4140,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
          return SlotAccess.NULL;
      }
  
@@ -162,10 +162,10 @@ index dc9fff08139b7006d825ba34e43e3b0ce5fb16e2..f2bc29078fe3635e6283a2fd01ffc1ef
      public void sendSystemMessage(Component message) {}
  
 diff --git a/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java b/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
-index 0a95842c53a9d0286c57bcb42db97e468e30fb7d..11e4219f115391e42dd6cb0989c427ce2282164d 100644
+index 77ae7b8ab24935d046cce1f8f7f476310876f9df..65e0382bc97b494812aba8c453ce12a646cae5a4 100644
 --- a/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
-@@ -92,4 +92,16 @@ public class StonecutterBlock extends Block {
+@@ -99,4 +99,16 @@ public class StonecutterBlock extends Block {
      public boolean isPathfindable(BlockState state, BlockGetter world, BlockPos pos, PathComputationType type) {
          return false;
      }
@@ -183,10 +183,10 @@ index 0a95842c53a9d0286c57bcb42db97e468e30fb7d..11e4219f115391e42dd6cb0989c427ce
 +    // Inkwell end
  }
 diff --git a/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java b/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-index 3583fcf5284bc5883308876dbd9886664b391e28..0e199eebedf857bd2798a5727010269a61189776 100644
+index 2aca9b193db5dadc4fb90b8d7548277b698924aa..1d9c2177128fde7d92e19185849ba43db4974468 100644
 --- a/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
 +++ b/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-@@ -465,7 +465,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
+@@ -471,7 +471,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
                              return BlockPathTypes.BLOCKED;
                          } else {
                          // Paper end
@@ -195,7 +195,7 @@ index 3583fcf5284bc5883308876dbd9886664b391e28..0e199eebedf857bd2798a5727010269a
                              return BlockPathTypes.DANGER_OTHER;
                          }
  
-@@ -498,7 +498,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
+@@ -504,7 +504,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
          } else if (!blockState.is(BlockTags.TRAPDOORS) && !blockState.is(Blocks.LILY_PAD) && !blockState.is(Blocks.BIG_DRIPLEAF)) {
              if (blockState.is(Blocks.POWDER_SNOW)) {
                  return BlockPathTypes.POWDER_SNOW;

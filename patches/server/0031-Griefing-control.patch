@@ -26,7 +26,7 @@ index 9d9679a42c63d4229bb495d639e644c7566a2fb2..9df72c4ccc33a13717dac2e1d05405b0
      private static void blockEntity() {
          allowSignColors = getBoolean(
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Creeper.java b/src/main/java/net/minecraft/world/entity/monster/Creeper.java
-index fd1b5a1beea7594fa65decfdcccfa15781fc005b..019641d57da608e344e947451a85b12135ad4fd0 100644
+index 52eb3f6a73fa99d12d5fc75bab03e47a605c653a..ba654bdcdf0859ba05fed2a8b79c860a63b92ecd 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Creeper.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Creeper.java
 @@ -272,7 +272,7 @@ public class Creeper extends Monster implements PowerableMob {
@@ -39,10 +39,10 @@ index fd1b5a1beea7594fa65decfdcccfa15781fc005b..019641d57da608e344e947451a85b121
              this.spawnLingeringCloud();
              // CraftBukkit start
 diff --git a/src/main/java/net/minecraft/world/entity/monster/EnderMan.java b/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
-index 6b9677eed89bf97929f9f10d4b40b375aa042447..8777d740dbd8572e88d4c838cdb1a13d58a16858 100644
+index 66da608477afe967f6c768c465bb1867b76e5df8..b28b8a271526aa8444ffcaac60338b78214ea74f 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
-@@ -515,6 +515,7 @@ public class EnderMan extends Monster implements NeutralMob {
+@@ -522,6 +522,7 @@ public class EnderMan extends Monster implements NeutralMob {
  
          @Override
          public boolean canUse() {
@@ -50,7 +50,7 @@ index 6b9677eed89bf97929f9f10d4b40b375aa042447..8777d740dbd8572e88d4c838cdb1a13d
              return this.enderman.getCarriedBlock() == null ? false : (!this.enderman.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? false : this.enderman.getRandom().nextInt(reducedTickDelay(2000)) == 0);
          }
  
-@@ -560,6 +561,7 @@ public class EnderMan extends Monster implements NeutralMob {
+@@ -567,6 +568,7 @@ public class EnderMan extends Monster implements NeutralMob {
  
          @Override
          public boolean canUse() {

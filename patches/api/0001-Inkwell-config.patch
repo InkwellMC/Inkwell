@@ -5,10 +5,10 @@ Subject: [PATCH] Inkwell config
 
 
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 8d8fe04e6b09d2a5b1cc05002073df5c58cdcb96..f8f41edc35ceb82a6b8876aab6849793d8d224cc 100644
+index 9af4bc16da09e59009c47911219e99450cdf2aa5..e15a1d9601fb033016133f16613ea50ae0d60f7d 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2121,6 +2121,18 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2198,6 +2198,18 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
          }
          // Paper end
  
