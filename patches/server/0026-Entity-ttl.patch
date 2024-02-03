@@ -1,0 +1,70 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Sat, 30 Dec 2023 22:59:21 +0300
+Subject: [PATCH] Entity ttl
+
+
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index 643dce1207fae4fccb808147319638e8c753bd64..cd975090d2b84694a9debe1f38137ad0527ea067 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
+ import java.lang.reflect.Modifier;
+ import java.util.Collections;
+ import java.util.List;
++import java.util.Locale;
++import java.util.Map;
+ 
+ import net.minecraft.core.registries.BuiltInRegistries;
+ import net.minecraft.server.MinecraftServer;
+@@ -215,4 +217,20 @@ public class InkwellConfig {
+     private static void miscSettings() {
+         disableOutOfOrderChat = getBoolean("misc.disable-out-of-order-chat", true);
+     }
++
++    public static Map<String, Integer> projectileTimeouts;
++    private static void projectileTimeouts() {
++        getInt("entity_timeouts.SNOWBALL", -1);
++        getInt("entity_timeouts.LLAMA_SPIT", -1);
++        setComment("entity_timeouts",
++                "These values define a entity's maximum lifespan. If an",
++                "entity is in this list and it has survived for longer than",
++                "that number of ticks, then it will be removed. Setting a value to",
++                "-1 disables this feature.");
++
++        for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
++        		String type = EntityType.getKey(entityType).getPath().toUpperCase(Locale.ROOT);
++        		entityType.ttl = config.getInt("entity_timeouts." + type, -1);
++        }
++    }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 1686f3b0e9a8ef0721d5d9e97c52755ea907b01d..040ef83edad9775f43eb5219a798f0187a94ade2 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -801,6 +801,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+     }
+ 
+     public void tick() {
++        // Inkwell start - entity TTL
++        if (type != EntityType.PLAYER && type.ttl >= 0 && this.tickCount >= type.ttl) {
++            discard();
++            return;
++        }
++        // Inkwell end - entity TTL
+         this.baseTick();
+     }
+ 
+diff --git a/src/main/java/net/minecraft/world/entity/EntityType.java b/src/main/java/net/minecraft/world/entity/EntityType.java
+index 00869478ee20a7802ea35299ffd57225c4bb9ca4..76c137db1d1cdc780edc029072ea6d28cfb1e7d0 100644
+--- a/src/main/java/net/minecraft/world/entity/EntityType.java
++++ b/src/main/java/net/minecraft/world/entity/EntityType.java
+@@ -301,6 +301,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
+     private final int clientTrackingRange;
+     private final int updateInterval;
+     public boolean dabEnabled = false; // Inkwell
++    public int ttl = -1; // Inkwell
+     @Nullable
+     private String descriptionId;
+     @Nullable

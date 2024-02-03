@@ -1,0 +1,206 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Sun, 21 Jan 2024 15:02:28 +0300
+Subject: [PATCH] Stonecutter damage
+
+
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index f2267e63de351107f318a72a6e7e82b465fc247d..536f6d01764940918613ddfb5c2af05f1fdcabb5 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -291,4 +291,14 @@ public class InkwellConfig {
+         infinityWorksWithSpectralArrows = getBoolean("gameplay-mechanics.infinity-bow.spectral-arrows", false);
+         infinityWorksWithTippedArrows = getBoolean("gameplay-mechanics.infinity-bow.tipped-arrows", false);
+     }
++
++    public static String deathMsgStonecutter;
++    private static void deathMessages() {
++        deathMsgStonecutter = getString("settings.messages.death-message.stonecutter", "<player> has sawed themself in half");
++    }
++
++    public static float stonecutterDamage;
++    private static void stonecutterSettings() {
++        stonecutterDamage = (float) getDouble("blocks.stonecutter.damage", 0.0F);
++    }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+index 39e8e6f7d8c82e392de3848ab02949e921df29ee..ee12ededcddd040297a08a71e025e46d22f80cfe 100644
+--- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
++++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+@@ -2219,6 +2219,24 @@ public class ServerPlayer extends Player {
+         this.lastSentExp = -1; // CraftBukkit - Added to reset
+     }
+ 
++    // Inkwell start
++    public void sendActionBarMessage(@Nullable String message) {
++        if (message != null && !message.isEmpty()) {
++            sendActionBarMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message));
++        }
++    }
++    public void sendActionBarMessage(@Nullable net.kyori.adventure.text.Component message) {
++        if (message != null) {
++            sendActionBarMessage(io.papermc.paper.adventure.PaperAdventure.asVanilla(message));
++        }
++    }
++    public void sendActionBarMessage(@Nullable Component message) {
++        if (message != null) {
++            displayClientMessage(message, true);
++        }
++    }
++    // Inkwell end
++
+     @Override
+     public void displayClientMessage(Component message, boolean overlay) {
+         this.sendSystemMessage(message, overlay);
+diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
+index 4f7a9a4ca030c8349a684080b44547f66ed0d2d7..d6c0400a7ceb81e6fe5ce59ddce2f4a6c1c0fcd6 100644
+--- a/src/main/java/net/minecraft/server/players/PlayerList.java
++++ b/src/main/java/net/minecraft/server/players/PlayerList.java
+@@ -1127,6 +1127,19 @@ public abstract class PlayerList {
+     }
+     // CraftBukkit end
+ 
++    // Inkwell start
++    public void broadcastMiniMessage(@Nullable String message, boolean overlay) {
++        if (message != null && !message.isEmpty()) {
++            this.broadcastMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message), overlay);
++        }
++    }
++    public void broadcastMessage(@Nullable net.kyori.adventure.text.Component message, boolean overlay) {
++        if (message != null) {
++            this.broadcastSystemMessage(io.papermc.paper.adventure.PaperAdventure.asVanilla(message), overlay);
++        }
++    }
++    // Inkwell end
++
+     public void broadcastAll(Packet<?> packet, ResourceKey<Level> dimension) {
+         Iterator iterator = this.players.iterator();
+ 
+diff --git a/src/main/java/net/minecraft/world/damagesource/CombatTracker.java b/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
+index 08e84a81facb5514b4e26805dda1291db8936f1a..e162f26846f1f35c525f0836786187cc6952e8f4 100644
+--- a/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
++++ b/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
+@@ -99,6 +99,9 @@ public class CombatTracker {
+                 Component component = ComponentUtils.wrapInSquareBrackets(Component.translatable(string + ".link")).withStyle(INTENTIONAL_GAME_DESIGN_STYLE);
+                 return Component.translatable(string + ".message", this.mob.getDisplayName(), component);
+             } else {
++                if (damageSource.isStoneCutter) {
++                    return damageSource.getLocalizedDeathMessage(io.inkwellmc.inkwell.InkwellConfig.deathMsgStonecutter, this.mob);
++                }
+                 return damageSource.getLocalizedDeathMessage(this.mob);
+             }
+         }
+diff --git a/src/main/java/net/minecraft/world/damagesource/DamageSource.java b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
+index 1df8d601e41c2ab35921b6a1534fdec6e6353954..25a2c38e4e5c47493aff1dd44ef7b051d47c1452 100644
+--- a/src/main/java/net/minecraft/world/damagesource/DamageSource.java
++++ b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
+@@ -54,6 +54,8 @@ public class DamageSource {
+     // CraftBukkit end
+     public @Nullable org.bukkit.block.BlockState explodedBlockState; // Paper - add exploded state
+ 
++    public boolean isStoneCutter; // Inkwell
++
+     public String toString() {
+         return "DamageSource (" + this.type().msgId() + ")";
+     }
+@@ -126,6 +128,15 @@ public class DamageSource {
+         }
+     }
+ 
++    // Inkwell start
++    public Component getLocalizedDeathMessage(String str, LivingEntity entity) {
++        net.kyori.adventure.text.Component name = io.papermc.paper.adventure.PaperAdventure.asAdventure(entity.getDisplayName());
++        net.kyori.adventure.text.minimessage.tag.resolver.TagResolver template = net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.component("player", name);
++        net.kyori.adventure.text.Component component = net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(str, template);
++        return io.papermc.paper.adventure.PaperAdventure.asVanilla(component);
++    }
++    // Inkwell end
++
+     public String getMsgId() {
+         return this.type().msgId();
+     }
+diff --git a/src/main/java/net/minecraft/world/damagesource/DamageSources.java b/src/main/java/net/minecraft/world/damagesource/DamageSources.java
+index 4604f8b38460e9113e966889a679d4547f24aff6..751bedfd52501a589198d845c6f5411c27784da6 100644
+--- a/src/main/java/net/minecraft/world/damagesource/DamageSources.java
++++ b/src/main/java/net/minecraft/world/damagesource/DamageSources.java
+@@ -267,4 +267,12 @@ public class DamageSources {
+     public DamageSource genericKill() {
+         return this.genericKill;
+     }
++
++    // Inkwell start
++    public DamageSource stonecutter() {
++        DamageSource source = new DamageSource(this.damageTypes.getHolderOrThrow(DamageTypes.MAGIC));
++        source.isStoneCutter = true;
++        return source;
++    }
++    // Inkwell end
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 040ef83edad9775f43eb5219a798f0187a94ade2..4dcb893e78b7b44d3299eaaca588a917c6f73965 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -4817,6 +4817,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+         return SlotAccess.NULL;
+     }
+ 
++    // Inkwell Start
++    public void sendMiniMessage(@Nullable String message) {
++        if (message != null && !message.isEmpty()) {
++            this.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message));
++        }
++    }
++    public void sendMessage(@Nullable net.kyori.adventure.text.Component message) {
++        if (message != null) {
++            this.sendSystemMessage(io.papermc.paper.adventure.PaperAdventure.asVanilla(message));
++        }
++    }
++    // Inkwell end
++
+     @Override
+     public void sendSystemMessage(Component message) {}
+ 
+diff --git a/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java b/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
+index 0a95842c53a9d0286c57bcb42db97e468e30fb7d..11e4219f115391e42dd6cb0989c427ce2282164d 100644
+--- a/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
+@@ -92,4 +92,16 @@ public class StonecutterBlock extends Block {
+     public boolean isPathfindable(BlockState state, BlockGetter world, BlockPos pos, PathComputationType type) {
+         return false;
+     }
++
++    // Inkwell start
++    @Override
++    public void stepOn(Level level, BlockPos pos, BlockState state, net.minecraft.world.entity.Entity entity) {
++        if (io.inkwellmc.inkwell.InkwellConfig.stonecutterDamage > 0.0F && entity instanceof net.minecraft.world.entity.LivingEntity) {
++            org.bukkit.craftbukkit.event.CraftEventFactory.blockDamage = level.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
++            entity.hurt(entity.damageSources().stonecutter(), io.inkwellmc.inkwell.InkwellConfig.stonecutterDamage);
++            org.bukkit.craftbukkit.event.CraftEventFactory.blockDamage = null;
++        }
++        super.stepOn(level, pos, state, entity);
++    }
++    // Inkwell end
+ }
+diff --git a/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java b/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
+index 3583fcf5284bc5883308876dbd9886664b391e28..0e199eebedf857bd2798a5727010269a61189776 100644
+--- a/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
++++ b/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
+@@ -465,7 +465,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
+                             return BlockPathTypes.BLOCKED;
+                         } else {
+                         // Paper end
+-                        if (blockState.is(Blocks.CACTUS) || blockState.is(Blocks.SWEET_BERRY_BUSH)) {
++                        if (blockState.is(Blocks.CACTUS) || blockState.is(Blocks.SWEET_BERRY_BUSH) || blockState.is(Blocks.STONECUTTER)) { // Inkwell
+                             return BlockPathTypes.DANGER_OTHER;
+                         }
+ 
+@@ -498,7 +498,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
+         } else if (!blockState.is(BlockTags.TRAPDOORS) && !blockState.is(Blocks.LILY_PAD) && !blockState.is(Blocks.BIG_DRIPLEAF)) {
+             if (blockState.is(Blocks.POWDER_SNOW)) {
+                 return BlockPathTypes.POWDER_SNOW;
+-            } else if (!blockState.is(Blocks.CACTUS) && !blockState.is(Blocks.SWEET_BERRY_BUSH)) {
++            } else if (!blockState.is(Blocks.CACTUS) && !blockState.is(Blocks.SWEET_BERRY_BUSH) && !blockState.is(Blocks.STONECUTTER)) { // Inkwell
+                 if (blockState.is(Blocks.HONEY_BLOCK)) {
+                     return BlockPathTypes.STICKY_HONEY;
+                 } else if (blockState.is(Blocks.COCOA)) {
