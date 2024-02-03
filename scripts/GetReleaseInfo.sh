@@ -43,7 +43,7 @@ if [ $preVersion = "true" ]; then
 fi
 echo "### Commit Message" >> $releaseinfo
 
-number=$(git log --oneline master ^`git describe --tags --abbrev=0` | wc -l)
+number=$(git log --oneline origin ^`git describe --tags --abbrev=0` | wc -l)
 echo "$(git log --pretty='> [%h] %s' -$number)" >> $releaseinfo
 
 echo "" >> $releaseinfo
