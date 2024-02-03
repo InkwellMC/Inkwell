@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <mia.krs3007@yandex.ru>
+Date: Sun, 3 Dec 2023 20:02:19 +0300
+Subject: [PATCH] Add server mod name
+
+
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index 07a82e4944e711f64b364c1cb7e773eb04d32e32..1a4add0bcf81e6adf70e0357c47cf7508fbd6332 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -130,6 +130,11 @@ public class InkwellConfig {
+         return config.getStringList(key);
+     }
+ 
++    public static String serverModName;
++    private static void server() {
++        serverModName = getString("server.server-mod-name", "Inkwell", "Changes the server brand in f3 and server ping");
++    }
++
+     public static boolean allowVoidTrading;
+     private static void villager() {
+         allowVoidTrading = getBoolean("entity.villager.allow-void-trading", false, "Allows you to interact with merchants in unloaded chunks");
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index d0cc6ec67f11a88fbc9cb20c9cf6ba105374b85b..311146f80afd82614c79af9b4ff3e7fa1215e8f7 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -1811,7 +1811,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+ 
+     @DontObfuscate
+     public String getServerModName() {
+-        return "Inkwell"; // Inkwell - Inkwell > // Paper - Paper > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
++        return io.inkwellmc.inkwell.InkwellConfig.serverModName; // Inkwell - Inkwell > // Paper - Paper > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
+     }
+ 
+     public SystemReport fillSystemReport(SystemReport details) {

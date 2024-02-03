@@ -1,0 +1,18 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Sat, 30 Dec 2023 23:57:51 +0300
+Subject: [PATCH] Fix Paper 6045 block goal shouldnt load chunks
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/MoveToBlockGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/MoveToBlockGoal.java
+index 34f319ad09276c6f68dde449c79351de0d7d86f5..b0047c1296549a0a2794424956779c30d82fda11 100644
+--- a/src/main/java/net/minecraft/world/entity/ai/goal/MoveToBlockGoal.java
++++ b/src/main/java/net/minecraft/world/entity/ai/goal/MoveToBlockGoal.java
+@@ -119,6 +119,7 @@ public abstract class MoveToBlockGoal extends Goal {
+                 for(int m = 0; m <= l; m = m > 0 ? -m : 1 - m) {
+                     for(int n = m < l && m > -l ? l : 0; n <= l; n = n > 0 ? -n : 1 - n) {
+                         mutableBlockPos.setWithOffset(blockPos, m, k - 1, n);
++                        if (!this.mob.level().hasChunkAt(mutableBlockPos)) continue; // Inkwell - if this block isn't loaded, continue
+                         if (this.mob.isWithinRestriction(mutableBlockPos) && this.isValidTarget(this.mob.level(), mutableBlockPos)) {
+                             this.blockPos = mutableBlockPos;
+                             setTargetPosition(mutableBlockPos.immutable()); // Paper

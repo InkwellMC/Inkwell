@@ -1,0 +1,21 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Spottedleaf <Spottedleaf@users.noreply.github.com>
+Date: Tue, 25 Jul 2023 11:47:18 -0700
+Subject: [PATCH] Make loadChunksAsync callback thread-safe
+
+Need to perform synchronisation on the return list to avoid CMEs
+
+diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
+index 08289e5f101e1a0deeadadbd7f4b960fe105dd5b..cfe426740d5463ea031c4eea427dff1b41aea149 100644
+--- a/src/main/java/net/minecraft/server/level/ServerLevel.java
++++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
+@@ -347,7 +347,9 @@ public class ServerLevel extends Level implements WorldGenLevel {
+ 
+         java.util.function.Consumer<net.minecraft.world.level.chunk.ChunkAccess> consumer = (net.minecraft.world.level.chunk.ChunkAccess chunk) -> {
+             if (chunk != null) {
++                synchronized (ret) { // Folia - region threading - make callback thread-safe TODO rebase
+                 ret.add(chunk);
++                } // Folia - region threading - make callback thread-safe TODO rebase
+                 chunkProvider.addTicketAtLevel(TicketType.FUTURE_AWAIT, chunk.getPos(), ticketLevel, holderIdentifier);
+             }
+             if (loadedChunks.incrementAndGet() == requiredChunks) {

@@ -14,9 +14,9 @@ commitid=$(git log --pretty='%h' -1)
 mcversion=$(prop mcVersion)
 gradleVersion=$(prop version)
 preVersion=$(prop preVersion)
-tagid="$mcversion-$commitid"
-jarName="inkwell-$mcversion.jar"
-inkwellid="Inkwell-$commitid"
+tagid="$mcversion-folinkwell-$commitid"
+jarName="foliinkwell-$mcversion.jar"
+inkwellid="1.20.1-Folinkwell-$commitid"
 releaseinfo="releaseinfo.md"
 discordmes="discordmes.json"
 make_latest=$([ $preVersion = "true" ] && echo "false" || echo "true")
@@ -53,6 +53,6 @@ echo "| ---- | ---- |" >> $releaseinfo
 echo "| MD5 | `md5 $jarName` |" >> $releaseinfo
 echo "| SHA1 | `sha1 $jarName` |" >> $releaseinfo
 
-echo -n "{\"content\":\"Inkwell New Release\",\"embeds\":[{\"color\":10508031,\"title\":\"$inkwellid\",\"url\":\"https://github.com/InkwellMC/Inkwell/releases/tag/$tagid\",\"fields\":[{\"name\":\"Changelog\",\"value\":\"" >> $discordmes
+echo -n "{\"content\":\"Folinkwell New Release\",\"embeds\":[{\"color\":10508031,\"title\":\"$inkwellid\",\"url\":\"https://github.com/InkwellMC/Inkwell/releases/tag/$tagid\",\"fields\":[{\"name\":\"Changelog\",\"value\":\"" >> $discordmes
 echo -n $(git log --oneline --pretty='> [%h] %s\\n' -$number | sed "s/\"/\\\\\"/g") >> $discordmes
 echo "\",\"inline\":true}]}]}" >> $discordmes

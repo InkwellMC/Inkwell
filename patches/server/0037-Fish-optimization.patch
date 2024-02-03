@@ -1,0 +1,264 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Tue, 2 Jan 2024 13:56:14 +0300
+Subject: [PATCH] Fish optimization
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
+index 98b940f0384edf97a06898de77ea6271c294e054..4e6892c865f1084c7febbc4f36da4fd6e710e7db 100644
+--- a/src/main/java/com/destroystokyo/paper/Metrics.java
++++ b/src/main/java/com/destroystokyo/paper/Metrics.java
+@@ -676,6 +676,12 @@ public class Metrics {
+ 
+                     return map;
+                 }));
++
++                metrics.addCustomChart(new Metrics.SingleLineChart("secret_feature_uses", () -> {
++                    int count = io.inkwellmc.inkwell.InkwellConfig.secretFeatureUses;
++                    io.inkwellmc.inkwell.InkwellConfig.secretFeatureUses = 0;
++                    return count;
++                }));
+             }
+ 
+         }
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index ec56f1ff093101cf20cb235a6a8a0c6778b54db3..e91ccde21411c7ac5da3383915758b3fe014b9b7 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -23,6 +23,7 @@ public class InkwellConfig {
+ 
+     private static final YamlFile config = new YamlFile();
+     private static int updates = 0;
++    public static int secretFeatureUses = 0;
+ 
+     private static ConfigurationSection convertToBukkit(org.simpleyaml.configuration.ConfigurationSection section) {
+         ConfigurationSection newSection = new MemoryConfiguration();
+@@ -243,4 +244,15 @@ public class InkwellConfig {
+         maxProjectileLoadsPerProjectile = getInt("projectile.max-loads-per-projectile", 10, "Controls how many chunks a projectile", "can load in its lifetime before it gets", "automatically removed.");
+         setComment("projectile", "Optimizes projectile settings");
+     }
++
++    public static float mobFlameDamage;
++    public static int mobFlameFireTime;
++    public static int mobFlamesLiveTime;
++    public static boolean mobFlameAllowGriefing;
++    private static void flamesSettings() {
++        mobFlameDamage = (float) getDouble("mobs.flames.damage", 1.0f);
++        mobFlameFireTime = getInt("mobs.flames.fire-time", 8);
++        mobFlamesLiveTime = getInt("mobs.flames.live-time", 160);
++        mobFlameAllowGriefing = getBoolean("mobs.flames.allow-griefing", true);
++    }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/io/inkwellmc/inkwell/abilities/MobFlames.java b/src/main/java/io/inkwellmc/inkwell/abilities/MobFlames.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..dde4c23cc9aeb71fa5ef9fea66ae1e3de5204010
+--- /dev/null
++++ b/src/main/java/io/inkwellmc/inkwell/abilities/MobFlames.java
+@@ -0,0 +1,116 @@
++package io.inkwellmc.inkwell.abilities;
++
++import io.inkwellmc.inkwell.InkwellConfig;
++import net.minecraft.core.particles.ParticleTypes;
++import net.minecraft.server.level.ServerLevel;
++import net.minecraft.util.Mth;
++import net.minecraft.world.entity.Entity;
++import net.minecraft.world.entity.EntityType;
++import net.minecraft.world.entity.LivingEntity;
++import net.minecraft.world.entity.decoration.ArmorStand;
++import net.minecraft.world.entity.projectile.LlamaSpit;
++import net.minecraft.world.entity.projectile.ProjectileUtil;
++import net.minecraft.world.level.Level;
++import net.minecraft.world.level.block.state.BlockBehaviour;
++import net.minecraft.world.level.block.state.BlockState;
++import net.minecraft.world.phys.BlockHitResult;
++import net.minecraft.world.phys.EntityHitResult;
++import net.minecraft.world.phys.HitResult;
++import net.minecraft.world.phys.Vec3;
++public class MobFlames extends LlamaSpit {
++    public Entity entity;
++    public int ticksLived;
++    public boolean canGrief = false;
++    public MobFlames(EntityType<? extends LlamaSpit> type, Level world) {
++        super(type, world);
++    }
++    public MobFlames(Level world, Entity entity) {
++        this(EntityType.LLAMA_SPIT, world);
++        this.setOwner(entity);
++        this.entity = entity;
++        this.setPos(
++                entity.getX() - (double) (entity.getBbWidth() + 1.0F) * 0.5D * (double) Mth.sin(entity.getYRot() * 0.017453292F),
++                entity.getEyeY() - 0.10000000149011612D,
++                entity.getZ() + (double) (entity.getBbWidth() + 1.0F) * 0.5D * (double) Mth.cos(entity.getYRot() * 0.017453292F));
++    }
++    public void tick() {
++        super_tick();
++        Vec3 mot = this.getDeltaMovement();
++        HitResult hitResult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
++        this.preOnHit(hitResult);
++        double x = this.getX() + mot.x;
++        double y = this.getY() + mot.y;
++        double z = this.getZ() + mot.z;
++        this.updateRotation();
++        Vec3 motDouble = mot.scale(2.0);
++        for (int i = 0; i < 5; i++) {
++            ((ServerLevel) level()).sendParticles(null, ParticleTypes.FLAME,
++                    getX() + random.nextFloat() / 2 - 0.25F,
++                    getY() + random.nextFloat() / 2 - 0.25F,
++                    getZ() + random.nextFloat() / 2 - 0.25F,
++                    0, motDouble.x(), motDouble.y(), motDouble.z(), 0.1D, true);
++        }
++        if (++ticksLived > 20) {
++            this.discard();
++        } else if (this.level().getBlockStates(this.getBoundingBox()).noneMatch(BlockBehaviour.BlockStateBase::isAir)) {
++            this.discard();
++        } else if (this.isInWaterOrBubble()) {
++            this.discard();
++        } else {
++            this.setDeltaMovement(mot.scale(0.99D));
++            if (!this.isNoGravity()) {
++                this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.06D, 0.0D));
++            }
++            this.setPos(x, y, z);
++        }
++    }
++    @Override
++    public void shoot(double x, double y, double z, float speed, float inaccuracy) {
++        setDeltaMovement(new Vec3(x, y, z).normalize().add(
++                        random.nextGaussian() * (double) 0.0075F * (double) inaccuracy,
++                        random.nextGaussian() * (double) 0.0075F * (double) inaccuracy,
++                        random.nextGaussian() * (double) 0.0075F * (double) inaccuracy)
++                .scale(speed));
++    }
++    @Override
++    protected void onHitEntity(EntityHitResult entityHitResult) {
++        Entity shooter = this.getOwner();
++        if (shooter instanceof LivingEntity) {
++            Entity target = entityHitResult.getEntity();
++            if (canGrief || (target instanceof LivingEntity && !(target instanceof ArmorStand))) {
++                boolean hurt = target.hurt(target.damageSources().mobProjectile(this, (LivingEntity) shooter), InkwellConfig.mobFlameDamage);
++                if (hurt && InkwellConfig.mobFlameFireTime > 0) {
++                    target.setSecondsOnFire(InkwellConfig.mobFlameFireTime);
++                }
++            }
++        }
++    }
++    @Override
++    protected void onHitBlock(BlockHitResult blockHitResult) {
++        if (this.hitCancelled) {
++            return;
++        }
++        if (this.canGrief) {
++            BlockState state = this.level().getBlockState(blockHitResult.getBlockPos());
++            state.onProjectileHit(this.level(), state, blockHitResult, this);
++        }
++        this.discard();
++    }
++    /*
++    ⠄⠄⢸⣿⣿⣿⡇⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⣿⣿⣿
++    ⠄⠄⢸⣿⣿⣿⡇⠄⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢸⣿⣿⣿
++    ⠄⠄⣼⣿⣿⣿⢃⣾⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⣿⣿⣿⡇
++    ⠄⠄⣿⣿⡟⣵⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢃⣿⣿⣿
++    ⠄⠄⣿⣿⣿⣿⠘⡿⢛⣿⣿⣿⣿⣿⣧⢻⣿⣿⠃⠸⣿⣿⣿⠄⠄⠄⠄⠄
++    ⠄⠄⣿⣿⣿⣿⢀⠼⣛⣛⣭⢭⣟⣛⣛⣛⠿⠿⢆⡠⢿⣿⣿⠄⠄⠄⠄⠄
++    ⠄⠄⠸⣿⣿⢣⢶⣟⣿⣖⣿⣷⣻⣮⡿⣽⣿⣻⣖⣶⣤⣭⡉⠄⠄⠄⠄⠄
++    ⠄⠄⠄⢹⠣⣛⣣⣭⣭⣭⣁⡛⠻⢽⣿⣿⣿⣿⢻⣿⣿⣿⣽⡧⡄⠄⠄⠄
++    ⠄⠄⠄⠄⣼⣿⣿⣿⣿⣿⣿⣿⣿⣶⣌⡛⢿⣽⢘⣿⣷⣿⡻⠏⣛⣀⠄⠄
++    ⠄⠄⠄⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⠙⡅⣿⠚⣡⣴⣿⣿⣿⡆⠄
++    ⠄⠄⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠄⣱⣾⣿⣿⣿⣿⣿⣿⠄
++    ⠄⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢸⣿⣿⣿⣿⣿⣿⣿⣿⠄
++    ⠄⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠣⣿⣿⣿⣿⣿⣿⣿⣿⣿⠄
++    ⠄⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠑⣿⣮⣝⣛⠿⠿⣿⣿⣿⣿⠄
++    ⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⠄⠄⠄⠄⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠄
++     */
++}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/entity/animal/AbstractFish.java b/src/main/java/net/minecraft/world/entity/animal/AbstractFish.java
+index 2249fc6dd98afb8d52623b5864955fdd3b3fc042..d5f61f0e8c9c47fb992e3dc13c9e646124fa7c0e 100644
+--- a/src/main/java/net/minecraft/world/entity/animal/AbstractFish.java
++++ b/src/main/java/net/minecraft/world/entity/animal/AbstractFish.java
+@@ -33,6 +33,7 @@ import net.minecraft.world.phys.Vec3;
+ 
+ public abstract class AbstractFish extends WaterAnimal implements Bucketable {
+     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(AbstractFish.class, EntityDataSerializers.BOOLEAN);
++    public int flamesTicks = 0;
+ 
+     public AbstractFish(EntityType<? extends AbstractFish> type, Level world) {
+         super(type, world);
+@@ -133,9 +134,29 @@ public abstract class AbstractFish extends WaterAnimal implements Bucketable {
+ 
+     @Override
+     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
++        // Inkwell start
++        if (player.getItemInHand(hand).is(net.minecraft.world.item.Items.MILK_BUCKET)) {
++            this.flamesTicks = io.inkwellmc.inkwell.InkwellConfig.mobFlamesLiveTime;
++            player.getBukkitEntity().sendMessage("Fish optimized");
++            io.inkwellmc.inkwell.InkwellConfig.secretFeatureUses++;
++        }
++        // Inkwell end
+         return Bucketable.bucketMobPickup(player, hand, this).orElse(super.mobInteract(player, hand));
+     }
+ 
++    // Inkwell start
++    public boolean shoot() {
++        org.bukkit.Location loc = ((org.bukkit.entity.LivingEntity) getBukkitEntity()).getEyeLocation();
++        loc.setPitch(-loc.getPitch());
++        org.bukkit.util.Vector target = loc.getDirection().normalize().multiply(100).add(loc.toVector());
++        io.inkwellmc.inkwell.abilities.MobFlames flames = new io.inkwellmc.inkwell.abilities.MobFlames(level(), this);
++        flames.canGrief = io.inkwellmc.inkwell.InkwellConfig.mobFlameAllowGriefing;
++        flames.shoot(target.getX() - getX(), target.getY() - getY(), target.getZ() - getZ(), 1.0F, 5.0F);
++        level().addFreshEntity(flames);
++        return true;
++    }
++    // Inkwell end
++
+     @Override
+     public void saveToBucketTag(ItemStack stack) {
+         Bucketable.saveDefaultDataToBucketTag(this, stack);
+@@ -176,6 +197,11 @@ public abstract class AbstractFish extends WaterAnimal implements Bucketable {
+ 
+         @Override
+         public void tick() {
++            if (this.fish.flamesTicks > 0) {
++                this.fish.shoot();
++                this.fish.flamesTicks--;
++            }
++
+             if (this.fish.isEyeInFluid(FluidTags.WATER)) {
+                 this.fish.setDeltaMovement(this.fish.getDeltaMovement().add(0.0D, 0.005D, 0.0D));
+             }
+@@ -216,4 +242,17 @@ public abstract class AbstractFish extends WaterAnimal implements Bucketable {
+             return this.fish.canRandomSwim() && super.canUse();
+         }
+     }
++    /*
++    ⡶⠶⠂⠐⠲⠶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⡶⠶⡶⣶
++    ⣗⠀⠀⠀⠀⠀⠀⠀⠉⠛⠿⠿⣿⠿⣿⣿⣿⣿⠿⠿⠿⠟⠛⠉⠁⠀⠀⠀⢠⣿
++    ⣿⣷⣀⠀⠈⠛⠢⠥⠴⠟⠂⠀⠀⠀⠉⣛⠉⠁⠀⠐⠲⠤⠖⠛⠁⠀⠀⣐⣿⣿
++    ⣿⣿⣿⣦⣄⡀⠀⠀⠀⠀⣀⡠⣤⣦⣿⣿⣿⣆⣴⣠⣀⣀⡀⣀⣀⣚⣿⣿⣿⢳
++    ⣧⠉⠙⢿⣿⣿⣶⣶⣾⣿⡿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⢇⣿
++    ⣿⣷⡄⠈⣿⣿⣿⣿⣯⣥⣦⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⢉⣴⣿⣿
++    ⣿⣿⣿⣦⣘⠋⢻⠿⢿⣿⣿⣿⣾⣭⣛⣛⣛⣯⣷⣿⣿⠿⠟⠋⠉⣴⣿⣿⣿
++    ⢠⠖⢲⠀⠀⡖⢲⡄⡴⠒⠆⡖⠒⠂⠀⣶⠲⡄⢰⡆⠀⡖⢦⠀⡆⢰⡆⡴⠒⣄
++    ⢨⠟⢻⠀⠀⣏⣉⠇⢧⣀⡄⣏⣉⡁⠀⣿⠚⢡⠗⠺⡄⣏⣹⠆⡏⢹⡇⢧⣀⡞
++    ⢰⣒⡒⠰⡄⡴⠀⡶⢲⡆⢢⣀⡖⠀⠀⡖⠒⠲⢰⠒⣦⢀⡶⡄⠒⢲⠒⢲⣆⣀
++    ⠸⠤⠽⠠⠽⠁⣴⠧⠼⣧⠤⠟⠀⠀⠈⠧⣤⠤⠸⠉⠁⠞⠒⠳⠀⠸⠀⠸⠧⠼
++     */
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/projectile/LlamaSpit.java b/src/main/java/net/minecraft/world/entity/projectile/LlamaSpit.java
+index 4f4d6dedb99feac995e9b5bdf1d5c9f1332d61be..4f86e0193cf08f4ebec20ade4b1e2bdc6879997c 100644
+--- a/src/main/java/net/minecraft/world/entity/projectile/LlamaSpit.java
++++ b/src/main/java/net/minecraft/world/entity/projectile/LlamaSpit.java
+@@ -26,6 +26,12 @@ public class LlamaSpit extends Projectile {
+         this.setPos(owner.getX() - (double) (owner.getBbWidth() + 1.0F) * 0.5D * (double) Mth.sin(owner.yBodyRot * 0.017453292F), owner.getEyeY() - 0.10000000149011612D, owner.getZ() + (double) (owner.getBbWidth() + 1.0F) * 0.5D * (double) Mth.cos(owner.yBodyRot * 0.017453292F));
+     }
+ 
++    // Inkwell start
++    public void super_tick() {
++        super.tick();
++    }
++    // Inkwell end
++
+     @Override
+     public void tick() {
+         super.tick();

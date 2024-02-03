@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Sat, 30 Dec 2023 22:50:50 +0300
+Subject: [PATCH] Disable out of order chat option
+
+
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index efa7a01cd89ca1623bfed666369a0cc7b79e6e93..643dce1207fae4fccb808147319638e8c753bd64 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -210,4 +210,9 @@ public class InkwellConfig {
+                 }, () -> MinecraftServer.LOGGER.warn("Unknown entity \"" + name + "\"")));
+         setComment("dab", "Optimizes entity brains when", "they're far away from the player");
+     }
++
++    public static boolean disableOutOfOrderChat;
++    private static void miscSettings() {
++        disableOutOfOrderChat = getBoolean("misc.disable-out-of-order-chat", true);
++    }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+index 678bba9d636a0eb34270a2d26b5b3d0d6d900115..3a8d9ebe7305383d69cbf1dbb5cc998011fbb68f 100644
+--- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
++++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+@@ -2456,6 +2456,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+     }
+ 
+     private boolean updateChatOrder(Instant timestamp) {
++        if (io.inkwellmc.inkwell.InkwellConfig.disableOutOfOrderChat) return true;
+         Instant instant1;
+ 
+         do {
