@@ -162,7 +162,7 @@ index 040ef83edad9775f43eb5219a798f0187a94ade2..4dcb893e78b7b44d3299eaaca588a917
      public void sendSystemMessage(Component message) {}
  
 diff --git a/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java b/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
-index 0a95842c53a9d0286c57bcb42db97e468e30fb7d..11e4219f115391e42dd6cb0989c427ce2282164d 100644
+index 0a95842c53a9d0286c57bcb42db97e468e30fb7d..8a2f80b5a9338819f8f28f79c1af1d53144794b2 100644
 --- a/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
 @@ -92,4 +92,16 @@ public class StonecutterBlock extends Block {
@@ -174,9 +174,9 @@ index 0a95842c53a9d0286c57bcb42db97e468e30fb7d..11e4219f115391e42dd6cb0989c427ce
 +    @Override
 +    public void stepOn(Level level, BlockPos pos, BlockState state, net.minecraft.world.entity.Entity entity) {
 +        if (io.inkwellmc.inkwell.InkwellConfig.stonecutterDamage > 0.0F && entity instanceof net.minecraft.world.entity.LivingEntity) {
-+            org.bukkit.craftbukkit.event.CraftEventFactory.blockDamage = level.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
++            org.bukkit.craftbukkit.event.CraftEventFactory.blockDamageRT.set(level.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ()));
 +            entity.hurt(entity.damageSources().stonecutter(), io.inkwellmc.inkwell.InkwellConfig.stonecutterDamage);
-+            org.bukkit.craftbukkit.event.CraftEventFactory.blockDamage = null;
++            org.bukkit.craftbukkit.event.CraftEventFactory.blockDamageRT.set(null);
 +        }
 +        super.stepOn(level, pos, state, entity);
 +    }

@@ -23,7 +23,7 @@ index cd975090d2b84694a9debe1f38137ad0527ea067..51c63555b933b1a5ccc91b2fb347adba
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/Projectile.java b/src/main/java/net/minecraft/world/entity/projectile/Projectile.java
-index 5835a1ba3e2927c6b5d143506b440ac5a43aaaa4..81d7dcec7ee489c71f9b786d01e14799e0cd62e0 100644
+index 5835a1ba3e2927c6b5d143506b440ac5a43aaaa4..5627ff2ff8132371553605e679279901eae97aa5 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/Projectile.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/Projectile.java
 @@ -44,6 +44,35 @@ public abstract class Projectile extends Entity implements TraceableEntity {
@@ -32,11 +32,11 @@ index 5835a1ba3e2927c6b5d143506b440ac5a43aaaa4..81d7dcec7ee489c71f9b786d01e14799
  
 +    // Inkwell start
 +    private static int loadedThisTick = 0;
-+    private static int loadedTick;
++    private static long loadedTick;
 +    private int loadedLifetime = 0;
 +    @Override
 +    public void setPos(double x, double y, double z) {
-+        int currentTick = net.minecraft.server.MinecraftServer.currentTick;
++        long currentTick = this.level().tickData.nonRedstoneGameTime();
 +        if (loadedTick != currentTick) {
 +            loadedTick = currentTick;
 +            loadedThisTick = 0;
