@@ -24,7 +24,7 @@ make_latest="false"
 rm -f $discordmes
 rm -f $releaseinfo
 
-mv build/libs/inkwell-paperclip-$gradleVersion-reobf.jar $jarName
+mv build/libs/folinkwell-paperclip-$gradleVersion-reobf.jar $jarName
 echo "name=$inkwellid" >> $GITHUB_ENV
 echo "tag=$tagid" >> $GITHUB_ENV
 echo "jar=$jarName" >> $GITHUB_ENV
