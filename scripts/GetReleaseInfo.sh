@@ -15,7 +15,7 @@ mcversion=$(prop mcVersion)
 gradleVersion=$(prop version)
 preVersion=$(prop preVersion)
 tagid="$mcversion-folinkwell-$commitid"
-jarName="foliinkwell-$mcversion.jar"
+jarName="folinkwell-$mcversion.jar"
 inkwellid="1.20.1-folinkwell-$commitid"
 releaseinfo="releaseinfo.md"
 discordmes="discordmes.json"
@@ -48,7 +48,7 @@ echo "" >> $releaseinfo
 
 echo "### Commit Message" >> $releaseinfo
 
-number=$(git log --oneline origin ^`git describe --tags --abbrev=0` | wc -l)
+number=$(git log --oneline 1.20.1-Folia ^`git describe --tags --abbrev=0` | wc -l)
 echo "$(git log --pretty='> [%h] %s' -$number)" >> $releaseinfo
 
 echo "" >> $releaseinfo
