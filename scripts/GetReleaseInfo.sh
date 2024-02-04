@@ -16,10 +16,10 @@ gradleVersion=$(prop version)
 preVersion=$(prop preVersion)
 tagid="$mcversion-folinkwell-$commitid"
 jarName="foliinkwell-$mcversion.jar"
-inkwellid="1.20.1-Folinkwell-$commitid"
+inkwellid="1.20.1-folinkwell-$commitid"
 releaseinfo="releaseinfo.md"
 discordmes="discordmes.json"
-make_latest=$([ $preVersion = "true" ] && echo "false" || echo "true")
+make_latest="false"
 
 rm -f $discordmes
 rm -f $releaseinfo
@@ -41,6 +41,11 @@ if [ $preVersion = "true" ]; then
   echo "> **Backups are mandatory!**" >> $releaseinfo
   echo "" >> $releaseinfo
 fi
+
+echo "> This is a Inkwell with folia changes this may very unstable!" >> $releaseinfo
+echo "> **Backups are mandatory!**" >> $releaseinfo
+echo "" >> $releaseinfo
+
 echo "### Commit Message" >> $releaseinfo
 
 number=$(git log --oneline origin ^`git describe --tags --abbrev=0` | wc -l)

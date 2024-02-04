@@ -17,7 +17,7 @@ index 37c3a00659ce21623be07317f4f6a45bf990d799..71f7052ee100fb9e48485c940b2ac7c4
 +*.rej
 \ No newline at end of file
 diff --git a/build.gradle.kts b/build.gradle.kts
-index fb98936bb8a5488db75d676c5bcb4060597fbbf8..14d939946555d16d768682a980d2e8aff42d986c 100644
+index fb98936bb8a5488db75d676c5bcb4060597fbbf8..1ac8432f5115d6a5506ff3b2cca1b3ee2bb59fab 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,8 +13,12 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -26,7 +26,7 @@ index fb98936bb8a5488db75d676c5bcb4060597fbbf8..14d939946555d16d768682a980d2e8af
  dependencies {
 -    implementation(project(":paper-api"))
 -    implementation(project(":paper-mojangapi"))
-+    implementation(project(":inkwell-api")) // Inkwell // Paper
++    implementation(project(":folinkwell-api")) // Inkwell // Paper
 +    // Inkwell start
 +    implementation("io.papermc.paper:paper-mojangapi:${project.version}") {
 +        exclude("io.papermc.paper", "paper-api")
