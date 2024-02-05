@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Sun, 21 Jan 2024 14:11:08 +0300
+Subject: [PATCH] EnderDragon griefing control
+
+
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index b342ece0dfa67bc165693adf05cf8f07d83012cb..94b35349dd20584d11f773b6b5e4fd94de5aae7c 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -180,6 +180,11 @@ public class InkwellConfig {
+         );
+     }
+ 
++    public static boolean enderdragonAllowGriefing;
++    private static void enderdragonSettings() {
++        enderdragonAllowGriefing = getBoolean("entity.enderdragon.allow-griefing", true);
++    }
++
+     public static boolean allowSignColors;
+     private static void blockEntity() {
+         allowSignColors = getBoolean(
+diff --git a/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java b/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
+index ce2d3387f5a812f6e074e0f46e2fd61e474f4734..56ecd665c05618d97dca8fd00f45bdc386f9fdef 100644
+--- a/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
++++ b/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
+@@ -523,7 +523,7 @@ public class EnderDragon extends Mob implements Enemy {
+                     BlockState iblockdata = this.level().getBlockState(blockposition);
+ 
+                     if (!iblockdata.isAir() && !iblockdata.is(BlockTags.DRAGON_TRANSPARENT)) {
+-                        if (this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && !iblockdata.is(BlockTags.DRAGON_IMMUNE)) {
++                        if (this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && !iblockdata.is(BlockTags.DRAGON_IMMUNE) && io.inkwellmc.inkwell.InkwellConfig.enderdragonAllowGriefing) {
+                             // CraftBukkit start - Add blocks to list rather than destroying them
+                             // flag1 = this.level().removeBlock(blockposition, false) || flag1;
+                             flag1 = true;

@@ -1,0 +1,62 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <mia.krs3007@yandex.ru>
+Date: Sun, 3 Dec 2023 23:51:50 +0300
+Subject: [PATCH] Pigman spawn limit
+
+
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index 1b793a765ec7b9ceb260b028f638351c992b132b..c6d7ddb389088c812d9d610ca2707990d5524ddc 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -140,6 +140,13 @@ public class InkwellConfig {
+         allowVoidTrading = getBoolean("entity.villager.allow-void-trading", false, "Allows you to interact with merchants in unloaded chunks");
+     }
+ 
++    public static boolean usePigmanSpawnLimit;
++    public static int pigmanSpawnLimit;
++    private static void pigman() {
++        usePigmanSpawnLimit = getBoolean("entity.pigman.use-pigman-spawn-limit", false);
++        pigmanSpawnLimit = getInt("entity.pigman.pigman-spawn-limit", 200, "This restriction is not global, but is only used on individual territories loaded on the server.");
++    }
++
+     public static boolean allowSignColors;
+     private static void blockEntity() {
+         allowSignColors = getBoolean("blockentity.allow-sign-colors", false, "Allows to parse colors on signs.");
+diff --git a/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java b/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
+index e6b762c70cbc08b20fc225b7731abd19c626369c..6b3187062e6ab347f19e1c4a9d9d9ff633bfceba 100644
+--- a/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
+@@ -66,8 +66,31 @@ public class NetherPortalBlock extends Block {
+             }
+ 
+             if (world.getBlockState(pos).isValidSpawn(world, pos, EntityType.ZOMBIFIED_PIGLIN)) {
+-                // CraftBukkit - set spawn reason to NETHER_PORTAL
+-                Entity entity = EntityType.ZOMBIFIED_PIGLIN.spawn(world, pos.above(), MobSpawnType.STRUCTURE, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.NETHER_PORTAL);
++                // Inkwell start
++                Entity entity = null;
++                int zombifiedPigninsCount = 0;
++                if (io.inkwellmc.inkwell.InkwellConfig.usePigmanSpawnLimit) {
++                    int radiusCheck = world.getViewDistances().loadViewDistance();
++                    int chunkX = pos.getX() >> 4;
++                    int chunkZ = pos.getZ() >> 4;
++                    java.util.List<net.minecraft.world.level.chunk.LevelChunk> chunks = new java.util.ArrayList<>();
++                    for (int x = chunkX - radiusCheck; x <= chunkX + radiusCheck; x++) {
++                        for (int z = chunkZ - radiusCheck; z <= chunkZ + radiusCheck; z++) {
++                            chunks.add(world.getChunk(x, z));
++                        }
++                    }
++                    for (net.minecraft.world.level.chunk.LevelChunk chunk : chunks) {
++                        java.util.List<org.bukkit.entity.Entity> entities = java.util.List.of(world.getChunkEntities(chunk.locX, chunk.locZ));
++                        for (org.bukkit.entity.Entity entityCycle : entities) {
++                            if (entityCycle.getType().equals(org.bukkit.entity.EntityType.ZOMBIFIED_PIGLIN)) zombifiedPigninsCount++;
++                        }
++                    }
++                }
++                if (zombifiedPigninsCount < io.inkwellmc.inkwell.InkwellConfig.pigmanSpawnLimit || !io.inkwellmc.inkwell.InkwellConfig.usePigmanSpawnLimit) {
++                    // CraftBukkit - set spawn reason to NETHER_PORTAL
++                    entity = EntityType.ZOMBIFIED_PIGLIN.spawn(world, pos.above(), MobSpawnType.STRUCTURE, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.NETHER_PORTAL);
++                }
++                // Inkwell end
+ 
+                 if (entity != null) {
+                     entity.setPortalCooldown();

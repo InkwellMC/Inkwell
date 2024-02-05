@@ -1,0 +1,52 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Mon, 1 Jan 2024 17:33:48 +0300
+Subject: [PATCH] Option for piston push limit
+
+
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index 51c63555b933b1a5ccc91b2fb347adba7b4d0563..ec56f1ff093101cf20cb235a6a8a0c6778b54db3 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -214,8 +214,10 @@ public class InkwellConfig {
+     }
+ 
+     public static boolean disableOutOfOrderChat;
++    public static int pistonPushLimit;
+     private static void miscSettings() {
+         disableOutOfOrderChat = getBoolean("misc.disable-out-of-order-chat", true);
++        pistonPushLimit = getInt("misc.piston-push-limit", 12, "The number of blocks the piston can move. The default is 12.");
+     }
+ 
+     public static Map<String, Integer> projectileTimeouts;
+diff --git a/src/main/java/net/minecraft/world/level/block/piston/PistonStructureResolver.java b/src/main/java/net/minecraft/world/level/block/piston/PistonStructureResolver.java
+index 744d91546d1a810f60a43c15ed74b4158f341a4a..ff028831e65b18146047be4c2a5cd4062cbcdfcd 100644
+--- a/src/main/java/net/minecraft/world/level/block/piston/PistonStructureResolver.java
++++ b/src/main/java/net/minecraft/world/level/block/piston/PistonStructureResolver.java
+@@ -86,7 +86,7 @@ public class PistonStructureResolver {
+             return true;
+         } else {
+             int i = 1;
+-            if (i + this.toPush.size() > 12) {
++            if (i + this.toPush.size() > io.inkwellmc.inkwell.InkwellConfig.pistonPushLimit) {
+                 return false;
+             } else {
+                 while(isSticky(blockState)) {
+@@ -98,7 +98,7 @@ public class PistonStructureResolver {
+                     }
+ 
+                     ++i;
+-                    if (i + this.toPush.size() > 12) {
++                    if (i + this.toPush.size() > io.inkwellmc.inkwell.InkwellConfig.pistonPushLimit) {
+                         return false;
+                     }
+                 }
+@@ -142,7 +142,7 @@ public class PistonStructureResolver {
+                         return true;
+                     }
+ 
+-                    if (this.toPush.size() >= 12) {
++                    if (this.toPush.size() >= io.inkwellmc.inkwell.InkwellConfig.pistonPushLimit) {
+                         return false;
+                     }
+ 

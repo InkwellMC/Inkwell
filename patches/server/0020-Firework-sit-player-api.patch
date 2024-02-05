@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Sat, 30 Dec 2023 17:24:25 +0300
+Subject: [PATCH] Firework sit player api
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/projectile/FireworkRocketEntity.java b/src/main/java/net/minecraft/world/entity/projectile/FireworkRocketEntity.java
+index 619bedc55d61f83dbc5adcf76a739cf9e6a1c55c..bcf3f7c7de032f2f8f0bccc5d97db4fd2c5daa37 100644
+--- a/src/main/java/net/minecraft/world/entity/projectile/FireworkRocketEntity.java
++++ b/src/main/java/net/minecraft/world/entity/projectile/FireworkRocketEntity.java
+@@ -202,7 +202,7 @@ public class FireworkRocketEntity extends Projectile implements ItemSupplier {
+         super.onHitEntity(entityHitResult);
+         if (!this.level().isClientSide) {
+             // CraftBukkit start
+-            if (!org.bukkit.craftbukkit.event.CraftEventFactory.callFireworkExplodeEvent(this).isCancelled()) {
++            if (!org.bukkit.craftbukkit.event.CraftEventFactory.callFireworkExplodeEvent(this).isCancelled() && this.hasBeenShot) {
+                 this.explode();
+             }
+             // CraftBukkit end
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftFirework.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftFirework.java
+index 7a98bcdd7c8a8934431cd50335f941ae79bc5763..796717e7178b082b1bfb314e9517d66b3b000856 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftFirework.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftFirework.java
+@@ -185,6 +185,11 @@ public class CraftFirework extends CraftProjectile implements Firework {
+         this.getHandle().lifetime = ticks;
+     }
+ 
++    @Override
++    public void sitPlayer(@org.jetbrains.annotations.NotNull org.bukkit.entity.Player player) {
++        this.addPassenger(player);
++    }
++
+     void applyFireworkEffect(FireworkMeta meta) {
+         ItemStack item = this.getHandle().getItem();
+         CraftItemStack.applyMetaToItem(item, meta);

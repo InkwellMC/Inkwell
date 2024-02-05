@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Sat, 30 Dec 2023 22:50:50 +0300
+Subject: [PATCH] Disable out of order chat option
+
+
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index efa7a01cd89ca1623bfed666369a0cc7b79e6e93..643dce1207fae4fccb808147319638e8c753bd64 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -210,4 +210,9 @@ public class InkwellConfig {
+                 }, () -> MinecraftServer.LOGGER.warn("Unknown entity \"" + name + "\"")));
+         setComment("dab", "Optimizes entity brains when", "they're far away from the player");
+     }
++
++    public static boolean disableOutOfOrderChat;
++    private static void miscSettings() {
++        disableOutOfOrderChat = getBoolean("misc.disable-out-of-order-chat", true);
++    }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/chat/SignedMessageChain.java b/src/main/java/net/minecraft/network/chat/SignedMessageChain.java
+index ba12919c3f9aec34a9e64993b143ae92be5eb172..b5cdf463353f2afac87ba5b203558facf6faf9ae 100644
+--- a/src/main/java/net/minecraft/network/chat/SignedMessageChain.java
++++ b/src/main/java/net/minecraft/network/chat/SignedMessageChain.java
+@@ -38,7 +38,7 @@ public class SignedMessageChain {
+                 throw new SignedMessageChain.DecodeException(Component.translatable("chat.disabled.chain_broken"), false); // Paper - diff on change (if disconnects, need a new kick event cause)
+             } else if (playerPublicKey.data().hasExpired()) {
+                 throw new SignedMessageChain.DecodeException(Component.translatable("chat.disabled.expiredProfileKey"), false, org.bukkit.event.player.PlayerKickEvent.Cause.EXPIRED_PROFILE_PUBLIC_KEY); // Paper - kick event causes
+-            } else if (body.timeStamp().isBefore(this.lastTimeStamp)) {
++            } else if (!io.inkwellmc.inkwell.InkwellConfig.disableOutOfOrderChat && body.timeStamp().isBefore(this.lastTimeStamp)) { // Inkwell
+                 throw new SignedMessageChain.DecodeException(Component.translatable("multiplayer.disconnect.out_of_order_chat"), true, org.bukkit.event.player.PlayerKickEvent.Cause.OUT_OF_ORDER_CHAT); // Paper - kick event causes
+             } else {
+                 this.lastTimeStamp = body.timeStamp();

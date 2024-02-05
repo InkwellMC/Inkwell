@@ -1,0 +1,132 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Wed, 17 Jan 2024 14:57:29 +0300
+Subject: [PATCH] Villager lobotomize
+
+
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index c51cc66ad291d6327a1bafdf53e05cc9e5d1984d..75c4db957c46f54e0c14dc41a9cbebbdfc897484 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -147,12 +147,23 @@ public class InkwellConfig {
+     }
+ 
+     public static boolean allowVoidTrading;
++    public static boolean villagerLobotomizeEnabled = false;
++    public static int villagerLobotomizeCheckInterval = 100;
+     private static void villager() {
+         allowVoidTrading = getBoolean(
+                 "entity.villager.allow-void-trading",
+                 false,
+                 "Allows you to interact with merchants in unloaded chunks"
+         );
++
++        villagerLobotomizeEnabled = getBoolean(
++                "entity.villager.lobotomize.enabled",
++                villagerLobotomizeEnabled
++        );
++        villagerLobotomizeCheckInterval = getInt(
++                "entity.villager.lobotomize.check-interval",
++                villagerLobotomizeCheckInterval
++        );
+     }
+ 
+     public static boolean usePigmanSpawnLimit;
+diff --git a/src/main/java/net/minecraft/world/entity/npc/Villager.java b/src/main/java/net/minecraft/world/entity/npc/Villager.java
+index 739783bfa6b603ab66ab83311e24a3825372967c..084956ddbf7694cbc72b54c0d9e17088636614a4 100644
+--- a/src/main/java/net/minecraft/world/entity/npc/Villager.java
++++ b/src/main/java/net/minecraft/world/entity/npc/Villager.java
+@@ -142,6 +142,9 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+         return holder.is(PoiTypes.MEETING);
+     });
+ 
++    private boolean isLobotomized = false; public boolean isLobotomized() { return this.isLobotomized; } // Inkwell
++    private int notLobotomizedCount = 0; // Inkwell
++
+     public Villager(EntityType<? extends Villager> entityType, Level world) {
+         this(entityType, world, VillagerType.PLAINS);
+     }
+@@ -206,6 +209,44 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+         brain.updateActivityFromSchedule(this.level().getLevelData().getDayTime(), this.level().getLevelData().getGameTime()); // Folia - region threading
+     }
+ 
++    private boolean checkLobotomized() {
++        int interval = io.inkwellmc.inkwell.InkwellConfig.villagerLobotomizeCheckInterval;
++        if (this.notLobotomizedCount > 3) {
++            // check half as often if not lobotomized for the last 3+ consecutive checks
++            interval *= 2;
++        }
++        if (this.level().getGameTime() % interval == 0) {
++            // offset Y for short blocks like dirt_path/farmland
++            this.isLobotomized = !canTravelFrom(BlockPos.containing(this.position().x, this.getBoundingBox().minY + 0.0625D, this.position().z));
++            if (this.isLobotomized) {
++                this.notLobotomizedCount = 0;
++            } else {
++                this.notLobotomizedCount++;
++            }
++        }
++        return this.isLobotomized;
++    }
++    private boolean canTravelFrom(BlockPos pos) {
++        return canTravelTo(pos.east()) || canTravelTo(pos.west()) || canTravelTo(pos.north()) || canTravelTo(pos.south());
++    }
++    private boolean canTravelTo(BlockPos pos) {
++        net.minecraft.world.level.block.state.BlockState state = this.level().getBlockStateIfLoaded(pos);
++        if (state == null) {
++            // chunk not loaded
++            return false;
++        }
++        net.minecraft.world.level.block.Block bottom = state.getBlock();
++        if (bottom instanceof net.minecraft.world.level.block.FenceBlock ||
++                bottom instanceof net.minecraft.world.level.block.FenceGateBlock ||
++                bottom instanceof net.minecraft.world.level.block.WallBlock) {
++            // bottom block is too tall to get over
++            return false;
++        }
++        net.minecraft.world.level.block.Block top = level().getBlockState(pos.above()).getBlock();
++        // only if both blocks have no collision
++        return !bottom.hasCollision && !top.hasCollision;
++    }
++
+     @Override
+     protected void ageBoundaryReached() {
+         super.ageBoundaryReached();
+@@ -252,13 +293,20 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+         this.customServerAiStep(false);
+     }
+     private int behaviorTick = 0; // Inkwell
+-    protected void customServerAiStep(final boolean inactive) {
++    protected void customServerAiStep(boolean inactive) { // Inkwell - not final
+         // Paper end
+         this.level().getProfiler().push("villagerBrain");
+         // Inkwell start
++        if (io.inkwellmc.inkwell.InkwellConfig.villagerLobotomizeEnabled) {
++            // treat as inactive if lobotomized
++            inactive = inactive || checkLobotomized();
++        } else {
++            this.isLobotomized = false;
++        }
++
+         if (!inactive && this.behaviorTick++ % this.activatedPriority == 0) {
+             this.getBrain().tick((ServerLevel) this.level(), this); // Paper
+-        }
++        } else if (this.isLobotomized && shouldRestock()) restock();
+         // Inkwell end
+         this.level().getProfiler().pop();
+         if (this.assignProfessionWhenSpawned) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftVillager.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftVillager.java
+index 771eb799b032fcf4fc33c5e445b7fa252baee72b..1bcf5d8ef53534fd06b60b1eef576bd306a14f38 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftVillager.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftVillager.java
+@@ -260,4 +260,11 @@ public class CraftVillager extends CraftAbstractVillager implements Villager {
+         getHandle().getGossips().gossips.clear();
+     }
+     // Paper end
++
++    // Inkwell start
++    @Override
++    public boolean isLobotomized() {
++        return getHandle().isLobotomized();
++    }
++    // Inkwell end
+ }

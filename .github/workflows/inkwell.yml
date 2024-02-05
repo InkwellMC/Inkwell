@@ -1,7 +1,7 @@
 name: Inkwell CI
 on:
   push:
-    branches: ['master']
+    branches: ['1.20.4-Folia']
 jobs:
   build:
     runs-on: ubuntu-latest

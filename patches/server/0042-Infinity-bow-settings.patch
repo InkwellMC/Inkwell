@@ -1,0 +1,49 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Sun, 21 Jan 2024 14:29:52 +0300
+Subject: [PATCH] Infinity bow settings
+
+
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index 94b35349dd20584d11f773b6b5e4fd94de5aae7c..f2267e63de351107f318a72a6e7e82b465fc247d 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -280,4 +280,15 @@ public class InkwellConfig {
+         playerCreativeBlockNoclip = getBoolean("player.creative-block-noclip", false, "Allows noclip blocks in creative");
+         spectatorCanGetAdvancement = getBoolean("player.spectator-advancements", true, "Value defines spectator can get advancements");
+     }
++
++    public static boolean infinityWorksWithoutArrows;
++    public static boolean infinityWorksWithNormalArrows;
++    public static boolean infinityWorksWithSpectralArrows;
++    public static boolean infinityWorksWithTippedArrows;
++    private static void infinityArrowsSettings() {
++        infinityWorksWithoutArrows = getBoolean("gameplay-mechanics.infinity-bow.works-without-arrows", false);
++        infinityWorksWithNormalArrows = getBoolean("gameplay-mechanics.infinity-bow.normal-arrows", true);
++        infinityWorksWithSpectralArrows = getBoolean("gameplay-mechanics.infinity-bow.spectral-arrows", false);
++        infinityWorksWithTippedArrows = getBoolean("gameplay-mechanics.infinity-bow.tipped-arrows", false);
++    }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/item/BowItem.java b/src/main/java/net/minecraft/world/item/BowItem.java
+index 08d597db1a5345a343777a01427655e6bf2c926b..62a0a603250dc50cd5f1e1afd7ee9319d2bcf3b4 100644
+--- a/src/main/java/net/minecraft/world/item/BowItem.java
++++ b/src/main/java/net/minecraft/world/item/BowItem.java
+@@ -38,7 +38,7 @@ public class BowItem extends ProjectileWeaponItem implements Vanishable {
+                 float f = BowItem.getPowerForTime(j);
+ 
+                 if ((double) f >= 0.1D) {
+-                    boolean flag1 = flag && itemstack1.is(Items.ARROW);
++                    boolean flag1 = flag && ((itemstack1.is(Items.ARROW) && io.inkwellmc.inkwell.InkwellConfig.infinityWorksWithNormalArrows) || (itemstack1.is(Items.TIPPED_ARROW) && io.inkwellmc.inkwell.InkwellConfig.infinityWorksWithTippedArrows) || (itemstack1.is(Items.SPECTRAL_ARROW) && io.inkwellmc.inkwell.InkwellConfig.infinityWorksWithSpectralArrows)); // Inkwell                    if (!world.isClientSide) {
+ 
+                     if (!world.isClientSide) {
+                         ArrowItem itemarrow = (ArrowItem) (itemstack1.getItem() instanceof ArrowItem ? itemstack1.getItem() : Items.ARROW);
+@@ -132,7 +132,7 @@ public class BowItem extends ProjectileWeaponItem implements Vanishable {
+         ItemStack itemstack = user.getItemInHand(hand);
+         boolean flag = !user.getProjectile(itemstack).isEmpty();
+ 
+-        if (!user.getAbilities().instabuild && !flag) {
++        if (!(io.inkwellmc.inkwell.InkwellConfig.infinityWorksWithoutArrows && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, itemstack) > 0) && !user.getAbilities().instabuild && !flag) { // Inkwell
+             return InteractionResultHolder.fail(itemstack);
+         } else {
+             user.startUsingItem(hand);
