@@ -5,5 +5,5 @@ pluginManagement {
     }
 }
 
-rootProject.name = "inkwell"
+rootProject.name = "folinkwell"
 include("folinkwell-api", "folinkwell-server", "paper-api-generator")
