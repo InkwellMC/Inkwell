@@ -129,7 +129,7 @@ index 9faa47caa5712477a9311c1bbeac893a81d25d20..b1af541bfeed70b49762d9c2d3e01392
                          //Thread.sleep(TimeUnit.SECONDS.toMillis(20));
                          // Paper end
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 774556a62eb240da42e84db4502e2ed43495be17..0143d44dd7f4fcf60b0b4dcf7067ca3f119aee02 100644
+index 774556a62eb240da42e84db4502e2ed43495be17..14b1672bf56619e920daa90bfc6359be478dc570 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -11,7 +11,7 @@ public final class Versioning {
@@ -137,7 +137,7 @@ index 774556a62eb240da42e84db4502e2ed43495be17..0143d44dd7f4fcf60b0b4dcf7067ca3f
          String result = "Unknown-Version";
  
 -        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/io.papermc.paper/paper-api/pom.properties");
-+        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/io.inkwellmc.folinkwell/folinkwell-api/pom.properties"); // Inkwell
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/io.inkwellmc.inkwell/folinkwell-api/pom.properties"); // Inkwell
          Properties properties = new Properties();
  
          if (stream != null) {
