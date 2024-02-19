@@ -20,10 +20,10 @@ index e91ccde21411c7ac5da3383915758b3fe014b9b7..c51cc66ad291d6327a1bafdf53e05cc9
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 542bc7657f21d0a987a865e495360eeffe0d934a..1361c4afa777e700e4f52e057b0913f85f0928af 100644
+index d52823d8a6e3aefabe47a938b105c19545d10e98..b5bd7954473c7016992fb295947a37eff2c02e49 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
-@@ -238,8 +238,8 @@ public abstract class Player extends LivingEntity {
+@@ -237,8 +237,8 @@ public abstract class Player extends LivingEntity {
  
      @Override
      public void tick() {
@@ -34,7 +34,7 @@ index 542bc7657f21d0a987a865e495360eeffe0d934a..1361c4afa777e700e4f52e057b0913f8
              this.setOnGround(false);
          }
  
-@@ -416,7 +416,7 @@ public abstract class Player extends LivingEntity {
+@@ -417,7 +417,7 @@ public abstract class Player extends LivingEntity {
  
              Pose entitypose1;
  
@@ -43,7 +43,7 @@ index 542bc7657f21d0a987a865e495360eeffe0d934a..1361c4afa777e700e4f52e057b0913f8
                  if (this.canPlayerFitWithinBlocksAndEntitiesWhen(Pose.CROUCHING)) {
                      entitypose1 = Pose.CROUCHING;
                  } else {
-@@ -576,7 +576,7 @@ public abstract class Player extends LivingEntity {
+@@ -577,7 +577,7 @@ public abstract class Player extends LivingEntity {
          }
  
          this.bob += (f - this.bob) * 0.4F;
@@ -52,7 +52,7 @@ index 542bc7657f21d0a987a865e495360eeffe0d934a..1361c4afa777e700e4f52e057b0913f8
              AABB axisalignedbb;
  
              if (this.isPassenger() && !this.getVehicle().isRemoved()) {
-@@ -2075,6 +2075,20 @@ public abstract class Player extends LivingEntity {
+@@ -2076,6 +2076,20 @@ public abstract class Player extends LivingEntity {
      @Override
      public abstract boolean isSpectator();
  
@@ -74,15 +74,17 @@ index 542bc7657f21d0a987a865e495360eeffe0d934a..1361c4afa777e700e4f52e057b0913f8
      public boolean canBeHitByProjectile() {
          return !this.isSpectator() && super.canBeHitByProjectile();
 diff --git a/src/main/java/net/minecraft/world/item/BlockItem.java b/src/main/java/net/minecraft/world/item/BlockItem.java
-index 8ab80717f7f694ed262fb84f9145bc189e3c087c..6a49389c16478f106e4dee1fb325c3b4e04f7039 100644
+index 8d2c0accadaf0c5d28e7db6e62a05f6c619cf02f..f91c81a7f4e77235d75ef29a31120ea6d02fb5fa 100644
 --- a/src/main/java/net/minecraft/world/item/BlockItem.java
 +++ b/src/main/java/net/minecraft/world/item/BlockItem.java
-@@ -211,7 +211,7 @@ public class BlockItem extends Item {
+@@ -210,8 +210,8 @@ public class BlockItem extends Item {
+         Player entityhuman = context.getPlayer();
          CollisionContext voxelshapecollision = entityhuman == null ? CollisionContext.empty() : CollisionContext.of(entityhuman);
          // CraftBukkit start - store default return
-         Level world = context.getLevel(); // Paper
--        boolean defaultReturn = (!this.mustSurvive() || state.canSurvive(context.getLevel(), context.getClickedPos())) && world.checkEntityCollision(state, entityhuman, voxelshapecollision, context.getClickedPos(), true); // Paper
-+        boolean defaultReturn = (!this.mustSurvive() || state.canSurvive(context.getLevel(), context.getClickedPos())) && (io.inkwellmc.inkwell.InkwellConfig.playerCreativeBlockNoclip && context.getPlayer() != null ? context.getPlayer().canSpectatingPlace(world, state, context.getClickedPos(), voxelshapecollision) : world.checkEntityCollision(state, entityhuman, voxelshapecollision, context.getClickedPos(), true)); // Paper // Inkwell - creative no clip
+-        Level world = context.getLevel(); // Paper - Cancel hit for vanished players
+-        boolean defaultReturn = (!this.mustSurvive() || state.canSurvive(context.getLevel(), context.getClickedPos())) && world.checkEntityCollision(state, entityhuman, voxelshapecollision, context.getClickedPos(), true); // Paper - Cancel hit for vanished players
++        Level world = context.getLevel(); // Paper
++        boolean defaultReturn = (!this.mustSurvive() || state.canSurvive(context.getLevel(), context.getClickedPos())) && (io.inkwellmc.inkwell.InkwellConfig.playerCreativeBlockNoclip && context.getPlayer() != null ? context.getPlayer().canSpectatingPlace(world, state, context.getClickedPos(), voxelshapecollision) : world.checkEntityCollision(state, entityhuman, voxelshapecollision, context.getClickedPos(), true)); // Paper - Cancel hit for vanished players // Inkwell - creative no clip
          org.bukkit.entity.Player player = (context.getPlayer() instanceof ServerPlayer) ? (org.bukkit.entity.Player) context.getPlayer().getBukkitEntity() : null;
  
          BlockCanBuildEvent event = new BlockCanBuildEvent(CraftBlock.at(context.getLevel(), context.getClickedPos()), player, CraftBlockData.fromData(state), defaultReturn, org.bukkit.craftbukkit.CraftEquipmentSlot.getHand(context.getHand())); // Paper - Expose hand in BlockCanBuildEvent
@@ -113,7 +115,7 @@ index 1fa22445a4ecc8c08dbcf0cc6bd39dc5003604c4..4bf5d15fd4d3c2b52430b6e75a388e95
                      }
                  }
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
-index 9a655c7bed0e99bb9db818f95043cff62ad5792a..ce1a5fa9917a0dc3d9eae338ea22335f259a3e9c 100644
+index 1a3be48e5636e80f5a5a5562e89b9f0e8070f889..2e1e7f28f6936fa70f6759647b7595753a21fea9 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
 @@ -130,7 +130,7 @@ public class TheEndGatewayBlockEntity extends TheEndPortalBlockEntity {
@@ -126,7 +128,7 @@ index 9a655c7bed0e99bb9db818f95043cff62ad5792a..ce1a5fa9917a0dc3d9eae338ea22335f
  
      public boolean isSpawning() {
 diff --git a/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java b/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
-index a595abb43853cd4c3f5886a83527c6cbe4a3e8f7..10f65005d3ded9dcf4372ea2ebcd6adb88896b8e 100644
+index 1c23597f172f46eec714b510acfedb415bb01bff..6faf4c7dfdd35cf630c9681b2ba48c4a42175c91 100644
 --- a/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
 @@ -142,7 +142,7 @@ public class PistonMovingBlockEntity extends BlockEntity {
@@ -147,18 +149,10 @@ index a595abb43853cd4c3f5886a83527c6cbe4a3e8f7..10f65005d3ded9dcf4372ea2ebcd6adb
          entity.move(MoverType.PISTON, new Vec3(distance * (double)movementDirection.getStepX(), distance * (double)movementDirection.getStepY(), distance * (double)movementDirection.getStepZ()));
          NOCLIP.set((Direction)null);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 003684843c2a9fc709619c1de8cf73dbb1b25c42..f68004c781663155b1958a4eaf1685743fd05559 100644
+index 8fc071a6249193af5e1795cc19f50996ea22d96f..d1e58141f7eacd8c7a7789cde9fa4d4f1582028b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -144,7 +144,6 @@ import org.bukkit.craftbukkit.event.CraftEventFactory;
- import org.bukkit.craftbukkit.inventory.CraftItemStack;
- import org.bukkit.craftbukkit.map.CraftMapView;
- import org.bukkit.craftbukkit.map.RenderData;
--import org.bukkit.craftbukkit.profile.CraftPlayerProfile;
- import org.bukkit.craftbukkit.scoreboard.CraftScoreboard;
- import org.bukkit.craftbukkit.util.CraftChatMessage;
- import org.bukkit.craftbukkit.util.CraftLocation;
-@@ -157,7 +156,6 @@ import org.bukkit.event.player.PlayerExpCooldownChangeEvent;
+@@ -161,7 +161,6 @@ import org.bukkit.event.player.PlayerExpCooldownChangeEvent;
  import org.bukkit.event.player.PlayerHideEntityEvent;
  import org.bukkit.event.player.PlayerRegisterChannelEvent;
  import org.bukkit.event.player.PlayerShowEntityEvent;
@@ -166,18 +160,10 @@ index 003684843c2a9fc709619c1de8cf73dbb1b25c42..f68004c781663155b1958a4eaf168574
  import org.bukkit.event.player.PlayerTeleportEvent;
  import org.bukkit.event.player.PlayerUnregisterChannelEvent;
  import org.bukkit.inventory.EquipmentSlot;
-@@ -168,7 +166,6 @@ import org.bukkit.map.MapView;
- import org.bukkit.metadata.MetadataValue;
- import org.bukkit.plugin.Plugin;
- import org.bukkit.plugin.messaging.StandardMessenger;
--import org.bukkit.profile.PlayerProfile;
- import org.bukkit.scoreboard.Scoreboard;
- import org.jetbrains.annotations.NotNull;
- 
-@@ -3385,4 +3382,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
-         return this.spigot;
+@@ -3439,4 +3438,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+     public void setSendViewDistance(final int viewDistance) {
+         this.getHandle().setSendViewDistance(viewDistance);
      }
-     // Spigot end
 +
 +    //Inkwell start
 +    @Override

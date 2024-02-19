@@ -55,10 +55,10 @@ index 558e89d32f41ac53fce17d77750c860e8587fd39..efa7a01cd89ca1623bfed666369a0cc7
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index e448a94b8a684bfd64b06d129116be03f008acaa..5eb5570faf29b916c00fdf047a8d75eaf2f50d33 100644
+index 5a84fdd24fb3d6eca0c7cba863ad21eb43070097..67fe5a84a17d0e78dd09351a9918d46f9243acab 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -979,6 +979,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -974,6 +974,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
              org.spigotmc.ActivationRange.activateEntities(this); // Spigot
              this.timings.entityTick.startTiming(); // Spigot
              regionizedWorldData.forEachTickingEntity((entity) -> { // Folia - regionised ticking
@@ -67,23 +67,23 @@ index e448a94b8a684bfd64b06d129116be03f008acaa..5eb5570faf29b916c00fdf047a8d75ea
                      if (false && this.shouldDiscardEntity(entity)) { // CraftBukkit - We prevent spawning in general, so this butchering is not needed
                          entity.discard();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 8a22c231417e0f7dab24886867b4500a357d1d8a..284b9443d59aeaca86046e0127155bf331b5caaa 100644
+index b7d9e9a5cb97397db90d614e77bb9b9205c9585a..7114941c39504e4e5106cbe0ebb508eb772c6c0a 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -440,6 +440,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
-         return this.originWorld;
-     }
-     // Paper end
+@@ -480,6 +480,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+ 
+     // Folia - region ticking
+     // Paper end - optimise entity tracking
 +    // Inkwell start
 +    public boolean activatedPriorityReset = false; // DAB
 +    public int activatedPriority = io.inkwellmc.inkwell.InkwellConfig.maximumActivationPriority; // golf score
 +    // Inkwell end
-+
++    
      public float getBukkitYaw() {
          return this.yRot;
      }
 diff --git a/src/main/java/net/minecraft/world/entity/EntityType.java b/src/main/java/net/minecraft/world/entity/EntityType.java
-index e52f3da3b63cc3dba59d3e874a8420dd312b5e96..a06300c9a4aea0aae376365de8cfccce450b7bac 100644
+index 09e8445a3f8c6b3ebc852a75a9a25b41a51ba659..df641bbb6a5e61f836782e0f0717404e3394236a 100644
 --- a/src/main/java/net/minecraft/world/entity/EntityType.java
 +++ b/src/main/java/net/minecraft/world/entity/EntityType.java
 @@ -305,6 +305,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
@@ -95,7 +95,7 @@ index e52f3da3b63cc3dba59d3e874a8420dd312b5e96..a06300c9a4aea0aae376365de8cfccce
      private String descriptionId;
      @Nullable
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 4e770f3b781be4c282d1e81c327fb2fb06b5af1f..436901fa20e50cd45c6852c3ad8e59845c4c6d09 100644
+index a3992e21e7d4112b9903e8d16a5e898d448eaea8..1b9a9b21d2b1a6713ef802119672a767747fc58b 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
 @@ -233,10 +233,10 @@ public abstract class Mob extends LivingEntity implements Targeting {
@@ -133,7 +133,7 @@ index 4e770f3b781be4c282d1e81c327fb2fb06b5af1f..436901fa20e50cd45c6852c3ad8e5984
              this.level().getProfiler().pop();
          }
 diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java b/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
-index b738ee2d3801fadfd09313f05ae24593e56b0ec6..413d86a8b68144ddd9779dbb1e99c4272f4d766c 100644
+index 676f5485a4ca9252e911213dcda8d51776b637b6..040411526f5056c8565cae9160caa81848132e34 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
 @@ -53,9 +53,12 @@ public class GoalSelector {
@@ -282,7 +282,7 @@ index 937f81a859953498abe73bea560c86e6560e1c33..63243cad9912f745790b75907db5149e
          this.level().getProfiler().pop();
          super.customServerAiStep();
 diff --git a/src/main/java/net/minecraft/world/entity/npc/Villager.java b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-index a7857a7d141a552f800d7becd130e0cf1660e886..739783bfa6b603ab66ab83311e24a3825372967c 100644
+index 853c777bad19656cd48e9de9015c12e2c078d940..9d26af7459a6916ffdf67a5e0dbd63bdd599914f 100644
 --- a/src/main/java/net/minecraft/world/entity/npc/Villager.java
 +++ b/src/main/java/net/minecraft/world/entity/npc/Villager.java
 @@ -251,10 +251,15 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
@@ -303,10 +303,10 @@ index a7857a7d141a552f800d7becd130e0cf1660e886..739783bfa6b603ab66ab83311e24a382
          if (this.assignProfessionWhenSpawned) {
              this.assignProfessionWhenSpawned = false;
 diff --git a/src/main/java/org/spigotmc/ActivationRange.java b/src/main/java/org/spigotmc/ActivationRange.java
-index 5f1dee3a1d5a7b0391bad60b53eda1c5586058aa..8c4517f07c25323bdbb2a904eda13f2713fd7922 100644
+index f8718d91f4c15c74d6e6dd5f60f7f05f45f63655..d2985e07aef897fb2d7bdfca059905a63e5b7d62 100644
 --- a/src/main/java/org/spigotmc/ActivationRange.java
 +++ b/src/main/java/org/spigotmc/ActivationRange.java
-@@ -231,6 +231,24 @@ public class ActivationRange
+@@ -230,6 +230,24 @@ public class ActivationRange
                  }
                  // Paper end - Configurable marker ticking
                  ActivationRange.activateEntity(entity, bbByType); // Folia - threaded regions

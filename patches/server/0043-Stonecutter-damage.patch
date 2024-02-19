@@ -25,7 +25,7 @@ index f2267e63de351107f318a72a6e7e82b465fc247d..536f6d01764940918613ddfb5c2af05f
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index eae2253f8b52bde82b436a9b991909b5b6d8df5a..3098c97ed7e5749a1e8e3c1eaf7fa6fbf139a570 100644
+index 6b6137f7bd4750275baa64c1f22b852da47697ac..899d4feaec5a9ddf3bae78a39687f49f91cd1af7 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -2320,6 +2320,24 @@ public class ServerPlayer extends Player {
@@ -54,10 +54,10 @@ index eae2253f8b52bde82b436a9b991909b5b6d8df5a..3098c97ed7e5749a1e8e3c1eaf7fa6fb
      public void displayClientMessage(Component message, boolean overlay) {
          this.sendSystemMessage(message, overlay);
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 5d4876fc53eb12ee8e4a0159177e05cee847f077..f6887c879081dc0f1d4d6878d32958aaf031e5cd 100644
+index d13edeff0de64cb77d7668e5b964cabcf9729388..ae44d1f29855c9f3b15dc7e333ea045afb45071c 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
-@@ -1152,6 +1152,19 @@ public abstract class PlayerList {
+@@ -1150,6 +1150,19 @@ public abstract class PlayerList {
      }
      // CraftBukkit end
  
@@ -92,19 +92,19 @@ index d02bc26812321745795d2f0bc3705addd0be912d..ee3ec5641172d7d0cdd79189bf9b34f3
              }
          }
 diff --git a/src/main/java/net/minecraft/world/damagesource/DamageSource.java b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
-index 31635964ee2cc73e04c1661521df2956ed5a1089..532021f9fbf0b49d3d49d0a09bf68ad2f9b4e60c 100644
+index 1588b48a646c5fe3913dbc83a522b39c8e368ab6..1cb1d9bd7a578cc994cd179ccbefac283523a4ad 100644
 --- a/src/main/java/net/minecraft/world/damagesource/DamageSource.java
 +++ b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
-@@ -54,6 +54,8 @@ public class DamageSource {
+@@ -97,6 +97,8 @@ public class DamageSource {
+     }
      // CraftBukkit end
-     public @Nullable org.bukkit.block.BlockState explodedBlockState; // Paper - add exploded state
  
 +    public boolean isStoneCutter; // Inkwell
 +
      public String toString() {
          return "DamageSource (" + this.type().msgId() + ")";
      }
-@@ -126,6 +128,15 @@ public class DamageSource {
+@@ -169,6 +171,15 @@ public class DamageSource {
          }
      }
  
@@ -121,10 +121,10 @@ index 31635964ee2cc73e04c1661521df2956ed5a1089..532021f9fbf0b49d3d49d0a09bf68ad2
          return this.type().msgId();
      }
 diff --git a/src/main/java/net/minecraft/world/damagesource/DamageSources.java b/src/main/java/net/minecraft/world/damagesource/DamageSources.java
-index f339475185645f7be30963e4f980ce81a6f7e536..a19403edacb7d9bb38fbe4b7d93c3e80c48924ce 100644
+index a47473c9875c70c52b9a61e0156e55961f34c694..6d89bd484cc3b81bb02afd18ee121c31f53379d1 100644
 --- a/src/main/java/net/minecraft/world/damagesource/DamageSources.java
 +++ b/src/main/java/net/minecraft/world/damagesource/DamageSources.java
-@@ -267,4 +267,12 @@ public class DamageSources {
+@@ -277,4 +277,12 @@ public class DamageSources {
      public DamageSource genericKill() {
          return this.genericKill;
      }
@@ -138,10 +138,10 @@ index f339475185645f7be30963e4f980ce81a6f7e536..a19403edacb7d9bb38fbe4b7d93c3e80
 +    // Inkwell end
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 6e1e3c31e297a2b046d9e4692d59015263b56c96..2107b7bb9738898530cdc21b13ca1aeff694cabf 100644
+index 396a0d40d4213dd00461c9e6b6d698b4adba6ad6..47397b4e60a5474ebaf037cb031a0f51d446794f 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -4933,6 +4933,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -4922,6 +4922,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
          return SlotAccess.NULL;
      }
  
@@ -162,7 +162,7 @@ index 6e1e3c31e297a2b046d9e4692d59015263b56c96..2107b7bb9738898530cdc21b13ca1aef
      public void sendSystemMessage(Component message) {}
  
 diff --git a/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java b/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
-index 77ae7b8ab24935d046cce1f8f7f476310876f9df..959c13535f0b8286b7d9ef6a38be0fe6d5160158 100644
+index 77ae7b8ab24935d046cce1f8f7f476310876f9df..b14e694422e1c4974c7a99f9a8df5f97cfc2e785 100644
 --- a/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
 @@ -99,4 +99,16 @@ public class StonecutterBlock extends Block {
@@ -174,22 +174,22 @@ index 77ae7b8ab24935d046cce1f8f7f476310876f9df..959c13535f0b8286b7d9ef6a38be0fe6
 +    @Override
 +    public void stepOn(Level level, BlockPos pos, BlockState state, net.minecraft.world.entity.Entity entity) {
 +        if (io.inkwellmc.inkwell.InkwellConfig.stonecutterDamage > 0.0F && entity instanceof net.minecraft.world.entity.LivingEntity) {
-+            org.bukkit.craftbukkit.event.CraftEventFactory.blockDamageRT.set(level.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ()));
++            org.bukkit.craftbukkit.event.CraftEventFactory.sourceBlockOverrideRT.set(pos);
 +            entity.hurt(entity.damageSources().stonecutter(), io.inkwellmc.inkwell.InkwellConfig.stonecutterDamage);
-+            org.bukkit.craftbukkit.event.CraftEventFactory.blockDamageRT.set(null);
++            org.bukkit.craftbukkit.event.CraftEventFactory.sourceBlockOverrideRT.set(null);
 +        }
 +        super.stepOn(level, pos, state, entity);
 +    }
 +    // Inkwell end
  }
 diff --git a/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java b/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-index 1e96bac6f22b1fddd22fc239126ff2f823c2abd0..5f893a610973945ab834808e9f06f4573ff8d34e 100644
+index 70c7c735fdd0c1b66243915622e47eab8a57e7cc..d64fa8a3d90e205e7dda02805aca10b5d333e8f0 100644
 --- a/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
 +++ b/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
 @@ -471,7 +471,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
                              return BlockPathTypes.BLOCKED;
                          } else {
-                         // Paper end
+                         // Paper end - Do not load chunks during pathfinding
 -                        if (blockState.is(Blocks.CACTUS) || blockState.is(Blocks.SWEET_BERRY_BUSH)) {
 +                        if (blockState.is(Blocks.CACTUS) || blockState.is(Blocks.SWEET_BERRY_BUSH) || blockState.is(Blocks.STONECUTTER)) { // Inkwell
                              return BlockPathTypes.DANGER_OTHER;

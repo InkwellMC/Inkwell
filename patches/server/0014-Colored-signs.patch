@@ -20,7 +20,7 @@ index 1a4add0bcf81e6adf70e0357c47cf7508fbd6332..1b793a765ec7b9ceb260b028f638351c
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 9a4481da26820f967d38ff582c256361936f957b..0243f29bebfac43ad03a98a14c76704f48913793 100644
+index add6fc106d3c38d97b48ec0df3ac2515c8c0486e..21e061af24fd860ac0848f5c6be81abc4a7f0d9c 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -1985,6 +1985,7 @@ public class ServerPlayer extends Player {
@@ -32,7 +32,7 @@ index 9a4481da26820f967d38ff582c256361936f957b..0243f29bebfac43ad03a98a14c76704f
          this.connection.send(new ClientboundOpenSignEditorPacket(sign.getBlockPos(), front));
      }
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/SignBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/SignBlockEntity.java
-index 6a883c185eb7ae228cb767044f7395ef1d08ab28..c156dbfbdada69efac9471fae3292337a461c728 100644
+index 927c7ea03560be0c86884cec70ee8e408e66cb07..5ac74e2cbbf6f1fcbbf6e0c21b749d7e1648990b 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/SignBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/SignBlockEntity.java
 @@ -200,16 +200,30 @@ public class SignBlockEntity extends BlockEntity implements CommandSource { // C

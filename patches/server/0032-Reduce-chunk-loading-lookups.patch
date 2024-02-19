@@ -5,7 +5,7 @@ Subject: [PATCH] Reduce chunk loading lookups
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/monster/EnderMan.java b/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
-index 30627f330536b5c89b52452981f0a960b61e4268..66da608477afe967f6c768c465bb1867b76e5df8 100644
+index f33c03e81b7ff643741f56eea055e6af260de618..bb4371bf31de61b9b1c7392d4187e712df671860 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
 @@ -333,11 +333,17 @@ public class EnderMan extends Monster implements NeutralMob {

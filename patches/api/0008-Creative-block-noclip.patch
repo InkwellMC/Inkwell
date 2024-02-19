@@ -5,18 +5,10 @@ Subject: [PATCH] Creative block noclip
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index ae61a39b25267b84fe0b8766e4b12d9b24b44ded..a969104104f97e711a62c79b5967b704f7ff3b96 100644
+index 254a02ddb5dc867c9dd6c2086791f7ab94247fd3..714d532d5d49a27c8f74f78da8b69b25b41fef40 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -43,7 +43,6 @@ import org.bukkit.inventory.ItemStack;
- import org.bukkit.map.MapView;
- import org.bukkit.plugin.Plugin;
- import org.bukkit.plugin.messaging.PluginMessageRecipient;
--import org.bukkit.profile.PlayerProfile;
- import org.bukkit.scoreboard.Scoreboard;
- import org.jetbrains.annotations.ApiStatus;
- import org.jetbrains.annotations.NotNull;
-@@ -3574,4 +3573,13 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -3687,4 +3687,13 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
      @Override
      Spigot spigot();
      // Spigot end

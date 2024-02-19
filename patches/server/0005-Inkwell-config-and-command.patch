@@ -23,10 +23,10 @@ index 3a06857a23df01b8c6fa958d095ca6bd43a278dc..0d364fcd2fefb73fcdbef57b0e6efb98
      testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
      testImplementation("org.hamcrest:hamcrest:2.2")
 diff --git a/src/main/java/co/aikar/timings/TimingsExport.java b/src/main/java/co/aikar/timings/TimingsExport.java
-index a2f71a6d1a9e98133dff6cd0f625da9435a8af14..04c825b361fc0c12e2a542a2321910ff911d7277 100644
+index 7620c72a4c243cbeea245203ce03a97cbfa7d922..c0360dc0e17ae3b9ef44f4988db96f3fcf951800 100644
 --- a/src/main/java/co/aikar/timings/TimingsExport.java
 +++ b/src/main/java/co/aikar/timings/TimingsExport.java
-@@ -242,7 +242,8 @@ public class TimingsExport extends Thread {
+@@ -240,7 +240,8 @@ public class TimingsExport extends Thread {
          parent.put("config", createObject(
              pair("spigot", mapAsJSON(Bukkit.spigot().getSpigotConfig(), null)),
              pair("bukkit", mapAsJSON(Bukkit.spigot().getBukkitConfig(), null)),
@@ -243,7 +243,7 @@ index 0000000000000000000000000000000000000000..3b8ded27552248210716db2617a28792
 +}
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 2b5f4ff619af8e23d759992f73551c054e2e5562..c09254452f9ba4b725092e13cbc6fe7fbaded0c3 100644
+index 6b3242117d62175de462d04e4d178b49ae2521e9..6a509e8f499bc8c18e1c4b6d49e54b2509b6ceda 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -222,6 +222,9 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface

@@ -23,7 +23,7 @@ index 1b793a765ec7b9ceb260b028f638351c992b132b..c6d7ddb389088c812d9d610ca2707990
      private static void blockEntity() {
          allowSignColors = getBoolean("blockentity.allow-sign-colors", false, "Allows to parse colors on signs.");
 diff --git a/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java b/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
-index e6b762c70cbc08b20fc225b7731abd19c626369c..6b3187062e6ab347f19e1c4a9d9d9ff633bfceba 100644
+index 1b5cc5d6aa0b4313da980ce175c54145852d0db0..2cae668c6894f9ad0a8c33fc5d5db0df468201e5 100644
 --- a/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
 @@ -66,8 +66,31 @@ public class NetherPortalBlock extends Block {

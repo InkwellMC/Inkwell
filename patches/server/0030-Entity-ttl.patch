@@ -40,10 +40,10 @@ index 643dce1207fae4fccb808147319638e8c753bd64..cd975090d2b84694a9debe1f38137ad0
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 284b9443d59aeaca86046e0127155bf331b5caaa..6e1e3c31e297a2b046d9e4692d59015263b56c96 100644
+index ca845b32675089fa9c7468287f1aeea977cd173f..396a0d40d4213dd00461c9e6b6d698b4adba6ad6 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -811,6 +811,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -801,6 +801,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
      }
  
      public void tick() {
@@ -57,7 +57,7 @@ index 284b9443d59aeaca86046e0127155bf331b5caaa..6e1e3c31e297a2b046d9e4692d590152
      }
  
 diff --git a/src/main/java/net/minecraft/world/entity/EntityType.java b/src/main/java/net/minecraft/world/entity/EntityType.java
-index a06300c9a4aea0aae376365de8cfccce450b7bac..1bad7175e8281b096579e4a07ba3e599bbe444b3 100644
+index 51a987256b254fa18b354ae0a014b67b43bd11e7..dd61bd1f94778d0370e293439fe91d6e8be25fd5 100644
 --- a/src/main/java/net/minecraft/world/entity/EntityType.java
 +++ b/src/main/java/net/minecraft/world/entity/EntityType.java
 @@ -306,6 +306,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
