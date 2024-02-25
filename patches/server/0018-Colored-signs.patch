@@ -20,7 +20,7 @@ index 1a4add0bcf81e6adf70e0357c47cf7508fbd6332..1b793a765ec7b9ceb260b028f638351c
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index add6fc106d3c38d97b48ec0df3ac2515c8c0486e..21e061af24fd860ac0848f5c6be81abc4a7f0d9c 100644
+index cbc89b8898f9243776af88c2b04ad3c2e4e23fb6..6b6137f7bd4750275baa64c1f22b852da47697ac 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -1985,6 +1985,7 @@ public class ServerPlayer extends Player {

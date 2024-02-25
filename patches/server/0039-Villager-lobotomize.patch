@@ -33,7 +33,7 @@ index c51cc66ad291d6327a1bafdf53e05cc9e5d1984d..75c4db957c46f54e0c14dc41a9cbebbd
  
      public static boolean usePigmanSpawnLimit;
 diff --git a/src/main/java/net/minecraft/world/entity/npc/Villager.java b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-index 739783bfa6b603ab66ab83311e24a3825372967c..084956ddbf7694cbc72b54c0d9e17088636614a4 100644
+index 9d26af7459a6916ffdf67a5e0dbd63bdd599914f..8c8990d9a06ba9043308aa97991b225a44cb7388 100644
 --- a/src/main/java/net/minecraft/world/entity/npc/Villager.java
 +++ b/src/main/java/net/minecraft/world/entity/npc/Villager.java
 @@ -142,6 +142,9 @@ public class Villager extends AbstractVillager implements ReputationEventHandler

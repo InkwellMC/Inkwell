@@ -67,7 +67,7 @@ index c6d7ddb389088c812d9d610ca2707990d5524ddc..558e89d32f41ac53fce17d77750c860e
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index b640d877f924094bcabbf9618bbd9aa0a70bf94a..85368ee7e6149e847616133946849c132b3d9850 100644
+index 2fa76a711a629e38a95b93e473272b8217783f99..622e1d0380c9e2bfc3dc316d06261e7e453266cb 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -420,7 +420,7 @@ public abstract class LivingEntity extends Entity implements Attackable {

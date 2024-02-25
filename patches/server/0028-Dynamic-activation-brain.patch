@@ -55,12 +55,12 @@ index 558e89d32f41ac53fce17d77750c860e8587fd39..efa7a01cd89ca1623bfed666369a0cc7
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 5a84fdd24fb3d6eca0c7cba863ad21eb43070097..67fe5a84a17d0e78dd09351a9918d46f9243acab 100644
+index 90251acbc4d43cb59bff668714d9f9f3fa2a84ad..8aba4d17727e20f8b4b4e6aa60f170d5b4d0b765 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -974,6 +974,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
-             org.spigotmc.ActivationRange.activateEntities(this); // Spigot
+@@ -987,6 +987,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
              this.timings.entityTick.startTiming(); // Spigot
+             profiler.startTimer(ca.spottedleaf.leafprofiler.LProfilerRegistry.ENTITY_TICK); try { // Folia - profiler
              regionizedWorldData.forEachTickingEntity((entity) -> { // Folia - regionised ticking
 +                entity.activatedPriorityReset = false; // Inkwell - DAB
                  if (!entity.isRemoved()) {
@@ -83,7 +83,7 @@ index b7d9e9a5cb97397db90d614e77bb9b9205c9585a..7114941c39504e4e5106cbe0ebb508eb
          return this.yRot;
      }
 diff --git a/src/main/java/net/minecraft/world/entity/EntityType.java b/src/main/java/net/minecraft/world/entity/EntityType.java
-index 09e8445a3f8c6b3ebc852a75a9a25b41a51ba659..df641bbb6a5e61f836782e0f0717404e3394236a 100644
+index f921c159c4f7556daf3c8405241de3607ba251ad..51a987256b254fa18b354ae0a014b67b43bd11e7 100644
 --- a/src/main/java/net/minecraft/world/entity/EntityType.java
 +++ b/src/main/java/net/minecraft/world/entity/EntityType.java
 @@ -305,6 +305,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT

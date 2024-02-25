@@ -40,7 +40,7 @@ index 643dce1207fae4fccb808147319638e8c753bd64..cd975090d2b84694a9debe1f38137ad0
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index ca845b32675089fa9c7468287f1aeea977cd173f..396a0d40d4213dd00461c9e6b6d698b4adba6ad6 100644
+index 7114941c39504e4e5106cbe0ebb508eb772c6c0a..8e3f42e2e49c99299012eea3104a3e922a9ee3c4 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -801,6 +801,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S

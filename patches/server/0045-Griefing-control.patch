@@ -26,7 +26,7 @@ index 536f6d01764940918613ddfb5c2af05f1fdcabb5..0bc76e6b84b337a287ef0af562592916
      private static void blockEntity() {
          allowSignColors = getBoolean(
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Creeper.java b/src/main/java/net/minecraft/world/entity/monster/Creeper.java
-index 52eb3f6a73fa99d12d5fc75bab03e47a605c653a..ba654bdcdf0859ba05fed2a8b79c860a63b92ecd 100644
+index 6a91960f93e624a4b975c1cf76698eb45ceda838..7b4c53ac11827dd0e5141752656e8378be0283d0 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Creeper.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Creeper.java
 @@ -272,7 +272,7 @@ public class Creeper extends Monster implements PowerableMob {
@@ -39,7 +39,7 @@ index 52eb3f6a73fa99d12d5fc75bab03e47a605c653a..ba654bdcdf0859ba05fed2a8b79c860a
              this.spawnLingeringCloud();
              // CraftBukkit start
 diff --git a/src/main/java/net/minecraft/world/entity/monster/EnderMan.java b/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
-index 66da608477afe967f6c768c465bb1867b76e5df8..b28b8a271526aa8444ffcaac60338b78214ea74f 100644
+index bb4371bf31de61b9b1c7392d4187e712df671860..7698f4805cd7502cf4b4ecf5a087d8108a991150 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
 @@ -522,6 +522,7 @@ public class EnderMan extends Monster implements NeutralMob {

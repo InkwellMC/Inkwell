@@ -21,7 +21,7 @@ index b342ece0dfa67bc165693adf05cf8f07d83012cb..94b35349dd20584d11f773b6b5e4fd94
      private static void blockEntity() {
          allowSignColors = getBoolean(
 diff --git a/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java b/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
-index ce2d3387f5a812f6e074e0f46e2fd61e474f4734..56ecd665c05618d97dca8fd00f45bdc386f9fdef 100644
+index a86ae40b945b1ecdf42a69d753d0412f39ee3001..0e0f21eef0a433dc091ed371647b057d70040db8 100644
 --- a/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
 +++ b/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
 @@ -523,7 +523,7 @@ public class EnderDragon extends Mob implements Enemy {

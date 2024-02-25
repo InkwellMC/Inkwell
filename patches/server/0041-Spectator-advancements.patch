@@ -20,7 +20,7 @@ index 9d4c5fb5c50860942ef0e0646d476123bfd73cab..b342ece0dfa67bc165693adf05cf8f07
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/PlayerAdvancements.java b/src/main/java/net/minecraft/server/PlayerAdvancements.java
-index f655e0ae4a287886d0291cd0089bad2000249d0f..db401a418ed36afbaebc6b964dd98f24cede7b2c 100644
+index 24e5993b281448734eb67c7a8439a349bbf9fd72..369a75c6a4278576299a623390f29d549b6c2a0d 100644
 --- a/src/main/java/net/minecraft/server/PlayerAdvancements.java
 +++ b/src/main/java/net/minecraft/server/PlayerAdvancements.java
 @@ -221,6 +221,12 @@ public class PlayerAdvancements {
