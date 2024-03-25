@@ -5,10 +5,10 @@ Subject: [PATCH] Firework sit player api
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/FireworkRocketEntity.java b/src/main/java/net/minecraft/world/entity/projectile/FireworkRocketEntity.java
-index 3cdfe382b0d4f35ce34628e7c1630dff7c2623c4..e905ae3471bd9439eabb582d71de424876ffc39a 100644
+index 01579e1f4d2c62b636e08cc06dc891728c352efe..d777d37deea6a32dfe80e1b0da3e3c6f412dc175 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/FireworkRocketEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/FireworkRocketEntity.java
-@@ -201,7 +201,7 @@ public class FireworkRocketEntity extends Projectile implements ItemSupplier {
+@@ -204,7 +204,7 @@ public class FireworkRocketEntity extends Projectile implements ItemSupplier {
          super.onHitEntity(entityHitResult);
          if (!this.level().isClientSide) {
              // CraftBukkit start

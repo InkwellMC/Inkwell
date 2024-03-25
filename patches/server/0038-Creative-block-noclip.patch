@@ -20,10 +20,10 @@ index e91ccde21411c7ac5da3383915758b3fe014b9b7..c51cc66ad291d6327a1bafdf53e05cc9
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index d52823d8a6e3aefabe47a938b105c19545d10e98..b5bd7954473c7016992fb295947a37eff2c02e49 100644
+index 579eb5a81281ca36c145153d8c24a517242ffe18..802d2ea12908cf1109c96b035bb79bf9563fe482 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
-@@ -237,8 +237,8 @@ public abstract class Player extends LivingEntity {
+@@ -238,8 +238,8 @@ public abstract class Player extends LivingEntity {
  
      @Override
      public void tick() {
@@ -34,7 +34,7 @@ index d52823d8a6e3aefabe47a938b105c19545d10e98..b5bd7954473c7016992fb295947a37ef
              this.setOnGround(false);
          }
  
-@@ -417,7 +417,7 @@ public abstract class Player extends LivingEntity {
+@@ -418,7 +418,7 @@ public abstract class Player extends LivingEntity {
  
              Pose entitypose1;
  
@@ -43,7 +43,7 @@ index d52823d8a6e3aefabe47a938b105c19545d10e98..b5bd7954473c7016992fb295947a37ef
                  if (this.canPlayerFitWithinBlocksAndEntitiesWhen(Pose.CROUCHING)) {
                      entitypose1 = Pose.CROUCHING;
                  } else {
-@@ -577,7 +577,7 @@ public abstract class Player extends LivingEntity {
+@@ -578,7 +578,7 @@ public abstract class Player extends LivingEntity {
          }
  
          this.bob += (f - this.bob) * 0.4F;
@@ -52,7 +52,7 @@ index d52823d8a6e3aefabe47a938b105c19545d10e98..b5bd7954473c7016992fb295947a37ef
              AABB axisalignedbb;
  
              if (this.isPassenger() && !this.getVehicle().isRemoved()) {
-@@ -2076,6 +2076,20 @@ public abstract class Player extends LivingEntity {
+@@ -2084,6 +2084,20 @@ public abstract class Player extends LivingEntity {
      @Override
      public abstract boolean isSpectator();
  
@@ -115,10 +115,10 @@ index 1fa22445a4ecc8c08dbcf0cc6bd39dc5003604c4..4bf5d15fd4d3c2b52430b6e75a388e95
                      }
                  }
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
-index 1a3be48e5636e80f5a5a5562e89b9f0e8070f889..2e1e7f28f6936fa70f6759647b7595753a21fea9 100644
+index 8bec28f6935a54e133dcbdf774a218991bf6df3f..0c596f0075b9141f2a765de0299d5e0d71f627ac 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
-@@ -130,7 +130,7 @@ public class TheEndGatewayBlockEntity extends TheEndPortalBlockEntity {
+@@ -124,7 +124,7 @@ public class TheEndGatewayBlockEntity extends TheEndPortalBlockEntity {
      }
  
      public static boolean canEntityTeleport(Entity entity) {
@@ -149,7 +149,7 @@ index 1c23597f172f46eec714b510acfedb415bb01bff..6faf4c7dfdd35cf630c9681b2ba48c4a
          entity.move(MoverType.PISTON, new Vec3(distance * (double)movementDirection.getStepX(), distance * (double)movementDirection.getStepY(), distance * (double)movementDirection.getStepZ()));
          NOCLIP.set((Direction)null);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 8fc071a6249193af5e1795cc19f50996ea22d96f..d1e58141f7eacd8c7a7789cde9fa4d4f1582028b 100644
+index d2902fc7f3b7af59f181bd1e12435d946db7ad23..10bc232be6272718ff069566be7208d4ff73a1b8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -161,7 +161,6 @@ import org.bukkit.event.player.PlayerExpCooldownChangeEvent;

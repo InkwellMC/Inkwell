@@ -20,7 +20,7 @@ index 3b8ded27552248210716db2617a28792775a89d8..07a82e4944e711f64b364c1cb7e773eb
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index a74538bdc720efc435e7890aa835c9f255f9ebb6..673f0572d3d09b9b4d7b69f64723c50750a73987 100644
+index f72e3d2decf8eb2a5a802bb1c6c8aa29e08912cf..63c83c194a3f20f89422e775c5c9d6b3526c4068 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -3015,7 +3015,7 @@ public class ServerLevel extends Level implements WorldGenLevel {

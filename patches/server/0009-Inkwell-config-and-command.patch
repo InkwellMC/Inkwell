@@ -5,7 +5,7 @@ Subject: [PATCH] Inkwell config and command
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 691190e8286d6694e03cdc330a680d3392d66920..51138ed15dbcce7383beff513d10813eba5c4a6e 100644
+index 591c8a19d8c5082214c8b27c9823cf134274b247..fab07dbfcdab78cbd9cdd772bd4d08bde9692010 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -54,6 +54,13 @@ dependencies {

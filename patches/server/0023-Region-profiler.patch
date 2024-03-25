@@ -1376,7 +1376,7 @@ index 98fb69a9adeb6eaab199aec127692acb07f56808..7cc624505931dcb6696c3ef3ee3bbea7
                          label25:
                          {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 6b07179212ec0bdb6b68294c996b9dfee8fc81cb..d6a7188227cee9072976db98613324ee2d3dcdc8 100644
+index 03ff40cdf8fc76f12f51537144b1763bd748b980..b5d96cdb4da949bb217b2e6ec81f90f40a2207ba 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1592,6 +1592,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -1635,7 +1635,7 @@ index d532043f33825ce2971d9e53f290cdead22d6916..74483543836d9ed042cc7b9cbbde8d58
              // Folia end - region threading
              // Paper end - optimise chunk tick iteration
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index f72e3d2decf8eb2a5a802bb1c6c8aa29e08912cf..81749b8da7182abd1bf35629f33388e813dbeac0 100644
+index 63c83c194a3f20f89422e775c5c9d6b3526c4068..0820a8d44a6ea1d213dd7f482d9f884f48e016d8 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -891,6 +891,7 @@ public class ServerLevel extends Level implements WorldGenLevel {

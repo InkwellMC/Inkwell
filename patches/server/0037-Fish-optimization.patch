@@ -246,10 +246,10 @@ index 2249fc6dd98afb8d52623b5864955fdd3b3fc042..d5f61f0e8c9c47fb992e3dc13c9e6461
 +     */
  }
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/LlamaSpit.java b/src/main/java/net/minecraft/world/entity/projectile/LlamaSpit.java
-index 4f4d6dedb99feac995e9b5bdf1d5c9f1332d61be..4f86e0193cf08f4ebec20ade4b1e2bdc6879997c 100644
+index 85a0f7b30db57a68133b38f42c17ac6e585fd629..699efb8a2c154d3ddbce1000381e53817d92577b 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/LlamaSpit.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/LlamaSpit.java
-@@ -26,6 +26,12 @@ public class LlamaSpit extends Projectile {
+@@ -29,6 +29,12 @@ public class LlamaSpit extends Projectile {
          this.setPos(owner.getX() - (double) (owner.getBbWidth() + 1.0F) * 0.5D * (double) Mth.sin(owner.yBodyRot * 0.017453292F), owner.getEyeY() - 0.10000000149011612D, owner.getZ() + (double) (owner.getBbWidth() + 1.0F) * 0.5D * (double) Mth.cos(owner.yBodyRot * 0.017453292F));
      }
  

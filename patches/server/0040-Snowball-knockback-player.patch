@@ -21,13 +21,14 @@ index 75c4db957c46f54e0c14dc41a9cbebbdfc897484..9d4c5fb5c50860942ef0e0646d476123
  
      public static Map<String, Integer> projectileTimeouts;
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/Snowball.java b/src/main/java/net/minecraft/world/entity/projectile/Snowball.java
-index 718e120c9768cf716b32d3d652f53f1dda925168..290fc5fcb9a31e6f57dbb99cef71c5470ab92b05 100644
+index 5e82549ea2e80b3968b793b7b4b685c4891e9a91..9ac622532c9c26d06cb5a3c34cee4e1a2ef20cd2 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/Snowball.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/Snowball.java
-@@ -55,6 +55,12 @@ public class Snowball extends ThrowableItemProjectile {
-         Entity entity = entityHitResult.getEntity();
+@@ -61,6 +61,13 @@ public class Snowball extends ThrowableItemProjectile {
          int i = entity instanceof Blaze ? 3 : 0;
-         entity.hurt(this.damageSources().thrown(this, this.getOwner()), (float)i);
+ 
+         entity.hurt(this.damageSources().thrown(this, this.getOwner()), (float) i);
++
 +        // Inkwell start - make snowball can knockback player
 +        if (io.inkwellmc.inkwell.InkwellConfig.snowballKnockbackPlayer && entity instanceof net.minecraft.server.level.ServerPlayer) {
 +            entity.hurt(this.damageSources().thrown(this, this.getOwner()), 0.0000001F);

@@ -54,10 +54,10 @@ index 6b6137f7bd4750275baa64c1f22b852da47697ac..899d4feaec5a9ddf3bae78a39687f49f
      public void displayClientMessage(Component message, boolean overlay) {
          this.sendSystemMessage(message, overlay);
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index d13edeff0de64cb77d7668e5b964cabcf9729388..ae44d1f29855c9f3b15dc7e333ea045afb45071c 100644
+index 90be312057221a5a78066d89783c5e22008d797d..f942dbbc1724d2911ee30a009a4bcfbde248a100 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
-@@ -1150,6 +1150,19 @@ public abstract class PlayerList {
+@@ -1158,6 +1158,19 @@ public abstract class PlayerList {
      }
      // CraftBukkit end
  
@@ -92,10 +92,10 @@ index d02bc26812321745795d2f0bc3705addd0be912d..ee3ec5641172d7d0cdd79189bf9b34f3
              }
          }
 diff --git a/src/main/java/net/minecraft/world/damagesource/DamageSource.java b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
-index 7f9bcaf76aca00e4bc5d2428beb0dcad6b538378..bf317dfadabec288ed6d5ad506df41f17fb92b71 100644
+index 90781fffbb7e6293d3a30d6041dc30186c84caaf..65a9e315fa8af166804c38ce0f10ed90a82a629d 100644
 --- a/src/main/java/net/minecraft/world/damagesource/DamageSource.java
 +++ b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
-@@ -98,6 +98,8 @@ public class DamageSource {
+@@ -104,6 +104,8 @@ public class DamageSource {
      }
      // CraftBukkit end
  
@@ -104,7 +104,7 @@ index 7f9bcaf76aca00e4bc5d2428beb0dcad6b538378..bf317dfadabec288ed6d5ad506df41f1
      public String toString() {
          return "DamageSource (" + this.type().msgId() + ")";
      }
-@@ -170,6 +172,15 @@ public class DamageSource {
+@@ -176,6 +178,15 @@ public class DamageSource {
          }
      }
  
@@ -138,10 +138,10 @@ index a47473c9875c70c52b9a61e0156e55961f34c694..6d89bd484cc3b81bb02afd18ee121c31
 +    // Inkwell end
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 8e3f42e2e49c99299012eea3104a3e922a9ee3c4..29041a4aee001187b36b2b26dc05c3668a015eb5 100644
+index 3a8e6074c5fa76850d7b67a785a9e267caee5dad..3f30514b5d23735907fd9648f00ed4487ac4dd56 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -4922,6 +4922,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -4938,6 +4938,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
          return SlotAccess.NULL;
      }
  

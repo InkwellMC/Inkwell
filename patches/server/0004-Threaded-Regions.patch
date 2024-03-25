@@ -8896,7 +8896,7 @@ index e028353e0261310afc42ca0454b723d9f1ffc131..08d282400644be5949f28eb879b333cc
       * Converts an NMS entity's current location to a Bukkit Location
       * @param entity
 diff --git a/src/main/java/io/papermc/paper/util/TickThread.java b/src/main/java/io/papermc/paper/util/TickThread.java
-index bdaf062f9b66ceab303a0807eca301342886a8ea..61fc8d4a52d6fb29b09eefd7b0fa880c0cf97849 100644
+index bdaf062f9b66ceab303a0807eca301342886a8ea..906f1c9e619a924c622acc76652a4569305edc8d 100644
 --- a/src/main/java/io/papermc/paper/util/TickThread.java
 +++ b/src/main/java/io/papermc/paper/util/TickThread.java
 @@ -1,5 +1,11 @@
@@ -8911,7 +8911,7 @@ index bdaf062f9b66ceab303a0807eca301342886a8ea..61fc8d4a52d6fb29b09eefd7b0fa880c
  import net.minecraft.core.BlockPos;
  import net.minecraft.server.MinecraftServer;
  import net.minecraft.server.level.ServerLevel;
-@@ -114,46 +120,137 @@ public class TickThread extends Thread {
+@@ -114,46 +120,149 @@ public class TickThread extends Thread {
      }
  
      public static boolean isShutdownThread() {
@@ -9036,7 +9036,19 @@ index bdaf062f9b66ceab303a0807eca301342886a8ea..61fc8d4a52d6fb29b09eefd7b0fa880c
 +                    return false;
 +                }
 +            }
-+            return isShutdownThread();
++            if (isShutdownThread()) {
++                return true;
++            }
++            if (entity instanceof ServerPlayer serverPlayer) {
++                // off-main access to server player is never ok, server player is owned by one of global context or region context always
++                return false;
++            }
++            // only own entities that have not yet been added to the world
++
++            // if the entity is removed, then it was in the world previously - which means that a region containing its location
++            // owns it
++            // if the entity has a callback, then it is contained in a world
++            return entity.hasNullCallback() && !entity.isRemoved();
 +        }
 +
 +        final Level level = entity.level();
@@ -10066,7 +10078,7 @@ index 3e2d5dcd62775b6ed7c0ce0ba51a71b635b1d644..98fb69a9adeb6eaab199aec127692acb
              // CraftBukkit start - SPIGOT-5477, MC-142590
          } else if (MinecraftServer.getServer().hasStopped() || (listener instanceof ServerCommonPacketListenerImpl && ((ServerCommonPacketListenerImpl) listener).processedDisconnect)) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index c220b116b62e783d42364bae3d499e66a52241d1..1e658114879ad9bdb679b9230ac3eab643375f8b 100644
+index 624821c3ebac401f46891f449d0e8541eef6e8f2..14c1143efe27b02de1d33b9aa147872f10ad5d52 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -203,7 +203,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -21594,7 +21606,7 @@ index 1d7c663fa0e550bd0cfb9a4b83ccd7e2968666f0..f3df9c9b6cff85565514f990597f3fe5
          LevelChunkTicks<T> levelChunkTicks = this.allContainers.get(l);
          if (levelChunkTicks == null) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index b63effd92be5a8a75db6c37e5a1b91541020ec75..350fc61fd709453a86c9f7f6e4bccc434065cc35 100644
+index c5cf6d4ea873a118b147b713460f3de159155bdf..bf6ffd05dcd1055d5139b559409a33821f0d58b5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -309,7 +309,7 @@ public final class CraftServer implements Server {

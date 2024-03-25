@@ -21,10 +21,10 @@ index 07a82e4944e711f64b364c1cb7e773eb04d32e32..1a4add0bcf81e6adf70e0357c47cf750
      private static void villager() {
          allowVoidTrading = getBoolean("entity.villager.allow-void-trading", false, "Allows you to interact with merchants in unloaded chunks");
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 8ab116b38afc2b717408c0683c9b6ab92f032985..db827924ca0dc490d410837cd26ecc97dba6a4f1 100644
+index 169d8ea6aedc4d94a963bd3384ce1be21f7c8e7e..03ff40cdf8fc76f12f51537144b1763bd748b980 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1936,7 +1936,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1946,7 +1946,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @DontObfuscate
      public String getServerModName() {

@@ -33,10 +33,10 @@ index c51cc66ad291d6327a1bafdf53e05cc9e5d1984d..75c4db957c46f54e0c14dc41a9cbebbd
  
      public static boolean usePigmanSpawnLimit;
 diff --git a/src/main/java/net/minecraft/world/entity/npc/Villager.java b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-index 9d26af7459a6916ffdf67a5e0dbd63bdd599914f..8c8990d9a06ba9043308aa97991b225a44cb7388 100644
+index b6024ce5eedc638beaec1ec6e15230ee88dafa86..e8a5d7a6b9fcc493980868330f31b20a289700c8 100644
 --- a/src/main/java/net/minecraft/world/entity/npc/Villager.java
 +++ b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-@@ -142,6 +142,9 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+@@ -143,6 +143,9 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
          return holder.is(PoiTypes.MEETING);
      });
  
@@ -46,7 +46,7 @@ index 9d26af7459a6916ffdf67a5e0dbd63bdd599914f..8c8990d9a06ba9043308aa97991b225a
      public Villager(EntityType<? extends Villager> entityType, Level world) {
          this(entityType, world, VillagerType.PLAINS);
      }
-@@ -206,6 +209,44 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+@@ -207,6 +210,44 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
          brain.updateActivityFromSchedule(this.level().getLevelData().getDayTime(), this.level().getLevelData().getGameTime()); // Folia - region threading
      }
  
@@ -91,7 +91,7 @@ index 9d26af7459a6916ffdf67a5e0dbd63bdd599914f..8c8990d9a06ba9043308aa97991b225a
      @Override
      protected void ageBoundaryReached() {
          super.ageBoundaryReached();
-@@ -252,13 +293,20 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+@@ -253,13 +294,20 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
          this.customServerAiStep(false);
      }
      private int behaviorTick = 0; // Inkwell

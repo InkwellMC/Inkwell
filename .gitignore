@@ -1,5 +1,5 @@
-folinkwell-api/
-folinkwell-server/
+inkwell-api/
+inkwell-server/
 paper-api-generator/
 build/
 .gradle/

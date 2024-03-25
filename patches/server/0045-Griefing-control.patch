@@ -26,16 +26,16 @@ index 536f6d01764940918613ddfb5c2af05f1fdcabb5..0bc76e6b84b337a287ef0af562592916
      private static void blockEntity() {
          allowSignColors = getBoolean(
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Creeper.java b/src/main/java/net/minecraft/world/entity/monster/Creeper.java
-index 6a91960f93e624a4b975c1cf76698eb45ceda838..7b4c53ac11827dd0e5141752656e8378be0283d0 100644
+index 9657796d08f4a102d9d5ff7685f2a152d1a87fda..829a57d8f29c3aa2cd5c2a3288a1afba1950c606 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Creeper.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Creeper.java
-@@ -272,7 +272,7 @@ public class Creeper extends Monster implements PowerableMob {
+@@ -273,7 +273,7 @@ public class Creeper extends Monster implements PowerableMob {
              if (!event.isCancelled()) {
              // CraftBukkit end
              this.dead = true;
 -            this.level().explode(this, this.getX(), this.getY(), this.getZ(), event.getRadius(), event.getFire(), Level.ExplosionInteraction.MOB); // CraftBukkit
-+                this.level().explode(this, this.getX(), this.getY(), this.getZ(), event.getRadius(), event.getFire(), this.level().getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_MOBGRIEFING) && io.inkwellmc.inkwell.InkwellConfig.creeperAllowGriefing ? Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE); // CraftBukkit // Inkwell
-             this.discard();
++            this.level().explode(this, this.getX(), this.getY(), this.getZ(), event.getRadius(), event.getFire(), this.level().getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_MOBGRIEFING) && io.inkwellmc.inkwell.InkwellConfig.creeperAllowGriefing ? Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE); // CraftBukkit // Inkwell
+             this.discard(EntityRemoveEvent.Cause.EXPLODE); // CraftBukkit - add Bukkit remove cause
              this.spawnLingeringCloud();
              // CraftBukkit start
 diff --git a/src/main/java/net/minecraft/world/entity/monster/EnderMan.java b/src/main/java/net/minecraft/world/entity/monster/EnderMan.java

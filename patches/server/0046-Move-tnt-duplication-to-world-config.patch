@@ -5,11 +5,11 @@ Subject: [PATCH] Move tnt duplication to world config
 
 
 diff --git a/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java b/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
-index be3d0bf530267a7b58d44ecdd4b1fb1798f10562..c21759b74dbbdf0d8d955ce68109e3bfc102a787 100644
+index 6f44ba7d4f8a4b12c0d5792b1fd2f4b53cbd334d..da5d7d6035cb63aac263c6b170e9c8a7b8b34754 100644
 --- a/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
 +++ b/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
-@@ -173,8 +173,6 @@ public class GlobalConfiguration extends ConfigurationPart {
-     public class UnsupportedSettings extends ConfigurationPart {
+@@ -176,8 +176,6 @@ public class GlobalConfiguration extends ConfigurationPart {
+         public boolean allowUnsafeEndPortalTeleportation = false;
          @Comment("This setting controls if players should be able to break bedrock, end portals and other intended to be permanent blocks.")
          public boolean allowPermanentBlockBreakExploits = false;
 -        @Comment("This setting controls if player should be able to use TNT duplication, but this also allows duplicating carpet, rails and potentially other items")
@@ -18,22 +18,13 @@ index be3d0bf530267a7b58d44ecdd4b1fb1798f10562..c21759b74dbbdf0d8d955ce68109e3bf
          @Comment("This setting controls if players should be able to create headless pistons.")
          public boolean allowHeadlessPistons = false;
 diff --git a/src/main/java/io/papermc/paper/configuration/WorldConfiguration.java b/src/main/java/io/papermc/paper/configuration/WorldConfiguration.java
-index f7a66f54a450f1a46e9d0a138544e97423f261b3..b5583d10151af03fc997c2cebcf485a94be2df3b 100644
+index 805080704cf5280c7d97e5e510c547c5e0d0f120..f19bdb86b202549e271795230beaee51f023337c 100644
 --- a/src/main/java/io/papermc/paper/configuration/WorldConfiguration.java
 +++ b/src/main/java/io/papermc/paper/configuration/WorldConfiguration.java
-@@ -54,6 +54,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
- import org.slf4j.Logger;
- import org.spigotmc.SpigotWorldConfig;
- import org.spongepowered.configurate.objectmapping.ConfigSerializable;
-+import org.spongepowered.configurate.objectmapping.meta.Comment;
- import org.spongepowered.configurate.objectmapping.meta.PostProcess;
- import org.spongepowered.configurate.objectmapping.meta.Required;
- import org.spongepowered.configurate.objectmapping.meta.Setting;
-@@ -445,6 +446,8 @@ public class WorldConfiguration extends ConfigurationPart {
- 
+@@ -450,6 +450,7 @@ public class WorldConfiguration extends ConfigurationPart {
      public class UnsupportedSettings extends ConfigurationPart {
          public boolean fixInvulnerableEndCrystalExploit = true;
-+        @Comment ("This setting controls if player should be able to use TNT duplication, but this also allows duplicating carpet, rails and potentially other items")
+         public boolean disableWorldTickingWhenEmpty = false;
 +        public boolean allowPistonDuplication = false;
      }
  
