@@ -59,7 +59,7 @@ subprojects {
 }
 
 paperweight {
-    serverProject.set(project(":folinkwell-server"))
+    serverProject.set(project(":inkwell-server"))
 
     remapRepo.set("https://maven.fabricmc.net/")
     decompileRepo.set("https://files.minecraftforge.net/maven/")
@@ -69,8 +69,8 @@ paperweight {
             apiPatchDir.set(layout.projectDirectory.dir("patches/api"))
             serverPatchDir.set(layout.projectDirectory.dir("patches/server"))
 
-            apiOutputDir.set(layout.projectDirectory.dir("folinkwell-api"))
-            serverOutputDir.set(layout.projectDirectory.dir("folinkwell-server"))
+            apiOutputDir.set(layout.projectDirectory.dir("inkwell-api"))
+            serverOutputDir.set(layout.projectDirectory.dir("inkwell-server"))
         }
 
         patchTasks.register("generatedApi") {

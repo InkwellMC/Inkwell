@@ -14,17 +14,17 @@ commitid=$(git log --pretty='%h' -1)
 mcversion=$(prop mcVersion)
 gradleVersion=$(prop version)
 preVersion=$(prop preVersion)
-tagid="$mcversion-folinkwell-$commitid"
-jarName="folinkwell-$mcversion.jar"
-inkwellid="$mcversion-folinkwell-$commitid"
+tagid="$mcversion-$commitid"
+jarName="inkwell-$mcversion.jar"
+inkwellid="Inkwell-$commitid"
 releaseinfo="releaseinfo.md"
 discordmes="discordmes.json"
-make_latest="false"
+make_latest=$([ $preVersion = "true" ] && echo "false" || echo "true")
 
 rm -f $discordmes
 rm -f $releaseinfo
 
-mv build/libs/folinkwell-paperclip-$gradleVersion-reobf.jar $jarName
+mv build/libs/inkwell-paperclip-$gradleVersion-reobf.jar $jarName
 echo "name=$inkwellid" >> $GITHUB_ENV
 echo "tag=$tagid" >> $GITHUB_ENV
 echo "jar=$jarName" >> $GITHUB_ENV
@@ -41,14 +41,9 @@ if [ $preVersion = "true" ]; then
   echo "> **Backups are mandatory!**" >> $releaseinfo
   echo "" >> $releaseinfo
 fi
-
-echo "> This is a Inkwell with folia changes this may very unstable!" >> $releaseinfo
-echo "> **Backups are mandatory!**" >> $releaseinfo
-echo "" >> $releaseinfo
-
 echo "### Commit Message" >> $releaseinfo
 
-number=$(git log --oneline 1.20.4-Folia ^`git describe --tags --abbrev=0` | wc -l)
+number=$(git log --oneline master ^`git describe --tags --abbrev=0` | wc -l)
 echo "$(git log --pretty='> [%h] %s' -$number)" >> $releaseinfo
 
 echo "" >> $releaseinfo
@@ -58,6 +53,6 @@ echo "| ---- | ---- |" >> $releaseinfo
 echo "| MD5 | `md5 $jarName` |" >> $releaseinfo
 echo "| SHA1 | `sha1 $jarName` |" >> $releaseinfo
 
-echo -n "{\"content\":\"Folinkwell New Release\",\"embeds\":[{\"color\":10508031,\"title\":\"$inkwellid\",\"url\":\"https://github.com/InkwellMC/Inkwell/releases/tag/$tagid\",\"fields\":[{\"name\":\"Changelog\",\"value\":\"" >> $discordmes
+echo -n "{\"content\":\"Inkwell New Release\",\"embeds\":[{\"color\":10508031,\"title\":\"$inkwellid\",\"url\":\"https://github.com/InkwellMC/Inkwell/releases/tag/$tagid\",\"fields\":[{\"name\":\"Changelog\",\"value\":\"" >> $discordmes
 echo -n $(git log --oneline --pretty='> [%h] %s\\n' -$number | sed "s/\"/\\\\\"/g") >> $discordmes
 echo "\",\"inline\":true}]}]}" >> $discordmes
