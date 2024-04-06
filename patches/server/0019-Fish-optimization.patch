@@ -5,7 +5,7 @@ Subject: [PATCH] Fish optimization
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
-index 98b940f0384edf97a06898de77ea6271c294e054..4e6892c865f1084c7febbc4f36da4fd6e710e7db 100644
+index 53f78093caa84d3d06359c5367807f890cdc5996..9308e1b07821245677a355b74ce7fcfdc8842851 100644
 --- a/src/main/java/com/destroystokyo/paper/Metrics.java
 +++ b/src/main/java/com/destroystokyo/paper/Metrics.java
 @@ -676,6 +676,12 @@ public class Metrics {

@@ -138,10 +138,10 @@ index a47473c9875c70c52b9a61e0156e55961f34c694..6d89bd484cc3b81bb02afd18ee121c31
 +    // Inkwell end
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 3a8e6074c5fa76850d7b67a785a9e267caee5dad..3f30514b5d23735907fd9648f00ed4487ac4dd56 100644
+index 194924d7617afd99a6230c6db2e9a2cfaaafed12..325d9e34d77ea29a2cb08a2b8af6acd756d7e4f7 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -4938,6 +4938,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -4941,6 +4941,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
          return SlotAccess.NULL;
      }
  

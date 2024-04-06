@@ -115,7 +115,7 @@ index 1fa22445a4ecc8c08dbcf0cc6bd39dc5003604c4..4bf5d15fd4d3c2b52430b6e75a388e95
                      }
                  }
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
-index 8bec28f6935a54e133dcbdf774a218991bf6df3f..0c596f0075b9141f2a765de0299d5e0d71f627ac 100644
+index 412fa8a03be7215fa2695f07ac4f2334d1e70903..447addfea0bc513de133fcc32c1fe2fc4d257b17 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
 @@ -124,7 +124,7 @@ public class TheEndGatewayBlockEntity extends TheEndPortalBlockEntity {
@@ -128,10 +128,10 @@ index 8bec28f6935a54e133dcbdf774a218991bf6df3f..0c596f0075b9141f2a765de0299d5e0d
  
      public boolean isSpawning() {
 diff --git a/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java b/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
-index 1c23597f172f46eec714b510acfedb415bb01bff..6faf4c7dfdd35cf630c9681b2ba48c4a42175c91 100644
+index 1955b660907c5d6b5ca4bf7741f8d568b9255347..bed01f490c6f61e202656a544af313b405f66ffe 100644
 --- a/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
-@@ -142,7 +142,7 @@ public class PistonMovingBlockEntity extends BlockEntity {
+@@ -152,7 +152,7 @@ public class PistonMovingBlockEntity extends BlockEntity {
                                          h = (double)direction.getStepZ();
                                  }
  
@@ -140,7 +140,7 @@ index 1c23597f172f46eec714b510acfedb415bb01bff..6faf4c7dfdd35cf630c9681b2ba48c4a
                                  // Paper - EAR items stuck in in slime pushed by a piston
                                  entity.activatedTick = Math.max(entity.activatedTick, io.papermc.paper.threadedregions.RegionizedServer.getCurrentTick() + 10); // Folia - region threading
                                  entity.activatedImmunityTick = Math.max(entity.activatedImmunityTick, io.papermc.paper.threadedregions.RegionizedServer.getCurrentTick() + 10); // Folia - region threading
-@@ -178,6 +178,7 @@ public class PistonMovingBlockEntity extends BlockEntity {
+@@ -188,6 +188,7 @@ public class PistonMovingBlockEntity extends BlockEntity {
      }
  
      private static void moveEntityByPiston(Direction direction, Entity entity, double distance, Direction movementDirection) {

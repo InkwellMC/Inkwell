@@ -30,7 +30,7 @@ index 805080704cf5280c7d97e5e510c547c5e0d0f120..f19bdb86b202549e271795230beaee51
  
      public Hopper hopper;
 diff --git a/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java b/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java
-index be74adc86f0ca467f3b59e7b57fd47a8f381d86e..54c4aa4f8b3c0cebd7f3833f74571723786476ce 100644
+index 363a712d6b9e717b075aa52643c6cf91497e7c3b..1a0eb797c47b5ab9558c3b7d7edc9e684aede600 100644
 --- a/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java
 @@ -441,7 +441,7 @@ public class PistonBaseBlock extends DirectionalBlock {
@@ -43,10 +43,10 @@ index be74adc86f0ca467f3b59e7b57fd47a8f381d86e..54c4aa4f8b3c0cebd7f3833f74571723
                  iblockdata1 = allowDesync ? world.getBlockState(oldPos) : null;
                  // Paper end - fix a variety of piston desync dupes
 diff --git a/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java b/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
-index 6faf4c7dfdd35cf630c9681b2ba48c4a42175c91..603f120c526bbb32575f1c9538daa37433c5f710 100644
+index bed01f490c6f61e202656a544af313b405f66ffe..41450402ae6953dbda116f4bced4e0e50fa072ac 100644
 --- a/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
-@@ -289,7 +289,7 @@ public class PistonMovingBlockEntity extends BlockEntity {
+@@ -299,7 +299,7 @@ public class PistonMovingBlockEntity extends BlockEntity {
                  if (world.getBlockState(pos).is(Blocks.MOVING_PISTON)) {
                      BlockState blockState = Block.updateFromNeighbourShapes(blockEntity.movedState, world, pos);
                      if (blockState.isAir()) {
