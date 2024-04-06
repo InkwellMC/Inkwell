@@ -5,7 +5,7 @@ Subject: [PATCH] Inkwell config and command
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 2e1bf7de47a46f0e299b16ea47bd64f317366c7e..bf62b4e4c87e09e850457d865217e82d5c7c3ac3 100644
+index 1005aba7cb01f5189a5f599aca72007b90eee0fe..50f363d696c7e7ec342099a607527552da1762b6 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -54,6 +54,13 @@ dependencies {
@@ -105,7 +105,7 @@ index 0000000000000000000000000000000000000000..988236d1942d01a2424d5d377c1480f1
 \ No newline at end of file
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..3b8ded27552248210716db2617a28792775a89d8
+index 0000000000000000000000000000000000000000..e0449dd7155b44ba1e249aadeb8eda0c7d7fdc3c
 --- /dev/null
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -0,0 +1,132 @@
@@ -163,7 +163,7 @@ index 0000000000000000000000000000000000000000..3b8ded27552248210716db2617a28792
 +        getString("info.version", "1.0");
 +        setComment("info",
 +                "Inkwell Configuration",
-+                "Join our Discord for support: https://discord.gg/RTaXtqKZNc",
++                "Join our Discord for support: https://discord.gg/eRvwvmEXWz",
 +                "Download new builds at https://github.com/InkwellMC/Inkwell/releases");
 +
 +        for (Method method : InkwellConfig.class.getDeclaredMethods()) {

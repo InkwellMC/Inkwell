@@ -91,7 +91,7 @@ paperweight {
 allprojects {
     publishing {
         repositories {
-            maven("https://repo.subroute.keenetic.pro/maven-public/") {
+            maven("https://repo.bambooland.fun/maven-public") {
                 name = "inkwellmc"
                 credentials(PasswordCredentials::class)
             }

@@ -17,7 +17,7 @@ index 3811c0d849a3eb028ed1a6b7a2d4747f7f570448..ac9b180b42880097e8236084be454263
 +*.rej
 \ No newline at end of file
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 905262067dabc7cbe5b08639fcefd3a996a937e0..2e1bf7de47a46f0e299b16ea47bd64f317366c7e 100644
+index 905262067dabc7cbe5b08639fcefd3a996a937e0..1005aba7cb01f5189a5f599aca72007b90eee0fe 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,12 +13,12 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -41,7 +41,7 @@ index 905262067dabc7cbe5b08639fcefd3a996a937e0..2e1bf7de47a46f0e299b16ea47bd64f3
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",
 -            "Implementation-Version" to "git-Folia-$implementationVersion", // Folia
-+            "Implementation-Version" to "git-Folia-$implementationVersion", // Folia // Inkwell
++            "Implementation-Version" to "git-Inkwell-$implementationVersion", // Folia // Inkwell
              "Implementation-Vendor" to date, // Paper
              "Specification-Title" to "Bukkit",
              "Specification-Version" to project.version,
