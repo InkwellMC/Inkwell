@@ -5,10 +5,10 @@ Subject: [PATCH] Use thread unsafe random for mob spawning
 
 
 diff --git a/src/main/java/net/minecraft/world/level/NaturalSpawner.java b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-index 1d082e977442790504e3ca70a90dabd69b522622..75c36cf5c2fb0839739ef5d979b09a38d88dff63 100644
+index 9c1263fdc3731e04ac28c6d0ed904ecdc3ea3038..42848b08f65f6c9bc033dd7da59d6c4ff1b443a7 100644
 --- a/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-@@ -429,12 +429,12 @@ public final class NaturalSpawner {
+@@ -425,12 +425,12 @@ public final class NaturalSpawner {
          }
      }
  
@@ -17,11 +17,11 @@ index 1d082e977442790504e3ca70a90dabd69b522622..75c36cf5c2fb0839739ef5d979b09a38
          ChunkPos chunkcoordintpair = chunk.getPos();
 -        int i = chunkcoordintpair.getMinBlockX() + world.random.nextInt(16);
 -        int j = chunkcoordintpair.getMinBlockZ() + world.random.nextInt(16);
-+        int i = chunkcoordintpair.getMinBlockX() + world.getThreadUnsafeRandom().nextInt(16); // Inkwell - use thread unsafe random
-+        int j = chunkcoordintpair.getMinBlockZ() + world.getThreadUnsafeRandom().nextInt(16); // Inkwell
++        int i = chunkcoordintpair.getMinBlockX() + world.getThreadUnsafeRandom().get().nextInt(16); // Inkwell - use thread unsafe random
++        int j = chunkcoordintpair.getMinBlockZ() + world.getThreadUnsafeRandom().get().nextInt(16); // Inkwell
          int k = chunk.getHeight(Heightmap.Types.WORLD_SURFACE, i, j) + 1;
 -        int l = Mth.randomBetweenInclusive(world.random, world.getMinBuildHeight(), k);
-+        int l = Mth.randomBetweenInclusive(world.getThreadUnsafeRandom(), world.getMinBuildHeight(), k); // Inkwell
++        int l = Mth.randomBetweenInclusive(world.getThreadUnsafeRandom().get(), world.getMinBuildHeight(), k); // Inkwell
  
          return new BlockPos(i, l, j);
      }

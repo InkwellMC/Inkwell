@@ -5,10 +5,10 @@ Subject: [PATCH] Optimize random calls in chunk ticking
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerChunkCache.java b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-index 8477c7b0bfa29524041c529bbe6928da83b90299..2aaf4f55ed0e81e272faf482a6ba68563dac50f5 100644
+index 74483543836d9ed042cc7b9cbbde8d58d6994475..587df17b8b54864ad39e123c7573e11eb1ca9922 100644
 --- a/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 +++ b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-@@ -524,6 +524,7 @@ public class ServerChunkCache extends ChunkSource {
+@@ -472,6 +472,7 @@ public class ServerChunkCache extends ChunkSource {
  
              // Paper - optimise chunk tick iteration
  
@@ -17,47 +17,43 @@ index 8477c7b0bfa29524041c529bbe6928da83b90299..2aaf4f55ed0e81e272faf482a6ba6856
                  gameprofilerfiller.popPush("naturalSpawnCount");
                  this.level.timings.countNaturalMobs.startTiming(); // Paper - timings
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 5b6ec9709d3a709a4bcaa35b50e9da9b99b92a0c..83275126450e5ce6f7dac2f3a11ff72f69f31d4e 100644
+index cd39aaa29907693a09f6f49b8f68994cb6a81982..29d341d43bf8606f5820ff32492dc79a2a0f8c98 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -984,9 +984,10 @@ public class ServerLevel extends Level implements WorldGenLevel {
-     }
-     // Paper start - optimise random block ticking
-     private final BlockPos.MutableBlockPos chunkTickMutablePosition = new BlockPos.MutableBlockPos();
--    private final io.papermc.paper.util.math.ThreadUnsafeRandom randomTickRandom = new io.papermc.paper.util.math.ThreadUnsafeRandom(this.random.nextLong());
-+    // private final io.papermc.paper.util.math.ThreadUnsafeRandom randomTickRandom = new io.papermc.paper.util.math.ThreadUnsafeRandom(this.random.nextLong()); // Inkwell - moved to super
+@@ -1115,6 +1115,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+     private final ThreadLocal<io.papermc.paper.util.math.ThreadUnsafeRandom> randomTickRandom = ThreadLocal.withInitial(() -> new io.papermc.paper.util.math.ThreadUnsafeRandom(this.random.nextLong())); // Folia - region threading
      // Paper end
  
-+    private int currentIceAndSnowTick = 0; protected void resetIceAndSnowTick() { this.currentIceAndSnowTick = this.randomTickRandom.nextInt(16); } // Inkwell
++    private int currentIceAndSnowTick = 0; protected void resetIceAndSnowTick() { this.currentIceAndSnowTick = this.randomTickRandom.get().nextInt(16); } // Inkwell
      public void tickChunk(LevelChunk chunk, int randomTickSpeed) {
+         io.papermc.paper.util.math.ThreadUnsafeRandom randomTickRandom = this.randomTickRandom.get(); // Folia - region threading
          ChunkPos chunkcoordintpair = chunk.getPos();
-         boolean flag = this.isRaining();
-@@ -997,7 +998,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1126,7 +1127,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
          gameprofilerfiller.push("thunder");
-         final BlockPos.MutableBlockPos blockposition = this.chunkTickMutablePosition; // Paper - use mutable to reduce allocation rate, final to force compile fail on change
+         final BlockPos.MutableBlockPos blockposition = this.chunkTickMutablePosition.get(); // Paper - use mutable to reduce allocation rate, final to force compile fail on change // Folia - region threading
  
--        if (!this.paperConfig().environment.disableThunder && flag && this.isThundering() && this.spigotConfig.thunderChance > 0 && this.random.nextInt(this.spigotConfig.thunderChance) == 0) { // Spigot // Paper - disable thunder
+-        if (!this.paperConfig().environment.disableThunder && flag && this.isThundering() && this.spigotConfig.thunderChance > 0 && this.random.nextInt(this.spigotConfig.thunderChance) == 0) { // Spigot // Paper - Option to disable thunder
 +        if (!this.paperConfig().environment.disableThunder && flag && this.isThundering() && this.spigotConfig.thunderChance > 0 && /*this.random.nextInt(this.spigotConfig.thunderChance) == 0 &&*/ chunk.shouldDoLightning(this.random)) { // Spigot // Paper - disable thunder // Inkwell - replace random with shouldDoLightning
              blockposition.set(this.findLightningTargetAround(this.getBlockRandomPos(j, 0, k, 15))); // Paper
  
              if (this.isRainingAt(blockposition)) {
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index afd2e9bcdf94f3511bcd68cab5e72284f07fd016..47dc9708c08f154ce7afb673f6fc265f5622a711 100644
+index a9921af214c596ef2601ccdbf37b4234bcf4ea1d..bafe66e9ff6c64a47f2d1761adbce6f3cf611f1f 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
-@@ -213,6 +213,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
+@@ -236,6 +236,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
+     public final int tickTimerId;
+     // Folia end - profiler
  
-     public abstract ResourceKey<LevelStem> getTypeKey();
- 
-+    protected final io.papermc.paper.util.math.ThreadUnsafeRandom randomTickRandom = new io.papermc.paper.util.math.ThreadUnsafeRandom(java.util.concurrent.ThreadLocalRandom.current().nextLong()); public net.minecraft.util.RandomSource getThreadUnsafeRandom() { return this.randomTickRandom; } // Inkwell - move thread unsafe random initialization // Inkwell - getter
++    protected final ThreadLocal<io.papermc.paper.util.math.ThreadUnsafeRandom> randomTickRandom = ThreadLocal.withInitial(() -> new io.papermc.paper.util.math.ThreadUnsafeRandom(java.util.concurrent.ThreadLocalRandom.current().nextLong())); public ThreadLocal<io.papermc.paper.util.math.ThreadUnsafeRandom> getThreadUnsafeRandom() { return this.randomTickRandom; } // Inkwell - move thread unsafe random initialization // Inkwell - getter
      protected Level(WritableLevelData worlddatamutable, ResourceKey<Level> resourcekey, RegistryAccess iregistrycustom, Holder<DimensionType> holder, Supplier<ProfilerFiller> supplier, boolean flag, boolean flag1, long i, int j, org.bukkit.generator.ChunkGenerator gen, org.bukkit.generator.BiomeProvider biomeProvider, org.bukkit.World.Environment env, java.util.function.Function<org.spigotmc.SpigotWorldConfig, io.papermc.paper.configuration.WorldConfiguration> paperWorldConfigCreator, java.util.concurrent.Executor executor) { // Paper - create paper world config; Async-Anti-Xray: Pass executor
          this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName()); // Spigot
          this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper - create paper world config
 diff --git a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-index 27e8ee4507460b1cc72de692b41562b9f4f13929..f051960a7e5cb2c559a1adb7616028fcac83a149 100644
+index 4847f7caa9147a63f85a86c1c45500f45ff48fbb..db3d80458767e416cc0dfe09e2fb3c9a5adb53f2 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-@@ -86,6 +86,18 @@ public class LevelChunk extends ChunkAccess {
+@@ -93,6 +93,18 @@ public class LevelChunk extends ChunkAccess {
      private final LevelChunkTicks<Fluid> fluidTicks;
      public volatile FullChunkStatus chunkStatus = FullChunkStatus.INACCESSIBLE; // Paper - rewrite chunk system
  
@@ -76,11 +72,11 @@ index 27e8ee4507460b1cc72de692b41562b9f4f13929..f051960a7e5cb2c559a1adb7616028fc
      public LevelChunk(Level world, ChunkPos pos) {
          this(world, pos, UpgradeData.EMPTY, new LevelChunkTicks<>(), new LevelChunkTicks<>(), 0L, (LevelChunkSection[]) null, (LevelChunk.PostLoadProcessor) null, (BlendingData) null);
      }
-@@ -109,6 +121,7 @@ public class LevelChunk extends ChunkAccess {
+@@ -116,6 +128,7 @@ public class LevelChunk extends ChunkAccess {
          this.postLoad = entityLoader;
          this.blockTicks = blockTickScheduler;
          this.fluidTicks = fluidTickScheduler;
-+        this.lightningTick = this.level.getThreadUnsafeRandom().nextInt(100000) << 1; // Inkwell - initialize lightning tick
++        this.lightningTick = this.level.getThreadUnsafeRandom().get().nextInt(100000) << 1; // Inkwell - initialize lightning tick
      }
  
      // CraftBukkit start

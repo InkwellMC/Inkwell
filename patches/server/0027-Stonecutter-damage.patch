@@ -138,7 +138,7 @@ index a47473c9875c70c52b9a61e0156e55961f34c694..6d89bd484cc3b81bb02afd18ee121c31
 +    // Inkwell end
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 194924d7617afd99a6230c6db2e9a2cfaaafed12..325d9e34d77ea29a2cb08a2b8af6acd756d7e4f7 100644
+index 14c63f5abc0e6d3a833061a165d3bcad0fbfb7fa..f09786dbb4c7fd49a714475b694c6e46e4407d5f 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -4941,6 +4941,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S

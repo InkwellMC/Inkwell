@@ -52,7 +52,7 @@ index ec56f1ff093101cf20cb235a6a8a0c6778b54db3..e91ccde21411c7ac5da3383915758b3f
 \ No newline at end of file
 diff --git a/src/main/java/io/inkwellmc/inkwell/abilities/MobFlames.java b/src/main/java/io/inkwellmc/inkwell/abilities/MobFlames.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..dde4c23cc9aeb71fa5ef9fea66ae1e3de5204010
+index 0000000000000000000000000000000000000000..9dc2490913543eb6a003c9f8dd4daa083b549056
 --- /dev/null
 +++ b/src/main/java/io/inkwellmc/inkwell/abilities/MobFlames.java
 @@ -0,0 +1,116 @@
@@ -109,11 +109,11 @@ index 0000000000000000000000000000000000000000..dde4c23cc9aeb71fa5ef9fea66ae1e3d
 +                    0, motDouble.x(), motDouble.y(), motDouble.z(), 0.1D, true);
 +        }
 +        if (++ticksLived > 20) {
-+            this.discard();
++            this.discard(null);
 +        } else if (this.level().getBlockStates(this.getBoundingBox()).noneMatch(BlockBehaviour.BlockStateBase::isAir)) {
-+            this.discard();
++            this.discard(null);
 +        } else if (this.isInWaterOrBubble()) {
-+            this.discard();
++            this.discard(null);
 +        } else {
 +            this.setDeltaMovement(mot.scale(0.99D));
 +            if (!this.isNoGravity()) {
@@ -152,7 +152,7 @@ index 0000000000000000000000000000000000000000..dde4c23cc9aeb71fa5ef9fea66ae1e3d
 +            BlockState state = this.level().getBlockState(blockHitResult.getBlockPos());
 +            state.onProjectileHit(this.level(), state, blockHitResult, this);
 +        }
-+        this.discard();
++        this.discard(null);
 +    }
 +    /*
 +    ⠄⠄⢸⣿⣿⣿⡇⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⣿⣿⣿

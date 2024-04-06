@@ -40,7 +40,7 @@ index 643dce1207fae4fccb808147319638e8c753bd64..cd975090d2b84694a9debe1f38137ad0
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 3230ebf89347715bc1ab1057eeec7bbf49604dbd..194924d7617afd99a6230c6db2e9a2cfaaafed12 100644
+index 3230ebf89347715bc1ab1057eeec7bbf49604dbd..14c63f5abc0e6d3a833061a165d3bcad0fbfb7fa 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -817,6 +817,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
@@ -49,7 +49,7 @@ index 3230ebf89347715bc1ab1057eeec7bbf49604dbd..194924d7617afd99a6230c6db2e9a2cf
      public void tick() {
 +        // Inkwell start - entity TTL
 +        if (type != EntityType.PLAYER && type.ttl >= 0 && this.tickCount >= type.ttl) {
-+            discard();
++            discard(EntityRemoveEvent.Cause.DESPAWN);
 +            return;
 +        }
 +        // Inkwell end - entity TTL

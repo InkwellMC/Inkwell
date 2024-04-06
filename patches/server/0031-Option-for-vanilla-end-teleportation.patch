@@ -22,7 +22,7 @@ index 7fe175c4faf229a45f8254d500814392cb98a9cc..3158d69ece3a4bd3905b53c70b75d3f7
  
      public static Map<String, Integer> projectileTimeouts;
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 325d9e34d77ea29a2cb08a2b8af6acd756d7e4f7..cb7d86f45ec3dc1044cb5163ddb378dddcd33799 100644
+index f09786dbb4c7fd49a714475b694c6e46e4407d5f..2e93f47621498d5d0354be81720b81b6d8d3a707 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -4165,9 +4165,17 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
