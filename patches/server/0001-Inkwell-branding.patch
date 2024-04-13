@@ -17,7 +17,7 @@ index 3811c0d849a3eb028ed1a6b7a2d4747f7f570448..ac9b180b42880097e8236084be454263
 +*.rej
 \ No newline at end of file
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 905262067dabc7cbe5b08639fcefd3a996a937e0..1005aba7cb01f5189a5f599aca72007b90eee0fe 100644
+index 12f9f9d46c098c5c88058cb1f73ae39a7d1debd5..f289023619e0e661496b46a06e107ffa84524ca9 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,12 +13,12 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -45,15 +45,6 @@ index 905262067dabc7cbe5b08639fcefd3a996a937e0..1005aba7cb01f5189a5f599aca72007b
              "Implementation-Vendor" to date, // Paper
              "Specification-Title" to "Bukkit",
              "Specification-Version" to project.version,
-@@ -215,7 +215,5 @@ val runtimeClasspathForRunDev = sourceSets.main.flatMap { src ->
- }
- tasks.registerRunTask("runDev") {
-     description = "Spin up a non-relocated Mojang-mapped test server"
--    classpath(tasks.filterProjectDir.flatMap { it.outputJar })
--    classpath(runtimeClasspathForRunDev)
--    jvmArgs("-DPaper.isRunDev=true")
-+    classpath(sourceSets.main.map { it.runtimeClasspath })
- }
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
 index cb60d58d4a7556dd896f31d0cd249f860bb3ef84..53f78093caa84d3d06359c5367807f890cdc5996 100644
 --- a/src/main/java/com/destroystokyo/paper/Metrics.java
@@ -82,7 +73,7 @@ index cb60d58d4a7556dd896f31d0cd249f860bb3ef84..53f78093caa84d3d06359c5367807f89
                  metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
                      Map<String, Map<String, Integer>> map = new HashMap<>();
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index d6a7188227cee9072976db98613324ee2d3dcdc8..538fb08df6bf9571c21fc167b0c152fe67ed1cb7 100644
+index 453bb595d31c6dea1cfb135f43ffe71e4ae44112..b18e2d8120d97d47631fdcda5095495fefa1733b 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1963,7 +1963,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa

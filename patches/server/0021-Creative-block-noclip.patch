@@ -5,7 +5,7 @@ Subject: [PATCH] Creative block noclip
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index e91ccde21411c7ac5da3383915758b3fe014b9b7..c51cc66ad291d6327a1bafdf53e05cc9e5d1984d 100644
+index e4944bf04d95e34676bb7ddfe80c057ee987e3f1..ff81bb904ba8079543f4c81fd55e2c54948da2c8 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -255,4 +255,9 @@ public class InkwellConfig {
@@ -149,7 +149,7 @@ index 1955b660907c5d6b5ca4bf7741f8d568b9255347..bed01f490c6f61e202656a544af313b4
          entity.move(MoverType.PISTON, new Vec3(distance * (double)movementDirection.getStepX(), distance * (double)movementDirection.getStepY(), distance * (double)movementDirection.getStepZ()));
          NOCLIP.set((Direction)null);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index d2902fc7f3b7af59f181bd1e12435d946db7ad23..10bc232be6272718ff069566be7208d4ff73a1b8 100644
+index b0a70287ff1fc9b3d5eba322d949aaf510b165d2..11b765c640c19f17631c829aae751acc10883501 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -161,7 +161,6 @@ import org.bukkit.event.player.PlayerExpCooldownChangeEvent;
@@ -160,7 +160,7 @@ index d2902fc7f3b7af59f181bd1e12435d946db7ad23..10bc232be6272718ff069566be7208d4
  import org.bukkit.event.player.PlayerTeleportEvent;
  import org.bukkit.event.player.PlayerUnregisterChannelEvent;
  import org.bukkit.inventory.EquipmentSlot;
-@@ -3439,4 +3438,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -3437,4 +3436,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      public void setSendViewDistance(final int viewDistance) {
          this.getHandle().setSendViewDistance(viewDistance);
      }

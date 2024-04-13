@@ -5,10 +5,10 @@ Subject: [PATCH] Move tnt duplication to world config
 
 
 diff --git a/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java b/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
-index 6f44ba7d4f8a4b12c0d5792b1fd2f4b53cbd334d..da5d7d6035cb63aac263c6b170e9c8a7b8b34754 100644
+index 59aad39f2381d9cc72aa0bb0a2b86e4d06994c09..32ba38aa9ae2592518cbf38b0c8259a4c52d4055 100644
 --- a/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
 +++ b/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
-@@ -176,8 +176,6 @@ public class GlobalConfiguration extends ConfigurationPart {
+@@ -178,8 +178,6 @@ public class GlobalConfiguration extends ConfigurationPart {
          public boolean allowUnsafeEndPortalTeleportation = false;
          @Comment("This setting controls if players should be able to break bedrock, end portals and other intended to be permanent blocks.")
          public boolean allowPermanentBlockBreakExploits = false;

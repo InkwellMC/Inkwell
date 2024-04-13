@@ -5,7 +5,7 @@ Subject: [PATCH] Dynamic activation brain
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 558e89d32f41ac53fce17d77750c860e8587fd39..efa7a01cd89ca1623bfed666369a0cc7b79e6e93 100644
+index d34f0f7010b10bf29853481b3e696bf3e8b8f747..8c3ce568fe0aebcc98fe2c7b883892df8e25cc64 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -4,8 +4,12 @@ import java.io.File;
@@ -55,7 +55,7 @@ index 558e89d32f41ac53fce17d77750c860e8587fd39..efa7a01cd89ca1623bfed666369a0cc7
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 0820a8d44a6ea1d213dd7f482d9f884f48e016d8..cd39aaa29907693a09f6f49b8f68994cb6a81982 100644
+index 9cec4e1758194778aa71d3509f89e52fd490b3a1..4153838c4ed1f54a09af0642ba94de5ef3464544 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -987,6 +987,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
@@ -67,7 +67,7 @@ index 0820a8d44a6ea1d213dd7f482d9f884f48e016d8..cd39aaa29907693a09f6f49b8f68994c
                      if (false && this.shouldDiscardEntity(entity)) { // CraftBukkit - We prevent spawning in general, so this butchering is not needed
                          entity.discard();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 5a532d27f2789bcaae774c7a8776c457da9c0ece..3230ebf89347715bc1ab1057eeec7bbf49604dbd 100644
+index e8ca99adf8271c7dc3462a89226a3f44cfd4d126..680b512a0aae46c63a76b1ba07e9b2fa2c97f9f8 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -481,6 +481,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
@@ -303,10 +303,10 @@ index 3eeff0cd8563939c656b5ded8470cab016903f25..b6024ce5eedc638beaec1ec6e15230ee
          if (this.assignProfessionWhenSpawned) {
              this.assignProfessionWhenSpawned = false;
 diff --git a/src/main/java/org/spigotmc/ActivationRange.java b/src/main/java/org/spigotmc/ActivationRange.java
-index f8718d91f4c15c74d6e6dd5f60f7f05f45f63655..d2985e07aef897fb2d7bdfca059905a63e5b7d62 100644
+index 4fc4690d03fd5f39e019f16845954052210c7361..87030547db507ef4b25a15b70169de25b48ab950 100644
 --- a/src/main/java/org/spigotmc/ActivationRange.java
 +++ b/src/main/java/org/spigotmc/ActivationRange.java
-@@ -230,6 +230,24 @@ public class ActivationRange
+@@ -232,6 +232,24 @@ public class ActivationRange
                  }
                  // Paper end - Configurable marker ticking
                  ActivationRange.activateEntity(entity, bbByType); // Folia - threaded regions

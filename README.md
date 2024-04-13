@@ -29,7 +29,7 @@ java {
 ```xml
 <repository>
   <id>inkwellmc</id>
-  <url>https://repo.bambooland.fun/maven-public</url>
+  <url>https://repo.bambooland.fun/maven-public/</url>
 </repository>
 ```
 ```xml

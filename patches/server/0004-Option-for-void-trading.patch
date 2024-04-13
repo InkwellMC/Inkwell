@@ -5,7 +5,7 @@ Subject: [PATCH] Option for void trading
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 3b8ded27552248210716db2617a28792775a89d8..07a82e4944e711f64b364c1cb7e773eb04d32e32 100644
+index e0449dd7155b44ba1e249aadeb8eda0c7d7fdc3c..35bc5f42ac7d7c378d82b4a872061fea5496714f 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -129,4 +129,9 @@ public class InkwellConfig {
@@ -20,10 +20,10 @@ index 3b8ded27552248210716db2617a28792775a89d8..07a82e4944e711f64b364c1cb7e773eb
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 81749b8da7182abd1bf35629f33388e813dbeac0..0820a8d44a6ea1d213dd7f482d9f884f48e016d8 100644
+index 36f1af9ef5fca7c45f250470d21a4dfbf573ceac..9cec4e1758194778aa71d3509f89e52fd490b3a1 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -3045,7 +3045,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -3058,7 +3058,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
              // Spigot Start
              if (entity.getBukkitEntity() instanceof org.bukkit.inventory.InventoryHolder && (!(entity instanceof ServerPlayer) || entity.getRemovalReason() != Entity.RemovalReason.KILLED)) { // SPIGOT-6876: closeInventory clears death message
                  // Paper start - Fix merchant inventory not closing on entity removal
