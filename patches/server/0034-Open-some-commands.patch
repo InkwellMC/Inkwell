@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Wed, 29 May 2024 14:00:50 +0300
+Subject: [PATCH] Open-some-commands
+
+
+diff --git a/src/main/java/net/minecraft/commands/Commands.java b/src/main/java/net/minecraft/commands/Commands.java
+index 4f25b35a037e6c697e5e345f38b94a8e4b436ad7..83c503ffee1a412b0da7730b9bcedd8c58a4d0ef 100644
+--- a/src/main/java/net/minecraft/commands/Commands.java
++++ b/src/main/java/net/minecraft/commands/Commands.java
+@@ -163,7 +163,7 @@ public class Commands {
+         ClearInventoryCommands.register(this.dispatcher, commandRegistryAccess);
+         //CloneCommands.register(this.dispatcher, commandRegistryAccess); // Folia - region threading - TODO
+         DamageCommand.register(this.dispatcher, commandRegistryAccess);
+-        //DataCommands.register(this.dispatcher); // Folia - region threading - TODO
++        DataCommands.register(this.dispatcher); // Inkwell
+         //DataPackCommand.register(this.dispatcher); // Folia - region threading - TODO
+         //DebugCommand.register(this.dispatcher); // Folia - region threading - TODO
+         DefaultGameModeCommands.register(this.dispatcher);
+@@ -194,7 +194,7 @@ public class Commands {
+         //ReloadCommand.register(this.dispatcher); // Folia - region threading
+         RecipeCommand.register(this.dispatcher);
+         //ReturnCommand.register(this.dispatcher); // Folia - region threading - TODO later
+-        //RideCommand.register(this.dispatcher); // Folia - region threading - TODO later
++        RideCommand.register(this.dispatcher); // Inkwell
+         SayCommand.register(this.dispatcher);
+         //ScheduleCommand.register(this.dispatcher); // Folia - region threading
+         //ScoreboardCommand.register(this.dispatcher); // Folia - region threading - TODO later

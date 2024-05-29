@@ -5,24 +5,24 @@ Subject: [PATCH] Option for vanilla end teleportation
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 7fe175c4faf229a45f8254d500814392cb98a9cc..3158d69ece3a4bd3905b53c70b75d3f76d681473 100644
+index 3b4f5290ea5e57c229982d98ef22ce1cd6d0d5ec..16c06f8b5f4e639c2da76d4ef06fe0cf0519e1b9 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -245,10 +245,12 @@ public class InkwellConfig {
      public static boolean disableOutOfOrderChat;
      public static int pistonPushLimit;
      public static boolean snowballKnockbackPlayer;
-+    public static boolean useVanillaEndTeleportation = false;
++    public static boolean useVanillaEndTeleportation;
      private static void miscSettings() {
          disableOutOfOrderChat = getBoolean("misc.disable-out-of-order-chat", true);
          pistonPushLimit = getInt("misc.piston-push-limit", 12, "The number of blocks the piston can move. The default is 12.");
          snowballKnockbackPlayer = getBoolean("misc.snowball-knockback-player", false, "Value defines can snowball kockback player");
-+        useVanillaEndTeleportation = getBoolean("misc.vanilla-end-teleportation", useVanillaEndTeleportation, "This can fix wither platform obsidian farm");
++        useVanillaEndTeleportation = getBoolean("misc.vanilla-end-teleportation", false, "This can fix wither platform obsidian farm");
      }
  
      public static Map<String, Integer> projectileTimeouts;
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index f09786dbb4c7fd49a714475b694c6e46e4407d5f..2e93f47621498d5d0354be81720b81b6d8d3a707 100644
+index 0d9e10e8fff3e1e9f921258b577ebf65fd26bdfe..5ca3de133d66eb18ce167d2ea2cdd35250edd395 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -4165,9 +4165,17 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
