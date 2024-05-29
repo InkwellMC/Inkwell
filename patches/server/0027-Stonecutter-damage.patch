@@ -5,7 +5,7 @@ Subject: [PATCH] Stonecutter damage
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index f2267e63de351107f318a72a6e7e82b465fc247d..536f6d01764940918613ddfb5c2af05f1fdcabb5 100644
+index aa994c32be5faa2806825f31b8c253d8189993a2..2e9d24261ac3b0f881f44f09f60e11c3268acc4e 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -291,4 +291,14 @@ public class InkwellConfig {
@@ -25,7 +25,7 @@ index f2267e63de351107f318a72a6e7e82b465fc247d..536f6d01764940918613ddfb5c2af05f
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 6b6137f7bd4750275baa64c1f22b852da47697ac..899d4feaec5a9ddf3bae78a39687f49f91cd1af7 100644
+index 8662f7e9dd8a19d48d90f270c74280129bb6b1f9..006ab76249ceeadab1395cf85e4d95986713941c 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -2320,6 +2320,24 @@ public class ServerPlayer extends Player {
@@ -78,10 +78,10 @@ index 90be312057221a5a78066d89783c5e22008d797d..f942dbbc1724d2911ee30a009a4bcfbd
          Iterator iterator = this.players.iterator();
  
 diff --git a/src/main/java/net/minecraft/world/damagesource/CombatTracker.java b/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
-index d02bc26812321745795d2f0bc3705addd0be912d..ee3ec5641172d7d0cdd79189bf9b34f3f6034cb3 100644
+index c92063c527aef85c932453d4761fd1955542dd98..fbc4c958a875c0ba1466a340de0911883499f6e9 100644
 --- a/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
 +++ b/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
-@@ -99,6 +99,9 @@ public class CombatTracker {
+@@ -97,6 +97,9 @@ public class CombatTracker {
                  Component component = ComponentUtils.wrapInSquareBrackets(Component.translatable(string + ".link")).withStyle(INTENTIONAL_GAME_DESIGN_STYLE);
                  return Component.translatable(string + ".message", this.mob.getDisplayName(), component);
              } else {
@@ -138,7 +138,7 @@ index a47473c9875c70c52b9a61e0156e55961f34c694..6d89bd484cc3b81bb02afd18ee121c31
 +    // Inkwell end
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 14c63f5abc0e6d3a833061a165d3bcad0fbfb7fa..f09786dbb4c7fd49a714475b694c6e46e4407d5f 100644
+index 2628c00fd402916656eaf2d58a83057f31408d7d..0d9e10e8fff3e1e9f921258b577ebf65fd26bdfe 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -4941,6 +4941,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
@@ -162,7 +162,7 @@ index 14c63f5abc0e6d3a833061a165d3bcad0fbfb7fa..f09786dbb4c7fd49a714475b694c6e46
      public void sendSystemMessage(Component message) {}
  
 diff --git a/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java b/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
-index 77ae7b8ab24935d046cce1f8f7f476310876f9df..b14e694422e1c4974c7a99f9a8df5f97cfc2e785 100644
+index 7c41b940dd915a27856f6fa6f9e536e296deeb53..20bb7262fbbc4bf89a62d06c8da6f1b676d2c3e5 100644
 --- a/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/StonecutterBlock.java
 @@ -99,4 +99,16 @@ public class StonecutterBlock extends Block {
@@ -183,10 +183,10 @@ index 77ae7b8ab24935d046cce1f8f7f476310876f9df..b14e694422e1c4974c7a99f9a8df5f97
 +    // Inkwell end
  }
 diff --git a/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java b/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-index 70c7c735fdd0c1b66243915622e47eab8a57e7cc..d64fa8a3d90e205e7dda02805aca10b5d333e8f0 100644
+index 1cd7f0f1c7d62552e6609997c83f3df8dae13316..b030e5dabce21320bf9c4f6fabbdb8fa84866f49 100644
 --- a/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
 +++ b/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-@@ -471,7 +471,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
+@@ -475,7 +475,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
                              return BlockPathTypes.BLOCKED;
                          } else {
                          // Paper end - Do not load chunks during pathfinding
@@ -195,12 +195,12 @@ index 70c7c735fdd0c1b66243915622e47eab8a57e7cc..d64fa8a3d90e205e7dda02805aca10b5
                              return BlockPathTypes.DANGER_OTHER;
                          }
  
-@@ -504,7 +504,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
-         } else if (!blockState.is(BlockTags.TRAPDOORS) && !blockState.is(Blocks.LILY_PAD) && !blockState.is(Blocks.BIG_DRIPLEAF)) {
-             if (blockState.is(Blocks.POWDER_SNOW)) {
-                 return BlockPathTypes.POWDER_SNOW;
--            } else if (!blockState.is(Blocks.CACTUS) && !blockState.is(Blocks.SWEET_BERRY_BUSH)) {
-+            } else if (!blockState.is(Blocks.CACTUS) && !blockState.is(Blocks.SWEET_BERRY_BUSH) && !blockState.is(Blocks.STONECUTTER)) { // Inkwell
-                 if (blockState.is(Blocks.HONEY_BLOCK)) {
-                     return BlockPathTypes.STICKY_HONEY;
-                 } else if (blockState.is(Blocks.COCOA)) {
+@@ -509,7 +509,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
+             return BlockPathTypes.TRAPDOOR;
+         } else if (blockState.is(Blocks.POWDER_SNOW)) {
+             return BlockPathTypes.POWDER_SNOW;
+-        } else if (blockState.is(Blocks.CACTUS) || blockState.is(Blocks.SWEET_BERRY_BUSH)) {
++        } else if (blockState.is(Blocks.CACTUS) || blockState.is(Blocks.SWEET_BERRY_BUSH) || blockState.is(Blocks.STONECUTTER)) { // Inkwell
+             return BlockPathTypes.DAMAGE_OTHER;
+         } else if (blockState.is(Blocks.HONEY_BLOCK)) {
+             return BlockPathTypes.STICKY_HONEY;

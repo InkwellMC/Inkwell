@@ -5,7 +5,7 @@ Subject: [PATCH] Move tnt duplication to world config
 
 
 diff --git a/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java b/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
-index 59aad39f2381d9cc72aa0bb0a2b86e4d06994c09..32ba38aa9ae2592518cbf38b0c8259a4c52d4055 100644
+index e45e2303ac69ce3a158bebb52bc8cbd96ceb3f71..1eacbbb22027342956b63ff6595bf8a2987ae9e3 100644
 --- a/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
 +++ b/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
 @@ -178,8 +178,6 @@ public class GlobalConfiguration extends ConfigurationPart {
@@ -18,10 +18,10 @@ index 59aad39f2381d9cc72aa0bb0a2b86e4d06994c09..32ba38aa9ae2592518cbf38b0c8259a4
          @Comment("This setting controls if players should be able to create headless pistons.")
          public boolean allowHeadlessPistons = false;
 diff --git a/src/main/java/io/papermc/paper/configuration/WorldConfiguration.java b/src/main/java/io/papermc/paper/configuration/WorldConfiguration.java
-index 805080704cf5280c7d97e5e510c547c5e0d0f120..f19bdb86b202549e271795230beaee51f023337c 100644
+index 17b538ee7591a75a5fc7e797c73e7730652fed69..5b365c452d388d088f09abee8ff285ea72d995d4 100644
 --- a/src/main/java/io/papermc/paper/configuration/WorldConfiguration.java
 +++ b/src/main/java/io/papermc/paper/configuration/WorldConfiguration.java
-@@ -450,6 +450,7 @@ public class WorldConfiguration extends ConfigurationPart {
+@@ -451,6 +451,7 @@ public class WorldConfiguration extends ConfigurationPart {
      public class UnsupportedSettings extends ConfigurationPart {
          public boolean fixInvulnerableEndCrystalExploit = true;
          public boolean disableWorldTickingWhenEmpty = false;
@@ -43,10 +43,10 @@ index 363a712d6b9e717b075aa52643c6cf91497e7c3b..1a0eb797c47b5ab9558c3b7d7edc9e68
                  iblockdata1 = allowDesync ? world.getBlockState(oldPos) : null;
                  // Paper end - fix a variety of piston desync dupes
 diff --git a/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java b/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
-index bed01f490c6f61e202656a544af313b405f66ffe..41450402ae6953dbda116f4bced4e0e50fa072ac 100644
+index 7b18ec0985482398d95772433b18adc4ddec1c42..5573f2623dc5ea33176a6277f30c504fbc2474eb 100644
 --- a/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
-@@ -299,7 +299,7 @@ public class PistonMovingBlockEntity extends BlockEntity {
+@@ -311,7 +311,7 @@ public class PistonMovingBlockEntity extends BlockEntity {
                  if (world.getBlockState(pos).is(Blocks.MOVING_PISTON)) {
                      BlockState blockState = Block.updateFromNeighbourShapes(blockEntity.movedState, world, pos);
                      if (blockState.isAir()) {

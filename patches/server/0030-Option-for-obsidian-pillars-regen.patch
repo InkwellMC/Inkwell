@@ -5,7 +5,7 @@ Subject: [PATCH] Option for obsidian pillars regen
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 0bc76e6b84b337a287ef0af5625929169017300a..7fe175c4faf229a45f8254d500814392cb98a9cc 100644
+index 1e9c6dd11d284f563fe1415b1b6d464c2e575aae..3b4f5290ea5e57c229982d98ef22ce1cd6d0d5ec 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -181,8 +181,10 @@ public class InkwellConfig {
@@ -20,10 +20,10 @@ index 0bc76e6b84b337a287ef0af5625929169017300a..7fe175c4faf229a45f8254d500814392
  
      public static boolean creeperAllowGriefing;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/SpikeFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/SpikeFeature.java
-index 3b36caafde83c87c823277e2085ee82ae497b9be..4b4f976834c97fe5dab5ca18ddd00d0c32ae3397 100644
+index 260c3a7dc592fba220ad4a7febb43ee2c9279115..91d7a7ab016b1fc1d7c43c1dca68502772d4909f 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/SpikeFeature.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/SpikeFeature.java
-@@ -39,7 +39,7 @@ public class SpikeFeature extends Feature<SpikeConfiguration> {
+@@ -41,7 +41,7 @@ public class SpikeFeature extends Feature<SpikeConfiguration> {
      public static List<SpikeFeature.EndSpike> getSpikesForLevel(WorldGenLevel world) {
          RandomSource randomSource = RandomSource.create(world.getSeed());
          long l = randomSource.nextLong() & 65535L;

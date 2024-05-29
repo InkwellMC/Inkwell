@@ -67,7 +67,7 @@ index 9cec4e1758194778aa71d3509f89e52fd490b3a1..4153838c4ed1f54a09af0642ba94de5e
                      if (false && this.shouldDiscardEntity(entity)) { // CraftBukkit - We prevent spawning in general, so this butchering is not needed
                          entity.discard();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index e8ca99adf8271c7dc3462a89226a3f44cfd4d126..680b512a0aae46c63a76b1ba07e9b2fa2c97f9f8 100644
+index 5e237018217bc6bae32915925457fa337f30c60b..b0c383dff4fe4287f795ab930f23d71dc78d993e 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -481,6 +481,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
@@ -95,7 +95,7 @@ index f921c159c4f7556daf3c8405241de3607ba251ad..51a987256b254fa18b354ae0a014b67b
      private String descriptionId;
      @Nullable
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 54297b9dde40fe853d873d60373cd8c0a3c9466b..14854451371a6b5a3cc9383d2ea24bd3b5b86204 100644
+index 3228d15fc21fec08e8683f96c829935a1de6cf45..bbffc7f63d69bc9c562807c4c9ee1bcff0ebdfd9 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
 @@ -234,10 +234,10 @@ public abstract class Mob extends LivingEntity implements Targeting {
@@ -133,10 +133,10 @@ index 54297b9dde40fe853d873d60373cd8c0a3c9466b..14854451371a6b5a3cc9383d2ea24bd3
              this.level().getProfiler().pop();
          }
 diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java b/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
-index 676f5485a4ca9252e911213dcda8d51776b637b6..040411526f5056c8565cae9160caa81848132e34 100644
+index 38af5c7280366fd6ec077f3d914ea5f3ee77451a..858c70c39a62e17ef491ea9accd2d3931a272662 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
-@@ -53,9 +53,12 @@ public class GoalSelector {
+@@ -52,9 +52,12 @@ public class GoalSelector {
      }
  
      // Paper start
@@ -184,11 +184,11 @@ index b21e180641d17438997a80e5bcb0ec7998d24a2e..ccef3f569a7780f0e4ceaa3c364d5365
          this.level().getProfiler().pop();
          this.level().getProfiler().push("axolotlActivityUpdate");
 diff --git a/src/main/java/net/minecraft/world/entity/animal/frog/Frog.java b/src/main/java/net/minecraft/world/entity/animal/frog/Frog.java
-index 295769d039f2a1e4f48912a60f9dbe267d8992c1..7832f3e540bed2128fe6e997f91ab99c77cc9656 100644
+index a03fb7aa9f4528f4885db88eaf480202d5f54750..d75bd2440b27004cd40105018c96406306e900d9 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/frog/Frog.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/frog/Frog.java
-@@ -159,9 +159,11 @@ public class Frog extends Animal implements VariantHolder<FrogVariant> {
- 
+@@ -183,9 +183,11 @@ public class Frog extends Animal implements VariantHolder<FrogVariant> {
+         }
      }
  
 +    private int behaviorTick = 0; // Inkwell
@@ -232,11 +232,11 @@ index 5d247ac38fe8a61603b3d934f3000bcda773142b..c032708306fe0fcc187d1db3465fc13d
          this.level().getProfiler().pop();
          this.level().getProfiler().push("goatActivityUpdate");
 diff --git a/src/main/java/net/minecraft/world/entity/monster/hoglin/Hoglin.java b/src/main/java/net/minecraft/world/entity/monster/hoglin/Hoglin.java
-index 01a2016ac82807d28ffe407b7dbb74bdbcde503e..16aeb9bfe715b3095618390a10caf5071468c789 100644
+index 050ffa4a23feba29fdf4c6a175cdff4e5009027d..65b019b1e951f20056bb498a8e812c3d4764f89f 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/hoglin/Hoglin.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/hoglin/Hoglin.java
-@@ -128,9 +128,11 @@ public class Hoglin extends Animal implements Enemy, HoglinBase {
-         return (Brain<Hoglin>) super.getBrain(); // Paper - decompile fix
+@@ -155,9 +155,11 @@ public class Hoglin extends Animal implements Enemy, HoglinBase {
+         return (Brain<Hoglin>)super.getBrain();
      }
  
 +    private int behaviorTick = 0; // Inkwell
