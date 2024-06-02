@@ -52,7 +52,7 @@ index a8ab5ffc669b765164e2509e0f9d580c719a85a0..f00db9319b2ce7291309d042aeb305f3
 \ No newline at end of file
 diff --git a/src/main/java/io/inkwellmc/inkwell/abilities/MobFlames.java b/src/main/java/io/inkwellmc/inkwell/abilities/MobFlames.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..9dc2490913543eb6a003c9f8dd4daa083b549056
+index 0000000000000000000000000000000000000000..9771fbde837225cd7737b5a1736545109d75ee54
 --- /dev/null
 +++ b/src/main/java/io/inkwellmc/inkwell/abilities/MobFlames.java
 @@ -0,0 +1,116 @@
@@ -95,7 +95,7 @@ index 0000000000000000000000000000000000000000..9dc2490913543eb6a003c9f8dd4daa08
 +        super_tick();
 +        Vec3 mot = this.getDeltaMovement();
 +        HitResult hitResult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
-+        this.preOnHit(hitResult);
++        this.onHit(hitResult);
 +        double x = this.getX() + mot.x;
 +        double y = this.getY() + mot.y;
 +        double z = this.getZ() + mot.z;
@@ -138,7 +138,7 @@ index 0000000000000000000000000000000000000000..9dc2490913543eb6a003c9f8dd4daa08
 +            if (canGrief || (target instanceof LivingEntity && !(target instanceof ArmorStand))) {
 +                boolean hurt = target.hurt(target.damageSources().mobProjectile(this, (LivingEntity) shooter), InkwellConfig.mobFlameDamage);
 +                if (hurt && InkwellConfig.mobFlameFireTime > 0) {
-+                    target.setSecondsOnFire(InkwellConfig.mobFlameFireTime);
++                    target.setRemainingFireTicks(InkwellConfig.mobFlameFireTime);
 +                }
 +            }
 +        }
