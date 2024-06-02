@@ -5,10 +5,10 @@ Subject: [PATCH] Stonecutter damage
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 545962861e9717590c932f3397c03ce61004c214..0096a61a91af71649c3890bc92995a478d0b0fb2 100644
+index dbf8e054af4225a4dad3e45ffde524398177ebec..5657280f8c92f5745663fecd6140287e45520adc 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -247,4 +247,13 @@ public class InkwellConfig {
+@@ -252,4 +252,13 @@ public class InkwellConfig {
          playerCreativeBlockNoclip = getBoolean("player.creative-block-noclip", false, "Allows noclip blocks in creative");
          spectatorCanGetAdvancement = getBoolean("player.spectator-advancements", true, "Value defines spectator can get advancements");
      }
@@ -24,7 +24,7 @@ index 545962861e9717590c932f3397c03ce61004c214..0096a61a91af71649c3890bc92995a47
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 8ab5ec90007bf00588d665a9afd0110c5558601d..4bbd556071d4e3222570d28ac6707f4e62e2a4de 100644
+index c0d2a5103250c24916bd02e43ab22d27944a089e..a44c5acdd7f218e379a43378616c21b972c5b9d0 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -2414,6 +2414,24 @@ public class ServerPlayer extends Player {

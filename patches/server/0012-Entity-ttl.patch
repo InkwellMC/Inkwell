@@ -5,10 +5,22 @@ Subject: [PATCH] Entity ttl
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 043063f8939060cae92c9b3fa8cc986f3bdb9671..e75006a53f8257d8d5109361380ab9f2592651fd 100644
+index 043063f8939060cae92c9b3fa8cc986f3bdb9671..98f0af8a6c5fb1dc71a14cb9b777513bd2d4f13f 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -184,4 +184,20 @@ public class InkwellConfig {
+@@ -5,7 +5,11 @@ import java.io.IOException;
+ import java.lang.reflect.Method;
+ import java.lang.reflect.Modifier;
+ import java.util.List;
++import java.util.Locale;
++
++import net.minecraft.core.registries.BuiltInRegistries;
+ import net.minecraft.server.MinecraftServer;
++import net.minecraft.world.entity.EntityType;
+ import org.bukkit.configuration.ConfigurationSection;
+ import org.bukkit.configuration.MemoryConfiguration;
+ import org.jetbrains.annotations.Nullable;
+@@ -184,4 +188,20 @@ public class InkwellConfig {
      private static void miscSettings() {
          disableOutOfOrderChat = getBoolean("misc.disable-out-of-order-chat", true);
      }

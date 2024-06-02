@@ -5,10 +5,10 @@ Subject: [PATCH] Ghast settings
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 1e8fce6e19903164477bef832c628ccf2419700f..8afeb6b9720bbf0a46a57a2f8e77ca56ef23791f 100644
+index 6a2a7b0e09717989e7e4d8d5e9892a5b9f38b85c..d27d91577bfb5c020c377f70c41fffb684748a9c 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -191,6 +191,19 @@ public class InkwellConfig {
+@@ -196,6 +196,19 @@ public class InkwellConfig {
          endermanAllowGriefing = getBoolean("entity.enderman.allow-griefing", true);
      }
  

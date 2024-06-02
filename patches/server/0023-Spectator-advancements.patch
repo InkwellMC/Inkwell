@@ -5,10 +5,10 @@ Subject: [PATCH] Spectator advancements
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 3c02ba25dc8ecc9c64576282272264c40f5aebeb..e42f4bee13a68d3e9460dd938ce5b80af51c6044 100644
+index 318648eb7fce2687e5b7af5a8d586ac9e9017efd..d23a2419144f690e1e5e63f677083ef273439a96 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -237,7 +237,9 @@ public class InkwellConfig {
+@@ -242,7 +242,9 @@ public class InkwellConfig {
      }
  
      public static boolean playerCreativeBlockNoclip;

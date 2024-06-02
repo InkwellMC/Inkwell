@@ -5,10 +5,10 @@ Subject: [PATCH] Villager lobotomize
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 0fd70a9ed7f82220b1dd917c97a36e612854b511..2fc4419f3501bc3b4ec3929e99029f99d5b43f72 100644
+index 8efb0d5042f4ae0b940daeb250f99d5844f4f7d0..ce52e5f41d892e5b7605411bb55ab11319f7e683 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -141,12 +141,23 @@ public class InkwellConfig {
+@@ -146,12 +146,23 @@ public class InkwellConfig {
      }
  
      public static boolean allowVoidTrading;

@@ -5,10 +5,18 @@ Subject: [PATCH] Reduce projectile chunk loading
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index e75006a53f8257d8d5109361380ab9f2592651fd..85829a7f6e502c30d09168626fbe5dc1b3204712 100644
+index 98f0af8a6c5fb1dc71a14cb9b777513bd2d4f13f..3929392b71cab51ccedf60b95caa90d515e21ceb 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -200,4 +200,12 @@ public class InkwellConfig {
+@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
+ import java.lang.reflect.Modifier;
+ import java.util.List;
+ import java.util.Locale;
++import java.util.Map;
+ 
+ import net.minecraft.core.registries.BuiltInRegistries;
+ import net.minecraft.server.MinecraftServer;
+@@ -204,4 +205,12 @@ public class InkwellConfig {
          		entityType.ttl = config.getInt("entity_timeouts." + type, -1);
          }
      }

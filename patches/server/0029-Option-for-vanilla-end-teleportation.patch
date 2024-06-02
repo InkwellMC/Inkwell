@@ -5,10 +5,10 @@ Subject: [PATCH] Option for vanilla end teleportation
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 427edf335238698dbf9bf931219eac401a1ac1a6..1e8fce6e19903164477bef832c628ccf2419700f 100644
+index 4e9f9c8ff81473ae4c06075a3f377ff8a2f7e11a..6a2a7b0e09717989e7e4d8d5e9892a5b9f38b85c 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -212,10 +212,12 @@ public class InkwellConfig {
+@@ -217,10 +217,12 @@ public class InkwellConfig {
      public static boolean disableOutOfOrderChat;
      public static int pistonPushLimit;
      public static boolean snowballKnockbackPlayer;

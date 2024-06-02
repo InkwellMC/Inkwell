@@ -22,10 +22,10 @@ index 53f78093caa84d3d06359c5367807f890cdc5996..9308e1b07821245677a355b74ce7fcfd
  
          }
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index bdaa0394929efb03c40e55e36fd5b0801dff3831..2323ff847b2ab2b0c7f325d6682a6f2c8abf6b16 100644
+index a8ab5ffc669b765164e2509e0f9d580c719a85a0..f00db9319b2ce7291309d042aeb305f3cfdc21dd 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -17,6 +17,7 @@ public class InkwellConfig {
+@@ -22,6 +22,7 @@ public class InkwellConfig {
  
      private static final YamlFile config = new YamlFile();
      private static int updates = 0;
@@ -33,7 +33,7 @@ index bdaa0394929efb03c40e55e36fd5b0801dff3831..2323ff847b2ab2b0c7f325d6682a6f2c
  
      private static ConfigurationSection convertToBukkit(org.simpleyaml.configuration.ConfigurationSection section) {
          ConfigurationSection newSection = new MemoryConfiguration();
-@@ -210,4 +211,15 @@ public class InkwellConfig {
+@@ -215,4 +216,15 @@ public class InkwellConfig {
          maxProjectileLoadsPerProjectile = getInt("projectile.max-loads-per-projectile", 10, "Controls how many chunks a projectile", "can load in its lifetime before it gets", "automatically removed.");
          setComment("projectile", "Optimizes projectile settings");
      }

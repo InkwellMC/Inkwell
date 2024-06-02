@@ -5,10 +5,10 @@ Subject: [PATCH] Creative block noclip
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 2323ff847b2ab2b0c7f325d6682a6f2c8abf6b16..0fd70a9ed7f82220b1dd917c97a36e612854b511 100644
+index f00db9319b2ce7291309d042aeb305f3cfdc21dd..8efb0d5042f4ae0b940daeb250f99d5844f4f7d0 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -222,4 +222,9 @@ public class InkwellConfig {
+@@ -227,4 +227,9 @@ public class InkwellConfig {
          mobFlamesLiveTime = getInt("mobs.flames.live-time", 160);
          mobFlameAllowGriefing = getBoolean("mobs.flames.allow-griefing", true);
      }

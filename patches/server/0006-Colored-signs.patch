@@ -20,14 +20,14 @@ index 60af32f5b04d5caa2a06822a4e16bb458aff7cda..3c7e49d566a47241a649addbd80971e4
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 95b72e49469554983e07205b0bd462eec6c9fd86..8ab5ec90007bf00588d665a9afd0110c5558601d 100644
+index 95b72e49469554983e07205b0bd462eec6c9fd86..c0d2a5103250c24916bd02e43ab22d27944a089e 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -2079,6 +2079,7 @@ public class ServerPlayer extends Player {
  
      @Override
      public void openTextEdit(SignBlockEntity sign, boolean front) {
-+        if (io.inkwellmc.inkwell.InkwellConfig.allowSignColors) this.connection.send(sign.getTranslatedUpdatePacket(textFilteringEnabled, front)); // Inkwell
++        if (io.inkwellmc.inkwell.InkwellConfig.allowSignColors) this.connection.send(sign.getTranslatedUpdatePacket(textFilteringEnabled, front, registryAccess())); // Inkwell
          this.connection.send(new ClientboundBlockUpdatePacket(this.level(), sign.getBlockPos()));
          this.connection.send(new ClientboundOpenSignEditorPacket(sign.getBlockPos(), front));
      }
