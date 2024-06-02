@@ -5,10 +5,10 @@ Subject: [PATCH] Spectator advancements
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 9d4c5fb5c50860942ef0e0646d476123bfd73cab..b342ece0dfa67bc165693adf05cf8f07d83012cb 100644
+index 3c02ba25dc8ecc9c64576282272264c40f5aebeb..e42f4bee13a68d3e9460dd938ce5b80af51c6044 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -270,7 +270,9 @@ public class InkwellConfig {
+@@ -237,7 +237,9 @@ public class InkwellConfig {
      }
  
      public static boolean playerCreativeBlockNoclip;
@@ -20,7 +20,7 @@ index 9d4c5fb5c50860942ef0e0646d476123bfd73cab..b342ece0dfa67bc165693adf05cf8f07
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/PlayerAdvancements.java b/src/main/java/net/minecraft/server/PlayerAdvancements.java
-index 24e5993b281448734eb67c7a8439a349bbf9fd72..369a75c6a4278576299a623390f29d549b6c2a0d 100644
+index c7e1f2bac3eca9bb72bf1f8c26cccb2905e1ddfc..667434e38ede44a0ae885ae8a9329554d78be0e5 100644
 --- a/src/main/java/net/minecraft/server/PlayerAdvancements.java
 +++ b/src/main/java/net/minecraft/server/PlayerAdvancements.java
 @@ -221,6 +221,12 @@ public class PlayerAdvancements {

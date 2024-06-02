@@ -5,10 +5,10 @@ Subject: [PATCH] Option for piston push limit
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 02fee54a9d6ff8ed2e445373acea880281fa36d4..50b8ab09932233c67cc55b3c80f87c6fd30e0ac5 100644
+index 85829a7f6e502c30d09168626fbe5dc1b3204712..bdaa0394929efb03c40e55e36fd5b0801dff3831 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -214,8 +214,10 @@ public class InkwellConfig {
+@@ -181,8 +181,10 @@ public class InkwellConfig {
      }
  
      public static boolean disableOutOfOrderChat;

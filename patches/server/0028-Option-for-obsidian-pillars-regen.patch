@@ -5,10 +5,10 @@ Subject: [PATCH] Option for obsidian pillars regen
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 1e9c6dd11d284f563fe1415b1b6d464c2e575aae..3b4f5290ea5e57c229982d98ef22ce1cd6d0d5ec 100644
+index 899000b1d12acb52de57938026670c4326e7bdc1..427edf335238698dbf9bf931219eac401a1ac1a6 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -181,8 +181,10 @@ public class InkwellConfig {
+@@ -175,8 +175,10 @@ public class InkwellConfig {
      }
  
      public static boolean enderdragonAllowGriefing;

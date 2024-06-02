@@ -5,7 +5,7 @@ Subject: [PATCH] Optimize suffocation
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index c6d7ddb389088c812d9d610ca2707990d5524ddc..558e89d32f41ac53fce17d77750c860e8587fd39 100644
+index ca1e1dbb03079e7b0eaa9679b1c866a5e6d82775..d34f0f7010b10bf29853481b3e696bf3e8b8f747 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -132,23 +132,51 @@ public class InkwellConfig {
@@ -67,10 +67,10 @@ index c6d7ddb389088c812d9d610ca2707990d5524ddc..558e89d32f41ac53fce17d77750c860e
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index fdb5ef574c14fafa1af50f4f656763119695f00e..c6226ff54230b3d6a216f0e196913ef2cb55bc21 100644
+index a7c0527dd7a8cc30bb42e7ce1342b3f11862ee81..905269351cfdd6a5f38c3aae65b549c924285757 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -429,7 +429,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -442,7 +442,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
              boolean flag = this instanceof net.minecraft.world.entity.player.Player;
  
              if (!this.level().isClientSide) {
@@ -79,7 +79,7 @@ index fdb5ef574c14fafa1af50f4f656763119695f00e..c6226ff54230b3d6a216f0e196913ef2
                      this.hurt(this.damageSources().inWall(), 1.0F);
                  } else if (flag && !this.level().getWorldBorder().isWithinBounds(this.getBoundingBox())) {
                      double d0 = this.level().getWorldBorder().getDistanceToBorder(this) + this.level().getWorldBorder().getDamageSafeZone();
-@@ -1437,6 +1437,18 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -1450,6 +1450,18 @@ public abstract class LivingEntity extends Entity implements Attackable {
          return this.getHealth() <= 0.0F;
      }
  
@@ -99,10 +99,10 @@ index fdb5ef574c14fafa1af50f4f656763119695f00e..c6226ff54230b3d6a216f0e196913ef2
      public boolean hurt(DamageSource source, float amount) {
          if (this.isInvulnerableTo(source)) {
 diff --git a/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java b/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
-index 12440ee2dccc0a697fb403765f2e1b987ccc0283..d9a600221479560aa6c75add8cec4e594afa5feb 100644
+index 7ddca52f7fe3f289b4b867e134326b1ead1a2aee..fb9b49908dd06230918e16ece75ff447afa9d309 100644
 --- a/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
 +++ b/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
-@@ -151,6 +151,13 @@ public class WitherBoss extends Monster implements PowerableMob, RangedAttackMob
+@@ -154,6 +154,13 @@ public class WitherBoss extends Monster implements PowerableMob, RangedAttackMob
          this.bossEvent.setName(this.getDisplayName());
      }
  

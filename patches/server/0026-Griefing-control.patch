@@ -5,10 +5,10 @@ Subject: [PATCH] Griefing control
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 536f6d01764940918613ddfb5c2af05f1fdcabb5..0bc76e6b84b337a287ef0af5625929169017300a 100644
+index 0096a61a91af71649c3890bc92995a478d0b0fb2..899000b1d12acb52de57938026670c4326e7bdc1 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -185,6 +185,16 @@ public class InkwellConfig {
+@@ -179,6 +179,16 @@ public class InkwellConfig {
          enderdragonAllowGriefing = getBoolean("entity.enderdragon.allow-griefing", true);
      }
  
@@ -26,23 +26,23 @@ index 536f6d01764940918613ddfb5c2af05f1fdcabb5..0bc76e6b84b337a287ef0af562592916
      private static void blockEntity() {
          allowSignColors = getBoolean(
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Creeper.java b/src/main/java/net/minecraft/world/entity/monster/Creeper.java
-index 9657796d08f4a102d9d5ff7685f2a152d1a87fda..829a57d8f29c3aa2cd5c2a3288a1afba1950c606 100644
+index 0ae4ba060b2ce2c79e1235c939f3c1926eb6e33e..3ebe6598fee3b2bea2e4b6ed2de9aaccd6d747cc 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Creeper.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Creeper.java
-@@ -273,7 +273,7 @@ public class Creeper extends Monster implements PowerableMob {
+@@ -271,7 +271,7 @@ public class Creeper extends Monster implements PowerableMob {
              if (!event.isCancelled()) {
              // CraftBukkit end
              this.dead = true;
--            this.level().explode(this, this.getX(), this.getY(), this.getZ(), event.getRadius(), event.getFire(), Level.ExplosionInteraction.MOB); // CraftBukkit
-+            this.level().explode(this, this.getX(), this.getY(), this.getZ(), event.getRadius(), event.getFire(), this.level().getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_MOBGRIEFING) && io.inkwellmc.inkwell.InkwellConfig.creeperAllowGriefing ? Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE); // CraftBukkit // Inkwell
+-            this.level().explode(this, this.getX(), this.getY(), this.getZ(), event.getRadius(), event.getFire(), Level.ExplosionInteraction.MOB); // CraftBukkit // Paper - fix DamageSource API (revert to vanilla, no, just no, don't change this)
++            this.level().explode(this, this.getX(), this.getY(), this.getZ(), event.getRadius(), event.getFire(), io.inkwellmc.inkwell.InkwellConfig.creeperAllowGriefing ? Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE); // CraftBukkit // Paper - fix DamageSource API (revert to vanilla, no, just no, don't change this) // Inkwell
              this.discard(EntityRemoveEvent.Cause.EXPLODE); // CraftBukkit - add Bukkit remove cause
              this.spawnLingeringCloud();
              // CraftBukkit start
 diff --git a/src/main/java/net/minecraft/world/entity/monster/EnderMan.java b/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
-index bb4371bf31de61b9b1c7392d4187e712df671860..7698f4805cd7502cf4b4ecf5a087d8108a991150 100644
+index 6de855d4d74d380a25cb2544c2c9aa01b7737104..a64437e073776cf973caed2e791193946185199f 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/EnderMan.java
-@@ -522,6 +522,7 @@ public class EnderMan extends Monster implements NeutralMob {
+@@ -505,6 +505,7 @@ public class EnderMan extends Monster implements NeutralMob {
  
          @Override
          public boolean canUse() {
@@ -50,7 +50,7 @@ index bb4371bf31de61b9b1c7392d4187e712df671860..7698f4805cd7502cf4b4ecf5a087d810
              return this.enderman.getCarriedBlock() == null ? false : (!this.enderman.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? false : this.enderman.getRandom().nextInt(reducedTickDelay(2000)) == 0);
          }
  
-@@ -567,6 +568,7 @@ public class EnderMan extends Monster implements NeutralMob {
+@@ -550,6 +551,7 @@ public class EnderMan extends Monster implements NeutralMob {
  
          @Override
          public boolean canUse() {

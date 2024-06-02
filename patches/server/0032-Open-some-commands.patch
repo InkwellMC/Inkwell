@@ -5,10 +5,10 @@ Subject: [PATCH] Open-some-commands
 
 
 diff --git a/src/main/java/net/minecraft/commands/Commands.java b/src/main/java/net/minecraft/commands/Commands.java
-index 4f25b35a037e6c697e5e345f38b94a8e4b436ad7..83c503ffee1a412b0da7730b9bcedd8c58a4d0ef 100644
+index 5e5a0fea0612d9d4521f818faf7c9bd77351d379..492cc24280f5578fb60df7b06e3d288e8ac366d3 100644
 --- a/src/main/java/net/minecraft/commands/Commands.java
 +++ b/src/main/java/net/minecraft/commands/Commands.java
-@@ -163,7 +163,7 @@ public class Commands {
+@@ -164,7 +164,7 @@ public class Commands {
          ClearInventoryCommands.register(this.dispatcher, commandRegistryAccess);
          //CloneCommands.register(this.dispatcher, commandRegistryAccess); // Folia - region threading - TODO
          DamageCommand.register(this.dispatcher, commandRegistryAccess);
@@ -17,7 +17,7 @@ index 4f25b35a037e6c697e5e345f38b94a8e4b436ad7..83c503ffee1a412b0da7730b9bcedd8c
          //DataPackCommand.register(this.dispatcher); // Folia - region threading - TODO
          //DebugCommand.register(this.dispatcher); // Folia - region threading - TODO
          DefaultGameModeCommands.register(this.dispatcher);
-@@ -194,7 +194,7 @@ public class Commands {
+@@ -195,7 +195,7 @@ public class Commands {
          //ReloadCommand.register(this.dispatcher); // Folia - region threading
          RecipeCommand.register(this.dispatcher);
          //ReturnCommand.register(this.dispatcher); // Folia - region threading - TODO later
@@ -25,4 +25,4 @@ index 4f25b35a037e6c697e5e345f38b94a8e4b436ad7..83c503ffee1a412b0da7730b9bcedd8c
 +        RideCommand.register(this.dispatcher); // Inkwell
          SayCommand.register(this.dispatcher);
          //ScheduleCommand.register(this.dispatcher); // Folia - region threading
-         //ScoreboardCommand.register(this.dispatcher); // Folia - region threading - TODO later
+         //ScoreboardCommand.register(this.dispatcher, commandRegistryAccess); // Folia - region threading - TODO later

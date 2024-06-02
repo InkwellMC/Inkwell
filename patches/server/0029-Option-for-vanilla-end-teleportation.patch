@@ -5,10 +5,10 @@ Subject: [PATCH] Option for vanilla end teleportation
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 3b4f5290ea5e57c229982d98ef22ce1cd6d0d5ec..16c06f8b5f4e639c2da76d4ef06fe0cf0519e1b9 100644
+index 427edf335238698dbf9bf931219eac401a1ac1a6..1e8fce6e19903164477bef832c628ccf2419700f 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -245,10 +245,12 @@ public class InkwellConfig {
+@@ -212,10 +212,12 @@ public class InkwellConfig {
      public static boolean disableOutOfOrderChat;
      public static int pistonPushLimit;
      public static boolean snowballKnockbackPlayer;
@@ -22,10 +22,10 @@ index 3b4f5290ea5e57c229982d98ef22ce1cd6d0d5ec..16c06f8b5f4e639c2da76d4ef06fe0cf
  
      public static Map<String, Integer> projectileTimeouts;
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 0d9e10e8fff3e1e9f921258b577ebf65fd26bdfe..5ca3de133d66eb18ce167d2ea2cdd35250edd395 100644
+index cc835707ae85ee11846f9c4a9a51e7b294ef69fb..cceaac4ebab8404aedb165cb6fb3def4ddf31527 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -4165,9 +4165,17 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -4207,9 +4207,17 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
  
                              // the portal obsidian is placed at targetPos.y - 2, so if we want to place the entity
                              // on the obsidian, we need to spawn at targetPos.y - 1

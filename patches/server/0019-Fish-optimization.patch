@@ -22,10 +22,10 @@ index 53f78093caa84d3d06359c5367807f890cdc5996..9308e1b07821245677a355b74ce7fcfd
  
          }
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 50b8ab09932233c67cc55b3c80f87c6fd30e0ac5..e4944bf04d95e34676bb7ddfe80c057ee987e3f1 100644
+index bdaa0394929efb03c40e55e36fd5b0801dff3831..2323ff847b2ab2b0c7f325d6682a6f2c8abf6b16 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -23,6 +23,7 @@ public class InkwellConfig {
+@@ -17,6 +17,7 @@ public class InkwellConfig {
  
      private static final YamlFile config = new YamlFile();
      private static int updates = 0;
@@ -33,7 +33,7 @@ index 50b8ab09932233c67cc55b3c80f87c6fd30e0ac5..e4944bf04d95e34676bb7ddfe80c057e
  
      private static ConfigurationSection convertToBukkit(org.simpleyaml.configuration.ConfigurationSection section) {
          ConfigurationSection newSection = new MemoryConfiguration();
-@@ -243,4 +244,15 @@ public class InkwellConfig {
+@@ -210,4 +211,15 @@ public class InkwellConfig {
          maxProjectileLoadsPerProjectile = getInt("projectile.max-loads-per-projectile", 10, "Controls how many chunks a projectile", "can load in its lifetime before it gets", "automatically removed.");
          setComment("projectile", "Optimizes projectile settings");
      }
@@ -174,10 +174,10 @@ index 0000000000000000000000000000000000000000..9dc2490913543eb6a003c9f8dd4daa08
 +}
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/animal/AbstractFish.java b/src/main/java/net/minecraft/world/entity/animal/AbstractFish.java
-index 401cffccd3c6adedcbd3986cd13733772953b31b..c93bbf8f2eaf1af1fbf8f634b5b1da456da3a1c4 100644
+index 3231eaa6af2ddfe4095ff2d650f580ebd4d43aea..ae7a894af25f0a4b884a384637f9ba187343c135 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/AbstractFish.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/AbstractFish.java
-@@ -33,6 +33,7 @@ import net.minecraft.world.phys.Vec3;
+@@ -31,6 +31,7 @@ import net.minecraft.world.phys.Vec3;
  
  public abstract class AbstractFish extends WaterAnimal implements Bucketable {
      private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(AbstractFish.class, EntityDataSerializers.BOOLEAN);
@@ -185,7 +185,7 @@ index 401cffccd3c6adedcbd3986cd13733772953b31b..c93bbf8f2eaf1af1fbf8f634b5b1da45
  
      public AbstractFish(EntityType<? extends AbstractFish> type, Level world) {
          super(type, world);
-@@ -135,9 +136,29 @@ public abstract class AbstractFish extends WaterAnimal implements Bucketable {
+@@ -128,9 +129,29 @@ public abstract class AbstractFish extends WaterAnimal implements Bucketable {
  
      @Override
      protected InteractionResult mobInteract(Player player, InteractionHand hand) {
@@ -215,7 +215,7 @@ index 401cffccd3c6adedcbd3986cd13733772953b31b..c93bbf8f2eaf1af1fbf8f634b5b1da45
      @Override
      public void saveToBucketTag(ItemStack stack) {
          Bucketable.saveDefaultDataToBucketTag(this, stack);
-@@ -178,6 +199,11 @@ public abstract class AbstractFish extends WaterAnimal implements Bucketable {
+@@ -171,6 +192,11 @@ public abstract class AbstractFish extends WaterAnimal implements Bucketable {
  
          @Override
          public void tick() {
@@ -227,7 +227,7 @@ index 401cffccd3c6adedcbd3986cd13733772953b31b..c93bbf8f2eaf1af1fbf8f634b5b1da45
              if (this.fish.isEyeInFluid(FluidTags.WATER)) {
                  this.fish.setDeltaMovement(this.fish.getDeltaMovement().add(0.0, 0.005, 0.0));
              }
-@@ -217,4 +243,17 @@ public abstract class AbstractFish extends WaterAnimal implements Bucketable {
+@@ -210,4 +236,17 @@ public abstract class AbstractFish extends WaterAnimal implements Bucketable {
              return this.fish.canRandomSwim() && super.canUse();
          }
      }
@@ -246,10 +246,10 @@ index 401cffccd3c6adedcbd3986cd13733772953b31b..c93bbf8f2eaf1af1fbf8f634b5b1da45
 +     */
  }
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/LlamaSpit.java b/src/main/java/net/minecraft/world/entity/projectile/LlamaSpit.java
-index 85a0f7b30db57a68133b38f42c17ac6e585fd629..699efb8a2c154d3ddbce1000381e53817d92577b 100644
+index 4ead19577f218dc3bd84260da8968c0fa00d7710..916f9015182c9ba373a33994adaa54e9506b8c64 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/LlamaSpit.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/LlamaSpit.java
-@@ -29,6 +29,12 @@ public class LlamaSpit extends Projectile {
+@@ -30,6 +30,12 @@ public class LlamaSpit extends Projectile {
          this.setPos(owner.getX() - (double) (owner.getBbWidth() + 1.0F) * 0.5D * (double) Mth.sin(owner.yBodyRot * 0.017453292F), owner.getEyeY() - 0.10000000149011612D, owner.getZ() + (double) (owner.getBbWidth() + 1.0F) * 0.5D * (double) Mth.cos(owner.yBodyRot * 0.017453292F));
      }
  
@@ -260,5 +260,5 @@ index 85a0f7b30db57a68133b38f42c17ac6e585fd629..699efb8a2c154d3ddbce1000381e5381
 +    // Inkwell end
 +
      @Override
-     public void tick() {
-         super.tick();
+     protected double getDefaultGravity() {
+         return 0.06D;

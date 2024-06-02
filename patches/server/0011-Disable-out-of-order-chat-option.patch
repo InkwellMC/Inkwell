@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: sub-kek <subbkek@gmail.com>
+Date: Sat, 30 Dec 2023 22:50:50 +0300
+Subject: [PATCH] Disable out of order chat option
+
+
+diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+index d34f0f7010b10bf29853481b3e696bf3e8b8f747..043063f8939060cae92c9b3fa8cc986f3bdb9671 100644
+--- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
++++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
+@@ -179,4 +179,9 @@ public class InkwellConfig {
+                 "Optimizes the suffocation check by selectively skipping"
+         );
+     }
++
++    public static boolean disableOutOfOrderChat;
++    private static void miscSettings() {
++        disableOutOfOrderChat = getBoolean("misc.disable-out-of-order-chat", true);
++    }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/chat/SignedMessageChain.java b/src/main/java/net/minecraft/network/chat/SignedMessageChain.java
+index 300929a406905f5ff1ede664d5b99fb0938d4d2e..35813331ccd69935870867fd5b4ec52320e5df3a 100644
+--- a/src/main/java/net/minecraft/network/chat/SignedMessageChain.java
++++ b/src/main/java/net/minecraft/network/chat/SignedMessageChain.java
+@@ -45,7 +45,7 @@ public class SignedMessageChain {
+                     SignedMessageLink signedMessageLink = SignedMessageChain.this.nextLink;
+                     if (signedMessageLink == null) {
+                         throw new SignedMessageChain.DecodeException(SignedMessageChain.DecodeException.CHAIN_BROKEN);
+-                    } else if (body.timeStamp().isBefore(SignedMessageChain.this.lastTimeStamp)) {
++                    } else if (!io.inkwellmc.inkwell.InkwellConfig.disableOutOfOrderChat && body.timeStamp().isBefore(SignedMessageChain.this.lastTimeStamp)) {
+                         this.setChainBroken();
+                         throw new SignedMessageChain.DecodeException(SignedMessageChain.DecodeException.OUT_OF_ORDER_CHAT, org.bukkit.event.player.PlayerKickEvent.Cause.OUT_OF_ORDER_CHAT); // Paper - kick event causes
+                     } else {

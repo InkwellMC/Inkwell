@@ -5,10 +5,10 @@ Subject: [PATCH] EnderDragon griefing control
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index b342ece0dfa67bc165693adf05cf8f07d83012cb..94b35349dd20584d11f773b6b5e4fd94de5aae7c 100644
+index e42f4bee13a68d3e9460dd938ce5b80af51c6044..545962861e9717590c932f3397c03ce61004c214 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -180,6 +180,11 @@ public class InkwellConfig {
+@@ -174,6 +174,11 @@ public class InkwellConfig {
          );
      }
  
@@ -21,10 +21,10 @@ index b342ece0dfa67bc165693adf05cf8f07d83012cb..94b35349dd20584d11f773b6b5e4fd94
      private static void blockEntity() {
          allowSignColors = getBoolean(
 diff --git a/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java b/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
-index 1df13af62af7d0bbd92c84d424a07da66bb8583f..a2d8661b5cf72d1c6c22be3fae3b988b6b950da3 100644
+index 0e797e2714a2fd103cbd51548764577fd9b6412d..74e0a0da83183e1ef5b8c7e9ed7ae87142b53432 100644
 --- a/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
 +++ b/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
-@@ -524,7 +524,7 @@ public class EnderDragon extends Mob implements Enemy {
+@@ -522,7 +522,7 @@ public class EnderDragon extends Mob implements Enemy {
                      BlockState iblockdata = this.level().getBlockState(blockposition);
  
                      if (!iblockdata.isAir() && !iblockdata.is(BlockTags.DRAGON_TRANSPARENT)) {

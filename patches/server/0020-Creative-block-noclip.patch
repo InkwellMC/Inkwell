@@ -5,10 +5,10 @@ Subject: [PATCH] Creative block noclip
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index e4944bf04d95e34676bb7ddfe80c057ee987e3f1..ff81bb904ba8079543f4c81fd55e2c54948da2c8 100644
+index 2323ff847b2ab2b0c7f325d6682a6f2c8abf6b16..0fd70a9ed7f82220b1dd917c97a36e612854b511 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -255,4 +255,9 @@ public class InkwellConfig {
+@@ -222,4 +222,9 @@ public class InkwellConfig {
          mobFlamesLiveTime = getInt("mobs.flames.live-time", 160);
          mobFlameAllowGriefing = getBoolean("mobs.flames.allow-griefing", true);
      }
@@ -20,10 +20,10 @@ index e4944bf04d95e34676bb7ddfe80c057ee987e3f1..ff81bb904ba8079543f4c81fd55e2c54
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 579eb5a81281ca36c145153d8c24a517242ffe18..802d2ea12908cf1109c96b035bb79bf9563fe482 100644
+index 448a6c8d73652824157c50cf4883d4d4d9b5db80..22fddd66f45e721f7071500ecad129286b7b8522 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
-@@ -238,8 +238,8 @@ public abstract class Player extends LivingEntity {
+@@ -250,8 +250,8 @@ public abstract class Player extends LivingEntity {
  
      @Override
      public void tick() {
@@ -34,7 +34,7 @@ index 579eb5a81281ca36c145153d8c24a517242ffe18..802d2ea12908cf1109c96b035bb79bf9
              this.setOnGround(false);
          }
  
-@@ -418,7 +418,7 @@ public abstract class Player extends LivingEntity {
+@@ -430,7 +430,7 @@ public abstract class Player extends LivingEntity {
  
              Pose entitypose1;
  
@@ -43,7 +43,7 @@ index 579eb5a81281ca36c145153d8c24a517242ffe18..802d2ea12908cf1109c96b035bb79bf9
                  if (this.canPlayerFitWithinBlocksAndEntitiesWhen(Pose.CROUCHING)) {
                      entitypose1 = Pose.CROUCHING;
                  } else {
-@@ -578,7 +578,7 @@ public abstract class Player extends LivingEntity {
+@@ -577,7 +577,7 @@ public abstract class Player extends LivingEntity {
          }
  
          this.bob += (f - this.bob) * 0.4F;
@@ -52,7 +52,7 @@ index 579eb5a81281ca36c145153d8c24a517242ffe18..802d2ea12908cf1109c96b035bb79bf9
              AABB axisalignedbb;
  
              if (this.isPassenger() && !this.getVehicle().isRemoved()) {
-@@ -2084,6 +2084,20 @@ public abstract class Player extends LivingEntity {
+@@ -2107,6 +2107,20 @@ public abstract class Player extends LivingEntity {
      @Override
      public abstract boolean isSpectator();
  
@@ -74,10 +74,10 @@ index 579eb5a81281ca36c145153d8c24a517242ffe18..802d2ea12908cf1109c96b035bb79bf9
      public boolean canBeHitByProjectile() {
          return !this.isSpectator() && super.canBeHitByProjectile();
 diff --git a/src/main/java/net/minecraft/world/item/BlockItem.java b/src/main/java/net/minecraft/world/item/BlockItem.java
-index 8d2c0accadaf0c5d28e7db6e62a05f6c619cf02f..f91c81a7f4e77235d75ef29a31120ea6d02fb5fa 100644
+index 96fb69ec6db2e7c8c728435f0c537b076259b2fb..c6b94e2cbac39041572549f0084e56f30557282c 100644
 --- a/src/main/java/net/minecraft/world/item/BlockItem.java
 +++ b/src/main/java/net/minecraft/world/item/BlockItem.java
-@@ -210,8 +210,8 @@ public class BlockItem extends Item {
+@@ -187,8 +187,8 @@ public class BlockItem extends Item {
          Player entityhuman = context.getPlayer();
          CollisionContext voxelshapecollision = entityhuman == null ? CollisionContext.empty() : CollisionContext.of(entityhuman);
          // CraftBukkit start - store default return
@@ -102,10 +102,10 @@ index f8f909ebdad5e96379e8bd8c610164ef0697368e..7b2ec2fde9002ff75ac6cace75fb3beb
  
              BlockCanBuildEvent event = new BlockCanBuildEvent(CraftBlock.at(world, blockposition), player, CraftBlockData.fromData(iblockdata1), defaultReturn, org.bukkit.craftbukkit.CraftEquipmentSlot.getHand(context.getHand())); // Paper - Expose hand in BlockCanBuildEvent
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
-index 1fa22445a4ecc8c08dbcf0cc6bd39dc5003604c4..4bf5d15fd4d3c2b52430b6e75a388e95431d9399 100644
+index 0d68db20f5fbe5e834f12c1e8fd429099a44e4b6..7d4e9591689f6bfcb4575443fd590e341deb7dbf 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
-@@ -162,7 +162,7 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl
+@@ -163,7 +163,7 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl
                  while (iterator.hasNext()) {
                      Entity entity = (Entity) iterator.next();
  
@@ -115,10 +115,10 @@ index 1fa22445a4ecc8c08dbcf0cc6bd39dc5003604c4..4bf5d15fd4d3c2b52430b6e75a388e95
                      }
                  }
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
-index 412fa8a03be7215fa2695f07ac4f2334d1e70903..447addfea0bc513de133fcc32c1fe2fc4d257b17 100644
+index 04743a3e8546655e769442744c32a4c54425fc55..c01c5ee93aa3b1a42f81d3433efc19ff9b0a5201 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/TheEndGatewayBlockEntity.java
-@@ -124,7 +124,7 @@ public class TheEndGatewayBlockEntity extends TheEndPortalBlockEntity {
+@@ -120,7 +120,7 @@ public class TheEndGatewayBlockEntity extends TheEndPortalBlockEntity {
      }
  
      public static boolean canEntityTeleport(Entity entity) {
@@ -128,10 +128,10 @@ index 412fa8a03be7215fa2695f07ac4f2334d1e70903..447addfea0bc513de133fcc32c1fe2fc
  
      public boolean isSpawning() {
 diff --git a/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java b/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
-index 9a0d66b48470a6bef70b6643ff05812da519adfa..7b18ec0985482398d95772433b18adc4ddec1c42 100644
+index 58b570cfdd52b414752b5a117946d59031eafe94..d5ba3779a5185249e9d76a0dc261d283496d292c 100644
 --- a/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
-@@ -156,7 +156,7 @@ public class PistonMovingBlockEntity extends BlockEntity {
+@@ -157,7 +157,7 @@ public class PistonMovingBlockEntity extends BlockEntity {
                                          h = (double)direction.getStepZ();
                                  }
  
@@ -140,7 +140,7 @@ index 9a0d66b48470a6bef70b6643ff05812da519adfa..7b18ec0985482398d95772433b18adc4
                                  // Paper - EAR items stuck in in slime pushed by a piston
                                  entity.activatedTick = Math.max(entity.activatedTick, io.papermc.paper.threadedregions.RegionizedServer.getCurrentTick() + 10); // Folia - region threading
                                  entity.activatedImmunityTick = Math.max(entity.activatedImmunityTick, io.papermc.paper.threadedregions.RegionizedServer.getCurrentTick() + 10); // Folia - region threading
-@@ -192,6 +192,7 @@ public class PistonMovingBlockEntity extends BlockEntity {
+@@ -193,6 +193,7 @@ public class PistonMovingBlockEntity extends BlockEntity {
      }
  
      private static void moveEntityByPiston(Direction direction, Entity entity, double distance, Direction movementDirection) {
@@ -149,10 +149,10 @@ index 9a0d66b48470a6bef70b6643ff05812da519adfa..7b18ec0985482398d95772433b18adc4
          entity.move(
              MoverType.PISTON,
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 0ece776a1e281a328e28dc07fb4dc882b19d029c..3e6fb9288d5bb01d7c81259a07ebcd9671c87368 100644
+index 96201b5b458d8e0cbebf586062fac1ec2d81fdd0..43948665a26f7754afa5b3375b16cf198a9ef851 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -161,7 +161,6 @@ import org.bukkit.event.player.PlayerExpCooldownChangeEvent;
+@@ -172,7 +172,6 @@ import org.bukkit.event.player.PlayerExpCooldownChangeEvent;
  import org.bukkit.event.player.PlayerHideEntityEvent;
  import org.bukkit.event.player.PlayerRegisterChannelEvent;
  import org.bukkit.event.player.PlayerShowEntityEvent;
@@ -160,7 +160,7 @@ index 0ece776a1e281a328e28dc07fb4dc882b19d029c..3e6fb9288d5bb01d7c81259a07ebcd96
  import org.bukkit.event.player.PlayerTeleportEvent;
  import org.bukkit.event.player.PlayerUnregisterChannelEvent;
  import org.bukkit.inventory.EquipmentSlot;
-@@ -3468,4 +3467,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -3531,4 +3530,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      public void setSendViewDistance(final int viewDistance) {
          this.getHandle().setSendViewDistance(viewDistance);
      }

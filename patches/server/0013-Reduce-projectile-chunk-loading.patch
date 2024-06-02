@@ -5,10 +5,10 @@ Subject: [PATCH] Reduce projectile chunk loading
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index cd975090d2b84694a9debe1f38137ad0527ea067..51c63555b933b1a5ccc91b2fb347adba7b4d0563 100644
+index e75006a53f8257d8d5109361380ab9f2592651fd..85829a7f6e502c30d09168626fbe5dc1b3204712 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -233,4 +233,12 @@ public class InkwellConfig {
+@@ -200,4 +200,12 @@ public class InkwellConfig {
          		entityType.ttl = config.getInt("entity_timeouts." + type, -1);
          }
      }
@@ -23,10 +23,10 @@ index cd975090d2b84694a9debe1f38137ad0527ea067..51c63555b933b1a5ccc91b2fb347adba
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/Projectile.java b/src/main/java/net/minecraft/world/entity/projectile/Projectile.java
-index 10d7c64fb3a9bafdcdae99f8dc87017722341337..c7881c700a8024f12a63c007c98d1c5292628965 100644
+index a8d2f7a9d0bcb6db0b38ac30b098d59951053b47..0880630e4e87f6063c66a0958822703f47d41194 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/Projectile.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/Projectile.java
-@@ -45,6 +45,35 @@ public abstract class Projectile extends Entity implements TraceableEntity {
+@@ -46,6 +46,35 @@ public abstract class Projectile extends Entity implements TraceableEntity {
          super(type, world);
      }
  

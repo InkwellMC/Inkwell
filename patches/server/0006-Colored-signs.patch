@@ -5,7 +5,7 @@ Subject: [PATCH] Colored signs
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 1a4add0bcf81e6adf70e0357c47cf7508fbd6332..1b793a765ec7b9ceb260b028f638351c992b132b 100644
+index 60af32f5b04d5caa2a06822a4e16bb458aff7cda..3c7e49d566a47241a649addbd80971e4523f709e 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -139,4 +139,9 @@ public class InkwellConfig {
@@ -20,10 +20,10 @@ index 1a4add0bcf81e6adf70e0357c47cf7508fbd6332..1b793a765ec7b9ceb260b028f638351c
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index cbc89b8898f9243776af88c2b04ad3c2e4e23fb6..6b6137f7bd4750275baa64c1f22b852da47697ac 100644
+index 95b72e49469554983e07205b0bd462eec6c9fd86..8ab5ec90007bf00588d665a9afd0110c5558601d 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -1985,6 +1985,7 @@ public class ServerPlayer extends Player {
+@@ -2079,6 +2079,7 @@ public class ServerPlayer extends Player {
  
      @Override
      public void openTextEdit(SignBlockEntity sign, boolean front) {
@@ -32,10 +32,10 @@ index cbc89b8898f9243776af88c2b04ad3c2e4e23fb6..6b6137f7bd4750275baa64c1f22b852d
          this.connection.send(new ClientboundOpenSignEditorPacket(sign.getBlockPos(), front));
      }
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/SignBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/SignBlockEntity.java
-index 927c7ea03560be0c86884cec70ee8e408e66cb07..5ac74e2cbbf6f1fcbbf6e0c21b749d7e1648990b 100644
+index a28be7a332659be655f419d969e0c64e659b6c21..66dce9ed8d1c7f2e0f84eef95e53a4f074360500 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/SignBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/SignBlockEntity.java
-@@ -200,16 +200,30 @@ public class SignBlockEntity extends BlockEntity implements CommandSource { // C
+@@ -201,16 +201,30 @@ public class SignBlockEntity extends BlockEntity implements CommandSource { // C
          return this.setText((SignText) textChanger.apply(signtext), front);
      }
  
@@ -60,22 +60,22 @@ index 927c7ea03560be0c86884cec70ee8e408e66cb07..5ac74e2cbbf6f1fcbbf6e0c21b749d7e
  
 +            Player player = (org.bukkit.craftbukkit.entity.CraftPlayer) entityhuman.getBukkitEntity(); // Inkwell
              if (entityhuman.isTextFilteringEnabled()) {
--                signtext = signtext.setMessage(i, Component.literal(net.minecraft.SharedConstants.filterText(filteredtext.filteredOrEmpty())).setStyle(chatmodifier)); // Paper - filter sign text to chat only
-+                signtext = signtext.setMessage(i, translateColors(player, net.minecraft.SharedConstants.filterText(filteredtext.filteredOrEmpty()), chatmodifier)); // Paper - filter sign text to chat only // Inkwell
+-                signtext = signtext.setMessage(i, Component.literal(net.minecraft.util.StringUtil.filterText(filteredtext.filteredOrEmpty())).setStyle(chatmodifier)); // Paper - filter sign text to chat only
++                signtext = signtext.setMessage(i, translateColors(player, net.minecraft.util.StringUtil.filterText(filteredtext.filteredOrEmpty()), chatmodifier)); // Paper - filter sign text to chat only // Inkwell
              } else {
--                signtext = signtext.setMessage(i, Component.literal(net.minecraft.SharedConstants.filterText(filteredtext.raw())).setStyle(chatmodifier), Component.literal(net.minecraft.SharedConstants.filterText(filteredtext.filteredOrEmpty())).setStyle(chatmodifier)); // Paper - filter sign text to chat only
-+                signtext = signtext.setMessage(i, translateColors(player, net.minecraft.SharedConstants.filterText(filteredtext.raw()), chatmodifier), translateColors(player, net.minecraft.SharedConstants.filterText(filteredtext.filteredOrEmpty()), chatmodifier)); // Paper - filter sign text to chat only // Inkwell
+-                signtext = signtext.setMessage(i, Component.literal(net.minecraft.util.StringUtil.filterText(filteredtext.raw())).setStyle(chatmodifier), Component.literal(net.minecraft.util.StringUtil.filterText(filteredtext.filteredOrEmpty())).setStyle(chatmodifier)); // Paper - filter sign text to chat only
++                signtext = signtext.setMessage(i, translateColors(player, net.minecraft.util.StringUtil.filterText(filteredtext.raw()), chatmodifier), translateColors(player, net.minecraft.util.StringUtil.filterText(filteredtext.filteredOrEmpty()), chatmodifier)); // Paper - filter sign text to chat only // Inkwell
              }
          }
  
-@@ -349,6 +363,28 @@ public class SignBlockEntity extends BlockEntity implements CommandSource { // C
+@@ -350,6 +364,28 @@ public class SignBlockEntity extends BlockEntity implements CommandSource { // C
          return ClientboundBlockEntityDataPacket.create(this);
      }
  
 +    // Inkwell start
-+    public ClientboundBlockEntityDataPacket getTranslatedUpdatePacket(boolean filtered, boolean front) {
++    public ClientboundBlockEntityDataPacket getTranslatedUpdatePacket(boolean filtered, boolean front, HolderLookup.Provider registryLookup) {
 +        final CompoundTag nbt = new CompoundTag();
-+        this.saveAdditional(nbt);
++        this.saveAdditional(nbt, registryLookup);
 +        final Component[] lines = front ? frontText.getMessages(filtered) : backText.getMessages(filtered);
 +        final String side = front ? "front_text" : "back_text";
 +        for (int i = 0; i < 4; i++) {
@@ -90,10 +90,10 @@ index 927c7ea03560be0c86884cec70ee8e408e66cb07..5ac74e2cbbf6f1fcbbf6e0c21b749d7e
 +            messagesNbt.set(i, net.minecraft.nbt.StringTag.valueOf(json));
 +        }
 +        nbt.putString("InkwellEditor", "true");
-+        return ClientboundBlockEntityDataPacket.create(this, entity -> nbt);
++        return ClientboundBlockEntityDataPacket.create(this);
 +    }
 +    // Inkwell end
 +
      @Override
-     public CompoundTag getUpdateTag() {
-         return this.saveWithoutMetadata();
+     public CompoundTag getUpdateTag(HolderLookup.Provider registryLookup) {
+         return this.saveCustomOnly(registryLookup);

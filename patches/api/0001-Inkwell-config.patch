@@ -17,10 +17,10 @@ index 97e78e27ee0eea2c8b24886eeb19164d552323fe..d9c459d2cdafc4efea5bd7200acc5400
 +*.rej
 \ No newline at end of file
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 15395ef52505087e7eef3b1a5981e787dcc16508..02d01b72c3523caa302f241358efa6c4dc5c0dcf 100644
+index d4c5b06fe4be177442ef1abaf1b223c6c2845930..1d0a65e1a76faf67d05e32bf074809239cdbbbb5 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2235,6 +2235,18 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2257,6 +2257,18 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
          }
          // Paper end
  

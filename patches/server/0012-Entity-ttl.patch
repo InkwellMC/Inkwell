@@ -5,19 +5,10 @@ Subject: [PATCH] Entity ttl
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 643dce1207fae4fccb808147319638e8c753bd64..cd975090d2b84694a9debe1f38137ad0527ea067 100644
+index 043063f8939060cae92c9b3fa8cc986f3bdb9671..e75006a53f8257d8d5109361380ab9f2592651fd 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
- import java.lang.reflect.Modifier;
- import java.util.Collections;
- import java.util.List;
-+import java.util.Locale;
-+import java.util.Map;
- 
- import net.minecraft.core.registries.BuiltInRegistries;
- import net.minecraft.server.MinecraftServer;
-@@ -215,4 +217,20 @@ public class InkwellConfig {
+@@ -184,4 +184,20 @@ public class InkwellConfig {
      private static void miscSettings() {
          disableOutOfOrderChat = getBoolean("misc.disable-out-of-order-chat", true);
      }
@@ -40,10 +31,10 @@ index 643dce1207fae4fccb808147319638e8c753bd64..cd975090d2b84694a9debe1f38137ad0
  }
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 3230ebf89347715bc1ab1057eeec7bbf49604dbd..14c63f5abc0e6d3a833061a165d3bcad0fbfb7fa 100644
+index f2b775d7d48f14dec7d84c59b0dc97535f5f527c..b6cd9a00716812023b5d9c016127f5010eb85e48 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -817,6 +817,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -856,6 +856,12 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
      }
  
      public void tick() {
@@ -57,13 +48,13 @@ index 3230ebf89347715bc1ab1057eeec7bbf49604dbd..14c63f5abc0e6d3a833061a165d3bcad
      }
  
 diff --git a/src/main/java/net/minecraft/world/entity/EntityType.java b/src/main/java/net/minecraft/world/entity/EntityType.java
-index 51a987256b254fa18b354ae0a014b67b43bd11e7..dd61bd1f94778d0370e293439fe91d6e8be25fd5 100644
+index a2f0fb8b4057bd3a84d18298e49c4d02955240d3..e291a71dfa3e619c18141411d2cb79ab02da9cef 100644
 --- a/src/main/java/net/minecraft/world/entity/EntityType.java
 +++ b/src/main/java/net/minecraft/world/entity/EntityType.java
-@@ -306,6 +306,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
+@@ -316,6 +316,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
+     private final boolean canSpawnFarFromPlayer;
      private final int clientTrackingRange;
      private final int updateInterval;
-     public boolean dabEnabled = false; // Inkwell
 +    public int ttl = -1; // Inkwell
      @Nullable
      private String descriptionId;

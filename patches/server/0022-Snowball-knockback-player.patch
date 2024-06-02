@@ -5,10 +5,10 @@ Subject: [PATCH] Snowball knockback player
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 75c4db957c46f54e0c14dc41a9cbebbdfc897484..9d4c5fb5c50860942ef0e0646d476123bfd73cab 100644
+index 2fc4419f3501bc3b4ec3929e99029f99d5b43f72..3c02ba25dc8ecc9c64576282272264c40f5aebeb 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -227,9 +227,11 @@ public class InkwellConfig {
+@@ -194,9 +194,11 @@ public class InkwellConfig {
  
      public static boolean disableOutOfOrderChat;
      public static int pistonPushLimit;
@@ -21,7 +21,7 @@ index 75c4db957c46f54e0c14dc41a9cbebbdfc897484..9d4c5fb5c50860942ef0e0646d476123
  
      public static Map<String, Integer> projectileTimeouts;
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/Snowball.java b/src/main/java/net/minecraft/world/entity/projectile/Snowball.java
-index 5e82549ea2e80b3968b793b7b4b685c4891e9a91..9ac622532c9c26d06cb5a3c34cee4e1a2ef20cd2 100644
+index 2b4d206c0d31ba38d7b2af654bd420e85145d441..83de28a457d943fd7d2d8a1c98d398891dc477e9 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/Snowball.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/Snowball.java
 @@ -61,6 +61,13 @@ public class Snowball extends ThrowableItemProjectile {

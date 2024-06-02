@@ -5,10 +5,10 @@ Subject: [PATCH] Inkwell config and command
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 1005aba7cb01f5189a5f599aca72007b90eee0fe..50f363d696c7e7ec342099a607527552da1762b6 100644
+index 467871e1849edae77c91b20d6e3954070450baae..90f4bf4871341186d45f05e11908504a07250feb 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -54,6 +54,13 @@ dependencies {
+@@ -47,6 +47,13 @@ dependencies {
      runtimeOnly("org.apache.maven.resolver:maven-resolver-connector-basic:1.9.18")
      runtimeOnly("org.apache.maven.resolver:maven-resolver-transport-http:1.9.18")
  
@@ -20,7 +20,7 @@ index 1005aba7cb01f5189a5f599aca72007b90eee0fe..50f363d696c7e7ec342099a607527552
 +    // Inkwell end
 +
      testImplementation("io.github.classgraph:classgraph:4.8.47") // Paper - mob goal test
-     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
      testImplementation("org.hamcrest:hamcrest:2.2")
 diff --git a/src/main/java/co/aikar/timings/TimingsExport.java b/src/main/java/co/aikar/timings/TimingsExport.java
 index 7620c72a4c243cbeea245203ce03a97cbfa7d922..c0360dc0e17ae3b9ef44f4988db96f3fcf951800 100644
@@ -243,12 +243,12 @@ index 0000000000000000000000000000000000000000..e0449dd7155b44ba1e249aadeb8eda0c
 +}
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 6b3242117d62175de462d04e4d178b49ae2521e9..6a509e8f499bc8c18e1c4b6d49e54b2509b6ceda 100644
+index bd333ffb44798069e180cad67c07d86425253024..f61147f6d4bd0f6f98780124dd396bb0ddcc9fd7 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -222,6 +222,9 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+@@ -234,6 +234,9 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+         com.destroystokyo.paper.Metrics.PaperMetrics.startMetrics(); // Paper - start metrics
          com.destroystokyo.paper.VersionHistoryManager.INSTANCE.getClass(); // Paper - load version history now
-         io.papermc.paper.brigadier.PaperBrigadierProviderImpl.INSTANCE.getClass(); // Paper - init PaperBrigadierProvider
  
 +        io.inkwellmc.inkwell.InkwellConfig.load(); // Inkwell
 +        io.inkwellmc.inkwell.InkwellCommand.init(); // Inkwell

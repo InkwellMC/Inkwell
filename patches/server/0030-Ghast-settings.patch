@@ -5,10 +5,10 @@ Subject: [PATCH] Ghast settings
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 3158d69ece3a4bd3905b53c70b75d3f76d681473..eae77aecfd17715e2e5ba26e1d1fc81bd6e3051c 100644
+index 1e8fce6e19903164477bef832c628ccf2419700f..8afeb6b9720bbf0a46a57a2f8e77ca56ef23791f 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -197,6 +197,19 @@ public class InkwellConfig {
+@@ -191,6 +191,19 @@ public class InkwellConfig {
          endermanAllowGriefing = getBoolean("entity.enderman.allow-griefing", true);
      }
  
@@ -29,10 +29,10 @@ index 3158d69ece3a4bd3905b53c70b75d3f76d681473..eae77aecfd17715e2e5ba26e1d1fc81b
      private static void blockEntity() {
          allowSignColors = getBoolean(
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Ghast.java b/src/main/java/net/minecraft/world/entity/monster/Ghast.java
-index c135bc245f59a1af706f98b9d140dee77016b12f..c5f9a3f050e4953071ee0f78a78dd4a80d51ea34 100644
+index 373a4f036157017b0d95e8f1849780582235a549..a46f264107d90e74ed91a02312f280bec4f8c744 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Ghast.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Ghast.java
-@@ -37,7 +37,7 @@ import org.joml.Vector3f;
+@@ -35,7 +35,7 @@ import net.minecraft.world.phys.Vec3;
  public class Ghast extends FlyingMob implements Enemy {
  
      private static final EntityDataAccessor<Boolean> DATA_IS_CHARGING = SynchedEntityData.defineId(Ghast.class, EntityDataSerializers.BOOLEAN);
@@ -41,7 +41,7 @@ index c135bc245f59a1af706f98b9d140dee77016b12f..c5f9a3f050e4953071ee0f78a78dd4a8
  
      public Ghast(EntityType<? extends Ghast> type, Level world) {
          super(type, world);
-@@ -337,11 +337,11 @@ public class Ghast extends FlyingMob implements Enemy {
+@@ -320,11 +320,11 @@ public class Ghast extends FlyingMob implements Enemy {
                      Level world = this.ghast.level();
  
                      ++this.chargeTime;
@@ -55,7 +55,7 @@ index c135bc245f59a1af706f98b9d140dee77016b12f..c5f9a3f050e4953071ee0f78a78dd4a8
                          double d1 = 4.0D;
                          Vec3 vec3d = this.ghast.getViewVector(1.0F);
                          double d2 = entityliving.getX() - (this.ghast.getX() + vec3d.x * 4.0D);
-@@ -358,13 +358,13 @@ public class Ghast extends FlyingMob implements Enemy {
+@@ -341,13 +341,13 @@ public class Ghast extends FlyingMob implements Enemy {
                          entitylargefireball.bukkitYield = entitylargefireball.explosionPower = this.ghast.getExplosionPower();
                          entitylargefireball.setPos(this.ghast.getX() + vec3d.x * 4.0D, this.ghast.getY(0.5D) + 0.5D, entitylargefireball.getZ() + vec3d.z * 4.0D);
                          world.addFreshEntity(entitylargefireball);

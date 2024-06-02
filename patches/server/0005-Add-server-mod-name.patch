@@ -5,7 +5,7 @@ Subject: [PATCH] Add server mod name
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index 07a82e4944e711f64b364c1cb7e773eb04d32e32..1a4add0bcf81e6adf70e0357c47cf7508fbd6332 100644
+index 35bc5f42ac7d7c378d82b4a872061fea5496714f..60af32f5b04d5caa2a06822a4e16bb458aff7cda 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 @@ -130,6 +130,11 @@ public class InkwellConfig {
@@ -20,16 +20,16 @@ index 07a82e4944e711f64b364c1cb7e773eb04d32e32..1a4add0bcf81e6adf70e0357c47cf750
      public static boolean allowVoidTrading;
      private static void villager() {
          allowVoidTrading = getBoolean("entity.villager.allow-void-trading", false, "Allows you to interact with merchants in unloaded chunks");
-diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 538fb08df6bf9571c21fc167b0c152fe67ed1cb7..d867d2691ec3d02399511fbaef2ddcef55e06886 100644
---- a/src/main/java/net/minecraft/server/MinecraftServer.java
-+++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1963,7 +1963,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
- 
-     @DontObfuscate
-     public String getServerModName() {
--        return "Inkwell"; // Paper // Folia - Folia // Inkwell - Inkwell
-+        return io.inkwellmc.inkwell.InkwellConfig.serverModName; // Paper // Folia - Folia // Inkwell - Inkwell
-     }
- 
-     public SystemReport fillSystemReport(SystemReport details) {
+diff --git a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
+index 9fb1cbe9267a1459a0d0e9712a019581bedaeef1..ad75196f1261683f55640c5406ab87fbbea334d3 100644
+--- a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
++++ b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
+@@ -44,7 +44,7 @@ public record ServerBuildInfoImpl(
+                 .map(Key::key)
+                 .orElse(Key.key("inkwellmc", "inkwell")), // Folia // Inkwell
+             getManifestAttribute(manifest, ATTRIBUTE_BRAND_NAME)
+-                .orElse("Inkwell"), // Folia // Inkwell
++                .orElse(io.inkwellmc.inkwell.InkwellConfig.serverModName), // Folia // Inkwell
+             SharedConstants.getCurrentVersion().getId(),
+             SharedConstants.getCurrentVersion().getName(),
+             getManifestAttribute(manifest, ATTRIBUTE_BUILD_NUMBER)

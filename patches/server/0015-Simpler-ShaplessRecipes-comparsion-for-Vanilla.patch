@@ -5,10 +5,10 @@ Subject: [PATCH] Simpler ShaplessRecipes comparsion for Vanilla
 
 
 diff --git a/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java b/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
-index 27b0a79f7a7c47047216aae42944bac2a2151181..be8b78c569d934f1d1c6f38154751ee8730190f0 100644
+index 3554109bcc4651ca93b6275c914e57e007e2204e..222d9c1c8662334d3b4b3111d9a5b52e398bd9cc 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
 +++ b/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
-@@ -26,8 +26,15 @@ public class ShapelessRecipe extends io.papermc.paper.inventory.recipe.RecipeBoo
+@@ -27,8 +27,15 @@ public class ShapelessRecipe extends io.papermc.paper.inventory.recipe.RecipeBoo
      final CraftingBookCategory category;
      final ItemStack result;
      final NonNullList<Ingredient> ingredients;
@@ -24,7 +24,7 @@ index 27b0a79f7a7c47047216aae42944bac2a2151181..be8b78c569d934f1d1c6f38154751ee8
          this.group = group;
          this.category = category;
          this.result = result;
-@@ -77,6 +84,25 @@ public class ShapelessRecipe extends io.papermc.paper.inventory.recipe.RecipeBoo
+@@ -78,6 +85,25 @@ public class ShapelessRecipe extends io.papermc.paper.inventory.recipe.RecipeBoo
      }
  
      public boolean matches(CraftingContainer inventory, Level world) {

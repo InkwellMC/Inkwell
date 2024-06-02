@@ -5,10 +5,10 @@ Subject: [PATCH] Villager lobotomize
 
 
 diff --git a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-index c51cc66ad291d6327a1bafdf53e05cc9e5d1984d..75c4db957c46f54e0c14dc41a9cbebbdfc897484 100644
+index 0fd70a9ed7f82220b1dd917c97a36e612854b511..2fc4419f3501bc3b4ec3929e99029f99d5b43f72 100644
 --- a/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
 +++ b/src/main/java/io/inkwellmc/inkwell/InkwellConfig.java
-@@ -147,12 +147,23 @@ public class InkwellConfig {
+@@ -141,12 +141,23 @@ public class InkwellConfig {
      }
  
      public static boolean allowVoidTrading;
@@ -33,7 +33,7 @@ index c51cc66ad291d6327a1bafdf53e05cc9e5d1984d..75c4db957c46f54e0c14dc41a9cbebbd
  
      public static boolean usePigmanSpawnLimit;
 diff --git a/src/main/java/net/minecraft/world/entity/npc/Villager.java b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-index b6024ce5eedc638beaec1ec6e15230ee88dafa86..e8a5d7a6b9fcc493980868330f31b20a289700c8 100644
+index 6339967b154af1ca9632c7b8b315d612f4b80ea2..1c2beaaeba8e79fe47e59c76530e69e75789198e 100644
 --- a/src/main/java/net/minecraft/world/entity/npc/Villager.java
 +++ b/src/main/java/net/minecraft/world/entity/npc/Villager.java
 @@ -143,6 +143,9 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
@@ -91,29 +91,27 @@ index b6024ce5eedc638beaec1ec6e15230ee88dafa86..e8a5d7a6b9fcc493980868330f31b20a
      @Override
      protected void ageBoundaryReached() {
          super.ageBoundaryReached();
-@@ -253,13 +294,20 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+@@ -252,10 +293,19 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+         // Paper start
          this.customServerAiStep(false);
      }
-     private int behaviorTick = 0; // Inkwell
 -    protected void customServerAiStep(final boolean inactive) {
 +    protected void customServerAiStep(boolean inactive) { // Inkwell - not final
          // Paper end
          this.level().getProfiler().push("villagerBrain");
-         // Inkwell start
++        // Inkwell start
 +        if (io.inkwellmc.inkwell.InkwellConfig.villagerLobotomizeEnabled) {
 +            // treat as inactive if lobotomized
 +            inactive = inactive || checkLobotomized();
 +        } else {
 +            this.isLobotomized = false;
 +        }
-+
-         if (!inactive && this.behaviorTick++ % this.activatedPriority == 0) {
-             this.getBrain().tick((ServerLevel) this.level(), this); // Paper
--        }
-+        } else if (this.isLobotomized && shouldRestock()) restock();
-         // Inkwell end
+         if (!inactive) this.getBrain().tick((ServerLevel) this.level(), this); // Paper
++        else if (this.isLobotomized && shouldRestock()) restock();
++        // Inkwell end
          this.level().getProfiler().pop();
          if (this.assignProfessionWhenSpawned) {
+             this.assignProfessionWhenSpawned = false;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftVillager.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftVillager.java
 index 771eb799b032fcf4fc33c5e445b7fa252baee72b..1bcf5d8ef53534fd06b60b1eef576bd306a14f38 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftVillager.java
