@@ -18,11 +18,11 @@ repositories {
 }
 
 dependencies {
-  compileOnly("io.inkwellmc.inkwell:inkwell-api:1.20.4-R0.1-SNAPSHOT")
+  compileOnly("io.inkwellmc.inkwell:inkwell-api:1.20.6-R0.1-SNAPSHOT")
 }
 
 java {
-  toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+  toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 ```
 ### maven
@@ -41,7 +41,7 @@ java {
 </dependency>
  ```
 ## Building
-You need JDK 17 and good Internet conditions.
+You need JDK 21 and good Internet conditions.
 
 Clone this repo, run `./gradlew applyPatches`, then run `./gradlew createReobfPaperclipJar` in your terminal.
 
